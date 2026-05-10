@@ -2,6 +2,7 @@ package de.louis.xdtils.util;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Location;
 
 public final class MessageUtil {
 
@@ -178,6 +179,143 @@ public final class MessageUtil {
 
     public static Component invseeOpened(String targetName) {
         return prefixed("<gray>Du siehst das Inventar von " + player(targetName) + "<gray>.</gray>");
+    }
+
+    // ── Back ──────────────────────────────────────────────────────────
+
+    public static Component backTeleported() {
+        return prefixed("<gray>Du wurdest zu deiner letzten Position zurückgebracht.</gray>");
+    }
+
+    public static Component backNoLocation() {
+        return prefixed("<gray>Es gibt keine gespeicherte Position für dich.</gray>");
+    }
+
+    // ── Teleport ──────────────────────────────────────────────────────
+
+    public static Component tpUsage() {
+        return prefixed("<gray>Benutzung: " + command("tp")
+                + "<gray> <spieler> | @a <ziel> | <x> <y> <z> | <spieler> <x> <y> <z></gray>");
+    }
+
+    public static Component tpToPlayer(String targetName) {
+        return prefixed("<gray>Du wurdest zu " + player(targetName) + "<gray> teleportiert.</gray>");
+    }
+
+    public static Component tpToPlayerByOther(String actorName, String targetName) {
+        return prefixed("<gray>Du wurdest von " + player(actorName)
+                + "<gray> zu " + player(targetName) + "<gray> teleportiert.</gray>");
+    }
+
+    public static Component tpPlayerToPlayer(String fromName, String toName) {
+        return prefixed("<gray>" + player(fromName) + "<gray> wurde zu "
+                + player(toName) + "<gray> teleportiert.</gray>");
+    }
+
+    public static Component tpAllToPlayer(String targetName, int count) {
+        return prefixed("<gray><#4DA3FF>" + count + "</#4DA3FF><gray> Spieler wurden zu "
+                + player(targetName) + "<gray> teleportiert.</gray>");
+    }
+
+    public static Component tpToCoords(Location loc) {
+        return prefixed("<gray>Du wurdest zu "
+                + value((int) loc.getX() + ", " + (int) loc.getY() + ", " + (int) loc.getZ())
+                + "<gray> teleportiert.</gray>");
+    }
+
+    public static Component tpPlayerToCoords(String targetName, Location loc) {
+        return prefixed("<gray>" + player(targetName) + "<gray> wurde zu "
+                + value((int) loc.getX() + ", " + (int) loc.getY() + ", " + (int) loc.getZ())
+                + "<gray> teleportiert.</gray>");
+    }
+
+    public static Component tpToCoordsBy(String actorName, Location loc) {
+        return prefixed("<gray>Du wurdest von " + player(actorName) + "<gray> zu "
+                + value((int) loc.getX() + ", " + (int) loc.getY() + ", " + (int) loc.getZ())
+                + "<gray> teleportiert.</gray>");
+    }
+
+    public static Component tpInvalidCoords() {
+        return prefixed("<gray>Ungültige Koordinaten. Nutze Zahlen oder <#86EFAC>~</#86EFAC><gray> für relative Werte.</gray>");
+    }
+
+    // ── Clear ─────────────────────────────────────────────────────────
+
+    public static Component clearSelf() {
+        return prefixed("<gray>Dein Inventar wurde geleert.</gray>");
+    }
+
+    public static Component clearOther(String targetName) {
+        return prefixed("<gray>Das Inventar von " + player(targetName) + "<gray> wurde geleert.</gray>");
+    }
+
+    public static Component clearByOther(String actorName) {
+        return prefixed("<gray>Dein Inventar wurde von " + player(actorName) + "<gray> geleert.</gray>");
+    }
+
+    public static Component clearAll(int count) {
+        return prefixed("<gray>Das Inventar von <#4DA3FF>" + count + "</#4DA3FF><gray> Spielern wurde geleert.</gray>");
+    }
+
+    // ── Trash ─────────────────────────────────────────────────────────
+
+    public static Component trashOpened() {
+        return prefixed("<gray>Mülleimer geöffnet. Items hier werden beim Schließen gelöscht.</gray>");
+    }
+
+    public static Component trashCleared() {
+        return prefixed("<gray>Mülleimer wurde geleert.</gray>");
+    }
+
+// ── Item (/i) ─────────────────────────────────────────────────────
+
+    public static Component itemUsage() {
+        return prefixed("<gray>Benutzung: " + command("i") + "<gray> <item> [menge]</gray>");
+    }
+
+    public static Component itemUnknown(String input) {
+        return prefixed("<gray>Unbekanntes Item: <#F87171>" + escape(input) + "</#F87171><gray>.</gray>");
+    }
+
+    public static Component itemInvalidAmount() {
+        return prefixed("<gray>Ungültige Menge. Nutze eine Zahl zwischen <#86EFAC>1</#86EFAC><gray> und <#86EFAC>64</#86EFAC><gray>.</gray>");
+    }
+
+    public static Component itemGiven(String itemName, int amount) {
+        return prefixed("<gray>Du hast <#4DA3FF>" + amount + "x</#4DA3FF> "
+                + item(itemName) + "<gray> erhalten.</gray>");
+    }
+
+// ── Give ──────────────────────────────────────────────────────────
+
+    public static Component giveUsage() {
+        return prefixed("<gray>Benutzung: " + command("give")
+                + "<gray> <spieler|@a> <item> [menge]</gray>");
+    }
+
+    public static Component giveSelf(String itemName, int amount) {
+        return prefixed("<gray>Du hast dir <#4DA3FF>" + amount + "x</#4DA3FF> "
+                + item(itemName) + "<gray> gegeben.</gray>");
+    }
+
+    public static Component giveOther(String targetName, String itemName, int amount) {
+        return prefixed("<gray>Du hast " + player(targetName) + "<gray> <#4DA3FF>" + amount
+                + "x</#4DA3FF> " + item(itemName) + "<gray> gegeben.</gray>");
+    }
+
+    public static Component giveReceived(String actorName, String itemName, int amount) {
+        return prefixed("<gray>Du hast <#4DA3FF>" + amount + "x</#4DA3FF> "
+                + item(itemName) + "<gray> von " + player(actorName) + "<gray> erhalten.</gray>");
+    }
+
+    public static Component giveReceivedAll(String actorName, String itemName, int amount) {
+        return prefixed("<gray>Du hast <#4DA3FF>" + amount + "x</#4DA3FF> "
+                + item(itemName) + "<gray> von " + player(actorName) + "<gray> erhalten.</gray>");
+    }
+
+    public static Component giveAllPlayers(String itemName, int amount, int count) {
+        return prefixed("<gray><#4DA3FF>" + count + "</#4DA3FF><gray> Spieler haben <#4DA3FF>"
+                + amount + "x</#4DA3FF> " + item(itemName) + "<gray> erhalten.</gray>");
     }
 }
 
