@@ -2,5 +2,65 @@ name: xdtils
 version: '${version}'
 
 main: de.louis.xdtils.main.Main
-api-version: '1.21.11'
+api-version: '1.21'
 load: POSTWORLD
+
+commands:
+  workbench:
+    description: Öffnet eine Werkbank
+    usage: /workbench
+    permission: xdtils.workbench
+  anvil:
+    description: Öffnet einen Amboss
+    usage: /anvil
+    permission: xdtils.anvil
+  grindstone:
+    description: Öffnet einen Schleifstein
+    usage: /grindstone
+    permission: xdtils.grindstone
+  cartography:
+    description: Öffnet einen Kartografietisch
+    usage: /cartography
+    permission: xdtils.cartography
+  loom:
+    description: Öffnet einen Webstuhl
+    usage: /loom
+    permission: xdtils.loom
+  stonecutter:
+    description: Öffnet einen Steinschneider
+    usage: /stonecutter
+    permission: xdtils.stonecutter
+  smithing:
+    description: Öffnet einen Schmiedetisch
+    usage: /smithing
+    permission: xdtils.smithing
+  enchanting:
+    description: Öffnet einen Zaubertisch
+    usage: /enchanting
+    permission: xdtils.enchanting
+
+permissions:
+  xdtils.workbench:
+    description: Erlaubt /workbench
+    default: true
+  xdtils.anvil:
+    description: Erlaubt /anvil
+    default: true
+  xdtils.grindstone:
+    description: Erlaubt /grindstone
+    default: true
+  xdtils.cartography:
+    description: Erlaubt /cartography
+    default: true
+  xdtils.loom:
+    description: Erlaubt /loom
+    default: true
+  xdtils.stonecutter:
+    description: Erlaubt /stonecutter
+    default: true
+  xdtils.smithing:
+    description: Erlaubt /smithing
+    default: true
+  xdtils.enchanting:
+    description: Erlaubt /enchanting
+    default: true
