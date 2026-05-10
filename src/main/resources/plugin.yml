@@ -11,27 +11,30 @@ commands:
     usage: /gamemode <mode> [spieler|@a]
     aliases: [gm]
     permission: xdtils.gamemode
-
   speed:
     description: Setzt Walk- oder Flyspeed automatisch
     usage: /speed <0-10> [spieler]
     permission: xdtils.speed
-
   walkspeed:
     description: Setzt den Walkspeed
     usage: /walkspeed <0-10> [spieler]
     permission: xdtils.walkspeed
-
   flyspeed:
     description: Setzt den Flyspeed
     usage: /flyspeed <0-10> [spieler]
     permission: xdtils.flyspeed
-
   enchant:
     description: Verzaubert das Item in der Hand
     usage: /enchant <verzauberung> <level>
     permission: xdtils.enchant
-
+  hat:
+    description: Setzt das Item in der Hand auf den Kopf
+    usage: /hat
+    permission: xdtils.hat
+  invsee:
+    description: Öffnet das Inventar eines Spielers
+    usage: /invsee <spieler>
+    permission: xdtils.invsee
   workbench:
     description: Öffnet eine Werkbank
     usage: /workbench
@@ -75,6 +78,10 @@ permissions:
   xdtils.flyspeed:
     default: op
   xdtils.enchant:
+    default: op
+  xdtils.hat:
+    default: op
+  xdtils.invsee:
     default: op
   xdtils.workbench:
     default: true

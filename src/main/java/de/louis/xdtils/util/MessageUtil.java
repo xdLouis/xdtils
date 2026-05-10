@@ -46,6 +46,10 @@ public final class MessageUtil {
         return "<gradient:#C084FC:#818CF8>" + escape(name) + "</gradient>";
     }
 
+    public static String item(String name) {
+        return "<gradient:#FCD34D:#F59E0B>" + escape(name) + "</gradient>";
+    }
+
     // ── Permissions / Errors ──────────────────────────────────────────
 
     public static Component noPermission(String cmd) {
@@ -154,9 +158,26 @@ public final class MessageUtil {
         return prefixed("<gray>Benutzung: " + command("enchant") + "<gray> <#86EFAC><verzauberung> <level></#86EFAC><gray>.</gray>");
     }
 
+    // ── Hat ───────────────────────────────────────────────────────────
+
+    public static Component hatEquipped(String itemName) {
+        return prefixed("<gray>" + item(itemName) + "<gray> wurde als Hut aufgesetzt.</gray>");
+    }
+
+    public static Component hatNoItem() {
+        return prefixed("<gray>Du hältst kein Item in der Hand.</gray>");
+    }
+
     // ─────────────────────────────────────────────────────────────────
 
     private static String escape(String text) {
         return text.replace("<", "\\<").replace(">", "\\>");
     }
+
+    // ── Invsee ────────────────────────────────────────────────────────
+
+    public static Component invseeOpened(String targetName) {
+        return prefixed("<gray>Du siehst das Inventar von " + player(targetName) + "<gray>.</gray>");
+    }
 }
+

@@ -2,6 +2,8 @@ package de.louis.xdtils.main;
 
 import de.louis.xdtils.commands.EnchantCommand;
 import de.louis.xdtils.commands.GamemodeCommand;
+import de.louis.xdtils.commands.HatCommand;
+import de.louis.xdtils.commands.InvseeCommand;
 import de.louis.xdtils.commands.SpeedCommand;
 import de.louis.xdtils.commands.WorkstationCommand;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -37,6 +39,13 @@ public final class Main extends JavaPlugin {
         EnchantCommand enchantCommand = new EnchantCommand();
         registerCommand("enchant", enchantCommand, enchantCommand);
 
+        // Hat
+        registerCommand("hat", new HatCommand(), null);
+
+        // Invsee
+        InvseeCommand invseeCommand = new InvseeCommand(this);
+        registerCommand("invsee", invseeCommand, invseeCommand);
+
         // Workstations
         registerWorkstation("workbench",   "workbench");
         registerWorkstation("anvil",       "anvil");
@@ -54,7 +63,7 @@ public final class Main extends JavaPlugin {
         var cmd = getCommand(name);
         if (cmd != null) {
             cmd.setExecutor(executor);
-            cmd.setTabCompleter(completer);
+            if (completer != null) cmd.setTabCompleter(completer);
         }
     }
 
