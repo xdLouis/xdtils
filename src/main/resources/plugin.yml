@@ -1,0 +1,6 @@
+name: xdtils
+version: '${version}'
+
+main: de.louis.xdtils.main.Main
+api-version: '1.21.11'
+load: POSTWORLD
