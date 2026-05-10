@@ -1,5 +1,6 @@
 package de.louis.xdtils.main;
 
+import de.louis.xdtils.commands.EnchantCommand;
 import de.louis.xdtils.commands.GamemodeCommand;
 import de.louis.xdtils.commands.SpeedCommand;
 import de.louis.xdtils.commands.WorkstationCommand;
@@ -28,20 +29,23 @@ public final class Main extends JavaPlugin {
         SpeedCommand speedAuto = new SpeedCommand(SpeedCommand.SpeedType.AUTO);
         SpeedCommand speedWalk = new SpeedCommand(SpeedCommand.SpeedType.WALK);
         SpeedCommand speedFly  = new SpeedCommand(SpeedCommand.SpeedType.FLY);
-
         registerCommand("speed",     speedAuto, speedAuto);
         registerCommand("walkspeed", speedWalk, speedWalk);
         registerCommand("flyspeed",  speedFly,  speedFly);
 
+        // Enchant
+        EnchantCommand enchantCommand = new EnchantCommand();
+        registerCommand("enchant", enchantCommand, enchantCommand);
+
         // Workstations
-        registerWorkstation("workbench",    "workbench");
-        registerWorkstation("anvil",        "anvil");
-        registerWorkstation("grindstone",   "grindstone");
-        registerWorkstation("cartography",  "cartography");
-        registerWorkstation("loom",         "loom");
-        registerWorkstation("stonecutter",  "stonecutter");
-        registerWorkstation("smithing",     "smithing");
-        registerWorkstation("enchanting",   "enchanting");
+        registerWorkstation("workbench",   "workbench");
+        registerWorkstation("anvil",       "anvil");
+        registerWorkstation("grindstone",  "grindstone");
+        registerWorkstation("cartography", "cartography");
+        registerWorkstation("loom",        "loom");
+        registerWorkstation("stonecutter", "stonecutter");
+        registerWorkstation("smithing",    "smithing");
+        registerWorkstation("enchanting",  "enchanting");
     }
 
     private void registerCommand(String name,

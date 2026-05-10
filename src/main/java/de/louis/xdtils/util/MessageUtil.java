@@ -42,6 +42,10 @@ public final class MessageUtil {
         return "<#67E8F9>" + escape(val) + "</#67E8F9>";
     }
 
+    public static String enchant(String name) {
+        return "<gradient:#C084FC:#818CF8>" + escape(name) + "</gradient>";
+    }
+
     // ── Permissions / Errors ──────────────────────────────────────────
 
     public static Component noPermission(String cmd) {
@@ -114,6 +118,40 @@ public final class MessageUtil {
 
     public static Component speedUsage(String cmd) {
         return prefixed("<gray>Benutzung: " + command(cmd) + "<gray> <#86EFAC><0-10></#86EFAC> [spieler]</gray>");
+    }
+
+    // ── Enchant ───────────────────────────────────────────────────────
+
+    public static Component enchantApplied(String enchantName, int level) {
+        return prefixed("<gray>Verzauberung " + enchant(enchantName) + "<gray> Level "
+                + value(String.valueOf(level)) + "<gray> wurde angewendet.</gray>");
+    }
+
+    public static Component enchantAppliedOverlevel(String enchantName, int level) {
+        return prefixed("<gray>Verzauberung " + enchant(enchantName) + "<gray> Level "
+                + value(String.valueOf(level)) + "<gray> wurde als "
+                + "<#F59E0B>Over-Level</color><gray> angewendet.</gray>");
+    }
+
+    public static Component enchantUnknown(String input) {
+        return prefixed("<gray>Unbekannte Verzauberung: <#F87171>" + escape(input) + "</#F87171><gray>.</gray>");
+    }
+
+    public static Component enchantInvalidLevel() {
+        return prefixed("<gray>Das Level muss <#86EFAC>1</#86EFAC><gray> oder höher sein.</gray>");
+    }
+
+    public static Component enchantLevelTooHigh(String enchantName, int max) {
+        return prefixed("<gray>Das maximale Level für " + enchant(enchantName) + "<gray> ist "
+                + value(String.valueOf(max)) + "<gray>. Nur OPs können Over-Level nutzen.</gray>");
+    }
+
+    public static Component enchantNoItem() {
+        return prefixed("<gray>Du hältst kein verzauberbares Item in der Hand.</gray>");
+    }
+
+    public static Component enchantUsage() {
+        return prefixed("<gray>Benutzung: " + command("enchant") + "<gray> <#86EFAC><verzauberung> <level></#86EFAC><gray>.</gray>");
     }
 
     // ─────────────────────────────────────────────────────────────────

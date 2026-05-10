@@ -27,6 +27,11 @@ commands:
     usage: /flyspeed <0-10> [spieler]
     permission: xdtils.flyspeed
 
+  enchant:
+    description: Verzaubert das Item in der Hand
+    usage: /enchant <verzauberung> <level>
+    permission: xdtils.enchant
+
   workbench:
     description: Öffnet eine Werkbank
     usage: /workbench
@@ -68,6 +73,8 @@ permissions:
   xdtils.walkspeed:
     default: op
   xdtils.flyspeed:
+    default: op
+  xdtils.enchant:
     default: op
   xdtils.workbench:
     default: true
