@@ -38,6 +38,12 @@ public final class MessageUtil {
         return "<gradient:#67E8F9:#3B82F6>" + escape(name) + "</gradient>";
     }
 
+    public static String value(String val) {
+        return "<#67E8F9>" + escape(val) + "</#67E8F9>";
+    }
+
+    // ── Permissions / Errors ──────────────────────────────────────────
+
     public static Component noPermission(String cmd) {
         return prefixed("<gray>Du hast keine Rechte für " + command(cmd) + "<gray>.</gray>");
     }
@@ -49,6 +55,8 @@ public final class MessageUtil {
     public static Component playerNotFound(String input) {
         return prefixed("<gray>Der Spieler " + player(input) + "<gray> wurde nicht gefunden.</gray>");
     }
+
+    // ── Gamemode ──────────────────────────────────────────────────────
 
     public static Component invalidGamemode(String input) {
         return prefixed("<gray>Unbekannter Spielmodus: <#F87171>" + escape(input) + "</#F87171><gray>.</gray> "
@@ -76,6 +84,8 @@ public final class MessageUtil {
         return prefixed("<gray>Dein Spielmodus wurde von " + player(actorName) + "<gray> zu " + mode(modeName) + "<gray> geändert.</gray>");
     }
 
+    // ── Workstation ───────────────────────────────────────────────────
+
     public static Component workstationOpened(String workstationName) {
         return prefixed("<gray>Du hast " + workstation(workstationName) + "<gray> geöffnet.</gray>");
     }
@@ -83,6 +93,30 @@ public final class MessageUtil {
     public static Component unknownWorkstation(String input) {
         return prefixed("<gray>Unbekannte Workstation: <#F87171>" + escape(input) + "</#F87171><gray>.</gray>");
     }
+
+    // ── Speed ─────────────────────────────────────────────────────────
+
+    public static Component speedChanged(String type, int displayValue) {
+        return prefixed("<gray>" + type + " wurde auf " + value(String.valueOf(displayValue)) + "<gray> gesetzt.</gray>");
+    }
+
+    public static Component speedChangedOther(String targetName, String type, int displayValue) {
+        return prefixed("<gray>" + type + " von " + player(targetName) + "<gray> wurde auf " + value(String.valueOf(displayValue)) + "<gray> gesetzt.</gray>");
+    }
+
+    public static Component speedChangedByOther(String actorName, String type, int displayValue) {
+        return prefixed("<gray>Dein " + type + " wurde von " + player(actorName) + "<gray> auf " + value(String.valueOf(displayValue)) + "<gray> gesetzt.</gray>");
+    }
+
+    public static Component speedInvalid() {
+        return prefixed("<gray>Ungültiger Wert. Nutze eine Zahl zwischen <#86EFAC>0</#86EFAC><gray> und <#86EFAC>10</#86EFAC><gray>.</gray>");
+    }
+
+    public static Component speedUsage(String cmd) {
+        return prefixed("<gray>Benutzung: " + command(cmd) + "<gray> <#86EFAC><0-10></#86EFAC> [spieler]</gray>");
+    }
+
+    // ─────────────────────────────────────────────────────────────────
 
     private static String escape(String text) {
         return text.replace("<", "\\<").replace(">", "\\>");

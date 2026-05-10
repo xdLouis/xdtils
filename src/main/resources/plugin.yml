@@ -12,41 +12,49 @@ commands:
     aliases: [gm]
     permission: xdtils.gamemode
 
+  speed:
+    description: Setzt Walk- oder Flyspeed automatisch
+    usage: /speed <0-10> [spieler]
+    permission: xdtils.speed
+
+  walkspeed:
+    description: Setzt den Walkspeed
+    usage: /walkspeed <0-10> [spieler]
+    permission: xdtils.walkspeed
+
+  flyspeed:
+    description: Setzt den Flyspeed
+    usage: /flyspeed <0-10> [spieler]
+    permission: xdtils.flyspeed
+
   workbench:
     description: Öffnet eine Werkbank
     usage: /workbench
     permission: xdtils.workbench
-
   anvil:
     description: Öffnet einen Amboss
     usage: /anvil
     permission: xdtils.anvil
-
   grindstone:
     description: Öffnet einen Schleifstein
     usage: /grindstone
     permission: xdtils.grindstone
-
   cartography:
     description: Öffnet einen Kartografietisch
     usage: /cartography
     permission: xdtils.cartography
-
   loom:
     description: Öffnet einen Webstuhl
     usage: /loom
     permission: xdtils.loom
-
   stonecutter:
     description: Öffnet einen Steinschneider
     usage: /stonecutter
     permission: xdtils.stonecutter
-
   smithing:
     description: Öffnet einen Schmiedetisch
     usage: /smithing
     permission: xdtils.smithing
-
   enchanting:
     description: Öffnet einen Zaubertisch
     usage: /enchanting
@@ -54,9 +62,13 @@ commands:
 
 permissions:
   xdtils.gamemode:
-    description: Erlaubt /gamemode und /gm
     default: op
-
+  xdtils.speed:
+    default: op
+  xdtils.walkspeed:
+    default: op
+  xdtils.flyspeed:
+    default: op
   xdtils.workbench:
     default: true
   xdtils.anvil:

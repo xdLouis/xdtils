@@ -1,6 +1,7 @@
 package de.louis.xdtils.main;
 
 import de.louis.xdtils.commands.GamemodeCommand;
+import de.louis.xdtils.commands.SpeedCommand;
 import de.louis.xdtils.commands.WorkstationCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,31 +19,45 @@ public final class Main extends JavaPlugin {
     }
 
     private void registerCommands() {
+        // Gamemode
         GamemodeCommand gamemodeCommand = new GamemodeCommand();
+        registerCommand("gamemode", gamemodeCommand, gamemodeCommand);
+        registerCommand("gm", gamemodeCommand, gamemodeCommand);
 
-        if (getCommand("gamemode") != null) {
-            getCommand("gamemode").setExecutor(gamemodeCommand);
-            getCommand("gamemode").setTabCompleter(gamemodeCommand);
+        // Speed
+        SpeedCommand speedAuto = new SpeedCommand(SpeedCommand.SpeedType.AUTO);
+        SpeedCommand speedWalk = new SpeedCommand(SpeedCommand.SpeedType.WALK);
+        SpeedCommand speedFly  = new SpeedCommand(SpeedCommand.SpeedType.FLY);
+
+        registerCommand("speed",     speedAuto, speedAuto);
+        registerCommand("walkspeed", speedWalk, speedWalk);
+        registerCommand("flyspeed",  speedFly,  speedFly);
+
+        // Workstations
+        registerWorkstation("workbench",    "workbench");
+        registerWorkstation("anvil",        "anvil");
+        registerWorkstation("grindstone",   "grindstone");
+        registerWorkstation("cartography",  "cartography");
+        registerWorkstation("loom",         "loom");
+        registerWorkstation("stonecutter",  "stonecutter");
+        registerWorkstation("smithing",     "smithing");
+        registerWorkstation("enchanting",   "enchanting");
+    }
+
+    private void registerCommand(String name,
+                                 org.bukkit.command.CommandExecutor executor,
+                                 org.bukkit.command.TabCompleter completer) {
+        var cmd = getCommand(name);
+        if (cmd != null) {
+            cmd.setExecutor(executor);
+            cmd.setTabCompleter(completer);
         }
-
-        if (getCommand("gm") != null) {
-            getCommand("gm").setExecutor(gamemodeCommand);
-            getCommand("gm").setTabCompleter(gamemodeCommand);
-        }
-
-        registerWorkstation("workbench", "workbench");
-        registerWorkstation("anvil", "anvil");
-        registerWorkstation("grindstone", "grindstone");
-        registerWorkstation("cartography", "cartography");
-        registerWorkstation("loom", "loom");
-        registerWorkstation("stonecutter", "stonecutter");
-        registerWorkstation("smithing", "smithing");
-        registerWorkstation("enchanting", "enchanting");
     }
 
     private void registerWorkstation(String commandName, String type) {
-        if (getCommand(commandName) != null) {
-            getCommand(commandName).setExecutor(new WorkstationCommand(type));
+        var cmd = getCommand(commandName);
+        if (cmd != null) {
+            cmd.setExecutor(new WorkstationCommand(type));
         }
     }
 }
