@@ -34,6 +34,10 @@ public final class MessageUtil {
         return "<gradient:#86EFAC:#22C55E>" + escape(name) + "</gradient>";
     }
 
+    public static String workstation(String name) {
+        return "<gradient:#67E8F9:#3B82F6>" + escape(name) + "</gradient>";
+    }
+
     public static Component noPermission(String cmd) {
         return prefixed("<gray>Du hast keine Rechte für " + command(cmd) + "<gray>.</gray>");
     }
@@ -53,7 +57,7 @@ public final class MessageUtil {
     }
 
     public static Component gamemodeUsage() {
-        return prefixed("<gray>Benutzung: " + command("gamemode") + "<gray> <#86EFAC><mode></#86EFAC> [spieler]</gray>");
+        return prefixed("<gray>Benutzung: " + command("gamemode") + "<gray> <#86EFAC><mode></#86EFAC> [spieler|@a]</gray>");
     }
 
     public static Component gamemodeSelf(String modeName) {
@@ -64,8 +68,20 @@ public final class MessageUtil {
         return prefixed("<gray>Der Spielmodus von " + player(targetName) + "<gray> wurde zu " + mode(modeName) + "<gray> geändert.</gray>");
     }
 
+    public static Component gamemodeAll(String modeName, int amount) {
+        return prefixed("<gray>Der Spielmodus von <#4DA3FF>" + amount + "</#4DA3FF><gray> Spielern wurde zu " + mode(modeName) + "<gray> geändert.</gray>");
+    }
+
     public static Component gamemodeChangedBy(String actorName, String modeName) {
         return prefixed("<gray>Dein Spielmodus wurde von " + player(actorName) + "<gray> zu " + mode(modeName) + "<gray> geändert.</gray>");
+    }
+
+    public static Component workstationOpened(String workstationName) {
+        return prefixed("<gray>Du hast " + workstation(workstationName) + "<gray> geöffnet.</gray>");
+    }
+
+    public static Component unknownWorkstation(String input) {
+        return prefixed("<gray>Unbekannte Workstation: <#F87171>" + escape(input) + "</#F87171><gray>.</gray>");
     }
 
     private static String escape(String text) {

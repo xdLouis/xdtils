@@ -1,5 +1,6 @@
 package de.louis.xdtils.commands;
 
+import de.louis.xdtils.util.MessageUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -18,44 +19,44 @@ public class WorkstationCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
                              @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage("§cNur Spieler können diesen Befehl verwenden!");
+            sender.sendMessage(MessageUtil.onlyPlayers());
             return true;
         }
 
         switch (type.toLowerCase()) {
             case "workbench" -> {
                 player.openWorkbench(null, true);
-                player.sendMessage("§aWerkbank geöffnet!");
+                player.sendMessage(MessageUtil.workstationOpened("Werkbank"));
             }
             case "anvil" -> {
                 player.openAnvil(null, true);
-                player.sendMessage("§aAmboss geöffnet!");
+                player.sendMessage(MessageUtil.workstationOpened("Amboss"));
             }
             case "grindstone" -> {
                 player.openGrindstone(null, true);
-                player.sendMessage("§aSchleifstein geöffnet!");
+                player.sendMessage(MessageUtil.workstationOpened("Schleifstein"));
             }
             case "cartography" -> {
                 player.openCartographyTable(null, true);
-                player.sendMessage("§aKartografietisch geöffnet!");
+                player.sendMessage(MessageUtil.workstationOpened("Kartografietisch"));
             }
             case "loom" -> {
                 player.openLoom(null, true);
-                player.sendMessage("§aWebstuhl geöffnet!");
+                player.sendMessage(MessageUtil.workstationOpened("Webstuhl"));
             }
             case "stonecutter" -> {
                 player.openStonecutter(null, true);
-                player.sendMessage("§aSteinschneider geöffnet!");
+                player.sendMessage(MessageUtil.workstationOpened("Steinschneider"));
             }
             case "smithing" -> {
                 player.openSmithingTable(null, true);
-                player.sendMessage("§aSchmiedetisch geöffnet!");
+                player.sendMessage(MessageUtil.workstationOpened("Schmiedetisch"));
             }
             case "enchanting" -> {
                 player.openEnchanting(null, true);
-                player.sendMessage("§aZaubertisch geöffnet!");
+                player.sendMessage(MessageUtil.workstationOpened("Zaubertisch"));
             }
-            default -> player.sendMessage("§cUnbekannte Workstation: " + type);
+            default -> player.sendMessage(MessageUtil.unknownWorkstation(type));
         }
 
         return true;

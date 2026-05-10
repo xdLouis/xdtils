@@ -6,45 +6,57 @@ api-version: '1.21'
 load: POSTWORLD
 
 commands:
+  gamemode:
+    description: Ändert den Spielmodus
+    usage: /gamemode <mode> [spieler|@a]
+    aliases: [gm]
+    permission: xdtils.gamemode
+
   workbench:
     description: Öffnet eine Werkbank
     usage: /workbench
     permission: xdtils.workbench
+
   anvil:
     description: Öffnet einen Amboss
     usage: /anvil
     permission: xdtils.anvil
+
   grindstone:
     description: Öffnet einen Schleifstein
     usage: /grindstone
     permission: xdtils.grindstone
+
   cartography:
     description: Öffnet einen Kartografietisch
     usage: /cartography
     permission: xdtils.cartography
+
   loom:
     description: Öffnet einen Webstuhl
     usage: /loom
     permission: xdtils.loom
+
   stonecutter:
     description: Öffnet einen Steinschneider
     usage: /stonecutter
     permission: xdtils.stonecutter
+
   smithing:
     description: Öffnet einen Schmiedetisch
     usage: /smithing
     permission: xdtils.smithing
+
   enchanting:
     description: Öffnet einen Zaubertisch
     usage: /enchanting
     permission: xdtils.enchanting
-  gamemode:
-    description: Ändert den Spielmodus
-    usage: /gamemode <mode> [spieler]
-    aliases: [ gm ]
-    permission: xdtils.gamemode
 
 permissions:
+  xdtils.gamemode:
+    description: Erlaubt /gamemode und /gm
+    default: op
+
   xdtils.workbench:
     default: true
   xdtils.anvil:
@@ -61,6 +73,3 @@ permissions:
     default: true
   xdtils.enchanting:
     default: true
-  xdtils.gamemode:
-    description: Erlaubt /gamemode und /gm
-    default: op

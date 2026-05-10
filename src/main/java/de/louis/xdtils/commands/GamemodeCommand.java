@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
@@ -48,6 +49,23 @@ public class GamemodeCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
+        if (args[1].equalsIgnoreCase("@a")) {
+            Collection<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers();
+
+            for (Player target : onlinePlayers) {
+                target.setGameMode(mode);
+
+                if (!target.getUniqueId().equals(getSenderUuid(sender))) {
+                    target.sendMessage(MessageUtil.gamemodeChangedBy(sender.getName(), formatMode(mode)));
+                } else {
+                    target.sendMessage(MessageUtil.gamemodeSelf(formatMode(mode)));
+                }
+            }
+
+            sender.sendMessage(MessageUtil.gamemodeAll(formatMode(mode), onlinePlayers.size()));
+            return true;
+        }
+
         Player target = Bukkit.getPlayerExact(args[1]);
         if (target == null) {
             sender.sendMessage(MessageUtil.playerNotFound(args[1]));
@@ -56,7 +74,11 @@ public class GamemodeCommand implements CommandExecutor, TabCompleter {
 
         target.setGameMode(mode);
         sender.sendMessage(MessageUtil.gamemodeOther(target.getName(), formatMode(mode)));
-        target.sendMessage(MessageUtil.gamemodeChangedBy(sender.getName(), formatMode(mode)));
+
+        if (!target.getName().equalsIgnoreCase(sender.getName())) {
+            target.sendMessage(MessageUtil.gamemodeChangedBy(sender.getName(), formatMode(mode)));
+        }
+
         return true;
     }
 
@@ -79,6 +101,13 @@ public class GamemodeCommand implements CommandExecutor, TabCompleter {
         };
     }
 
+    private java.util.UUID getSenderUuid(CommandSender sender) {
+        if (sender instanceof Player player) {
+            return player.getUniqueId();
+        }
+        return new java.util.UUID(0L, 0L);
+    }
+
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
                                                 @NotNull String alias, @NotNull String[] args) {
@@ -98,6 +127,10 @@ public class GamemodeCommand implements CommandExecutor, TabCompleter {
 
         if (args.length == 2) {
             String input = args[1].toLowerCase(Locale.ROOT);
+
+            if ("@a".startsWith(input)) {
+                list.add("@a");
+            }
 
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (player.getName().toLowerCase(Locale.ROOT).startsWith(input)) {
