@@ -536,5 +536,20 @@ public final class MessageUtil {
                 + (enabled ? "<#86EFAC>aktiviert</#86EFAC>" : "<#F87171>deaktiviert</#F87171>")
                 + "<gray>.</gray>");
     }
+    // ── TpHere ───────────────────────────────────────────────────────
+
+    public static Component tpHereSuccess(String targetName) {
+        return prefixed("<gray>" + player(targetName) + "<gray> wurde zu dir teleportiert.</gray>");
+    }
+
+    public static Component tpHereNotify(String actorName) {
+        return prefixed("<gray>Du wurdest von " + player(actorName) + "<gray> zu sich gerufen.</gray>");
+    }
+
+    // ── ClearChat ─────────────────────────────────────────────────────
+
+    public static Component chatCleared(String actorName) {
+        return prefixed("<gray>Der Chat wurde von " + player(actorName) + "<gray> geleert.</gray>");
+    }
 }
 

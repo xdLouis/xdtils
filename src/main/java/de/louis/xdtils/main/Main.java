@@ -2,6 +2,7 @@ package de.louis.xdtils.main;
 
 import de.louis.xdtils.commands.*;
 import de.louis.xdtils.listener.BackListener;
+import de.louis.xdtils.listener.ChatListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -50,6 +51,10 @@ public final class Main extends JavaPlugin {
         // Teleport
         TeleportCommand tp = new TeleportCommand();
         registerCommand("tp", tp, tp);
+
+        // TpHere
+        TpHereCommand tpHere = new TpHereCommand();
+        registerCommand("tphere", tpHere, null);
 
         // Clear
         ClearCommand clear = new ClearCommand();
@@ -106,6 +111,9 @@ public final class Main extends JavaPlugin {
         FlyCommand fly = new FlyCommand();
         registerCommand("fly", fly, fly);
 
+        // ClearChat
+        registerCommand("cc", new ClearChatCommand(), null);
+
         // Workstations
         registerWorkstation("workbench",   "workbench");
         registerWorkstation("anvil",       "anvil");
@@ -119,6 +127,7 @@ public final class Main extends JavaPlugin {
 
     private void registerListeners() {
         Bukkit.getPluginManager().registerEvents(new BackListener(), this);
+        Bukkit.getPluginManager().registerEvents(new ChatListener(), this);
     }
 
     private void registerCommand(String name,

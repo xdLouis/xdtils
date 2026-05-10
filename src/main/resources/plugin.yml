@@ -150,6 +150,14 @@ commands:
     description: Öffnet einen Zaubertisch
     usage: /enchanting
     permission: xdtils.enchanting
+  tphere:
+    description: Teleportiert einen Spieler zu dir
+    usage: /tphere <spieler>
+    permission: xdtils.tphere
+  cc:
+    description: Leert den Chat
+    usage: /cc
+    permission: xdtils.clearchat
 
 permissions:
   xdtils.gamemode:
@@ -224,3 +232,7 @@ permissions:
     default: true
   xdtils.enchanting:
     default: true
+  xdtils.tphere:
+    default: op
+  xdtils.clearchat:
+    default: op
