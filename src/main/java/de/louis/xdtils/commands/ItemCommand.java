@@ -45,8 +45,9 @@ public class ItemCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
+
         // Parse optionale Menge
-        int amount = 1;
+        int amount = 64;
         if (args.length >= 2) {
             try {
                 amount = Integer.parseInt(args[1]);

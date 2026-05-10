@@ -317,5 +317,224 @@ public final class MessageUtil {
         return prefixed("<gray><#4DA3FF>" + count + "</#4DA3FF><gray> Spieler haben <#4DA3FF>"
                 + amount + "x</#4DA3FF> " + item(itemName) + "<gray> erhalten.</gray>");
     }
+    // ── Kick ─────────────────────────────────────────────────────────
+
+    public static net.kyori.adventure.text.Component kickScreen(String reason, String actorName) {
+        return parse("<red><bold>Du wurdest gekickt</bold></red>\n\n"
+                + "<gray>Grund: <white>" + escape(reason) + "</white></gray>\n"
+                + "<gray>Von: " + player(actorName) + "</gray>");
+    }
+
+    public static Component kickBroadcast(String targetName, String actorName, String reason) {
+        return prefixed(player(targetName) + "<gray> wurde von " + player(actorName)
+                + "<gray> gekickt. </gray><gray>(<#F87171>" + escape(reason) + "</#F87171><gray>)</gray>");
+    }
+
+// ── Ban ──────────────────────────────────────────────────────────
+
+    public static net.kyori.adventure.text.Component banScreen(String reason, String actorName) {
+        return parse("<red><bold>Du wurdest gebannt</bold></red>\n\n"
+                + "<gray>Grund: <white>" + escape(reason) + "</white></gray>\n"
+                + "<gray>Von: " + player(actorName) + "</gray>");
+    }
+
+    public static Component banBroadcast(String targetName, String actorName, String reason) {
+        return prefixed(player(targetName) + "<gray> wurde von " + player(actorName)
+                + "<gray> gebannt. </gray><gray>(<#F87171>" + escape(reason) + "</#F87171><gray>)</gray>");
+    }
+
+    public static Component banIpSuccess(String ip, String actorName, String reason) {
+        return prefixed("<gray>IP <#F87171>" + escape(ip) + "</#F87171><gray> wurde von "
+                + player(actorName) + "<gray> gebannt. Grund: <#F87171>" + escape(reason) + "</#F87171></gray>");
+    }
+
+// ── Pardon ───────────────────────────────────────────────────────
+
+    public static Component pardonSuccess(String targetName) {
+        return prefixed("<gray>" + player(targetName) + "<gray> wurde entbannt.</gray>");
+    }
+
+    public static Component pardonNotBanned(String targetName) {
+        return prefixed("<gray><#F87171>" + escape(targetName) + "</#F87171><gray> ist nicht gebannt.</gray>");
+    }
+
+// ── Op / Deop ────────────────────────────────────────────────────
+
+    public static Component opSuccess(String targetName) {
+        return prefixed("<gray>" + player(targetName) + "<gray> wurde zum Operator gemacht.</gray>");
+    }
+
+    public static Component opNotify() {
+        return prefixed("<gray>Du bist jetzt <#86EFAC>Operator</#86EFAC><gray>.</gray>");
+    }
+
+    public static Component deopSuccess(String targetName) {
+        return prefixed("<gray>" + player(targetName) + "<gray> wurde der Operator-Status entzogen.</gray>");
+    }
+
+    public static Component deopNotify() {
+        return prefixed("<gray>Dein <#F87171>Operator-Status</#F87171><gray> wurde entzogen.</gray>");
+    }
+
+// ── Kill ─────────────────────────────────────────────────────────
+
+    public static Component killSelf() {
+        return prefixed("<gray>Du wurdest getötet.</gray>");
+    }
+
+    public static Component killOther(String targetName) {
+        return prefixed("<gray>" + player(targetName) + "<gray> wurde getötet.</gray>");
+    }
+
+    public static Component killByOther(String actorName) {
+        return prefixed("<gray>Du wurdest von " + player(actorName) + "<gray> getötet.</gray>");
+    }
+
+    public static Component killAll(int count) {
+        return prefixed("<gray><#4DA3FF>" + count + "</#4DA3FF><gray> Spieler wurden getötet.</gray>");
+    }
+
+// ── Time ─────────────────────────────────────────────────────────
+
+    public static Component timeUsage() {
+        return prefixed("<gray>Benutzung: " + command("time")
+                + "<gray> <set|add|query> [tag|nacht|zahl]</gray>");
+    }
+
+    public static Component timeSet(String val) {
+        return prefixed("<gray>Zeit wurde auf " + value(val) + "<gray> gesetzt.</gray>");
+    }
+
+    public static Component timeAdded(long ticks) {
+        return prefixed("<gray>" + value(String.valueOf(ticks)) + "<gray> Ticks wurden hinzugefügt.</gray>");
+    }
+
+    public static Component timeQuery(long ticks) {
+        return prefixed("<gray>Aktuelle Zeit: " + value(String.valueOf(ticks)) + "<gray> Ticks.</gray>");
+    }
+
+    public static Component timeInvalid(String input) {
+        return prefixed("<gray>Ungültiger Wert: <#F87171>" + escape(input) + "</#F87171><gray>.</gray>");
+    }
+
+// ── Weather ──────────────────────────────────────────────────────
+
+    public static Component weatherUsage() {
+        return prefixed("<gray>Benutzung: " + command("weather")
+                + "<gray> <clear|rain|thunder></gray>");
+    }
+
+    public static Component weatherSet(String typeName) {
+        return prefixed("<gray>Wetter wurde auf " + value(typeName) + "<gray> gesetzt.</gray>");
+    }
+
+    public static Component weatherInvalid(String input) {
+        return prefixed("<gray>Unbekanntes Wetter: <#F87171>" + escape(input)
+                + "</#F87171><gray>. Nutze <#86EFAC>clear</#86EFAC><gray>, "
+                + "<#86EFAC>rain</#86EFAC><gray> oder <#86EFAC>thunder</#86EFAC><gray>.</gray>");
+    }
+
+// ── Difficulty ───────────────────────────────────────────────────
+
+    public static Component difficultyUsage() {
+        return prefixed("<gray>Benutzung: " + command("difficulty")
+                + "<gray> <peaceful|easy|normal|hard></gray>");
+    }
+
+    public static Component difficultySet(String diffName) {
+        return prefixed("<gray>Schwierigkeit wurde auf " + value(diffName) + "<gray> gesetzt.</gray>");
+    }
+
+    public static Component difficultyInvalid(String input) {
+        return prefixed("<gray>Unbekannte Schwierigkeit: <#F87171>" + escape(input) + "</#F87171><gray>.</gray>");
+    }
+
+// ── Whitelist ────────────────────────────────────────────────────
+
+    public static Component whitelistUsage() {
+        return prefixed("<gray>Benutzung: " + command("whitelist")
+                + "<gray> <on|off|add|remove|list|reload></gray>");
+    }
+
+    public static Component whitelistEnabled() {
+        return prefixed("<gray>Whitelist wurde <#86EFAC>aktiviert</#86EFAC><gray>.</gray>");
+    }
+
+    public static Component whitelistDisabled() {
+        return prefixed("<gray>Whitelist wurde <#F87171>deaktiviert</#F87171><gray>.</gray>");
+    }
+
+    public static Component whitelistAdded(String targetName) {
+        return prefixed("<gray>" + player(targetName) + "<gray> wurde zur Whitelist hinzugefügt.</gray>");
+    }
+
+    public static Component whitelistRemoved(String targetName) {
+        return prefixed("<gray>" + player(targetName) + "<gray> wurde von der Whitelist entfernt.</gray>");
+    }
+
+    public static Component whitelistList(java.util.List<String> names, int count) {
+        String joined = names.isEmpty() ? "<gray>Keine Einträge</gray>" : String.join("<gray>, </gray>", names.stream().map(n -> player(n)).toList());
+        return prefixed("<gray>Whitelist (<#4DA3FF>" + count + "</#4DA3FF><gray>): </gray>" + joined);
+    }
+
+    public static Component whitelistReloaded() {
+        return prefixed("<gray>Whitelist wurde neu geladen.</gray>");
+    }
+
+// ── Heal ─────────────────────────────────────────────────────────
+
+    public static Component healSelf() {
+        return prefixed("<gray>Du wurdest geheilt.</gray>");
+    }
+
+    public static Component healOther(String targetName) {
+        return prefixed("<gray>" + player(targetName) + "<gray> wurde geheilt.</gray>");
+    }
+
+    public static Component healByOther(String actorName) {
+        return prefixed("<gray>Du wurdest von " + player(actorName) + "<gray> geheilt.</gray>");
+    }
+
+    public static Component healAll(int count) {
+        return prefixed("<gray><#4DA3FF>" + count + "</#4DA3FF><gray> Spieler wurden geheilt.</gray>");
+    }
+
+// ── Feed ─────────────────────────────────────────────────────────
+
+    public static Component feedSelf() {
+        return prefixed("<gray>Du wurdest gesättigt.</gray>");
+    }
+
+    public static Component feedOther(String targetName) {
+        return prefixed("<gray>" + player(targetName) + "<gray> wurde gesättigt.</gray>");
+    }
+
+    public static Component feedByOther(String actorName) {
+        return prefixed("<gray>Du wurdest von " + player(actorName) + "<gray> gesättigt.</gray>");
+    }
+
+    public static Component feedAll(int count) {
+        return prefixed("<gray><#4DA3FF>" + count + "</#4DA3FF><gray> Spieler wurden gesättigt.</gray>");
+    }
+
+// ── Fly ──────────────────────────────────────────────────────────
+
+    public static Component flySelf(boolean enabled) {
+        return prefixed("<gray>Flugmodus wurde " + (enabled
+                ? "<#86EFAC>aktiviert</#86EFAC>" : "<#F87171>deaktiviert</#F87171>")
+                + "<gray>.</gray>");
+    }
+
+    public static Component flyOther(String targetName, boolean enabled) {
+        return prefixed("<gray>Flugmodus von " + player(targetName) + "<gray> wurde "
+                + (enabled ? "<#86EFAC>aktiviert</#86EFAC>" : "<#F87171>deaktiviert</#F87171>")
+                + "<gray>.</gray>");
+    }
+
+    public static Component flyByOther(String actorName, boolean enabled) {
+        return prefixed("<gray>Dein Flugmodus wurde von " + player(actorName) + "<gray> "
+                + (enabled ? "<#86EFAC>aktiviert</#86EFAC>" : "<#F87171>deaktiviert</#F87171>")
+                + "<gray>.</gray>");
+    }
 }
 

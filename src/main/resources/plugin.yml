@@ -1,6 +1,5 @@
 name: xdtils
 version: '${version}'
-
 main: de.louis.xdtils.main.Main
 api-version: '1.21'
 load: POSTWORLD
@@ -41,7 +40,7 @@ commands:
     permission: xdtils.back
   tp:
     description: Teleportiert Spieler
-    usage: /tp <spieler> | @a <ziel> | <x> <y> <z> | <spieler> <x> <y> <z>
+    usage: /tp <spieler> | @a <ziel> | <x> <y> <z>
     permission: xdtils.tp
   clear:
     description: Leert das Inventar
@@ -59,6 +58,66 @@ commands:
     description: Gibt einem Spieler ein Item
     usage: /give <spieler|@a> <item> [menge]
     permission: xdtils.give
+  kick:
+    description: Kickt einen Spieler
+    usage: /kick <spieler> [grund]
+    permission: xdtils.kick
+  ban:
+    description: Bannt einen Spieler
+    usage: /ban <spieler> [grund]
+    permission: xdtils.ban
+  ban-ip:
+    description: Bannt eine IP
+    usage: /ban-ip <ip> [grund]
+    permission: xdtils.ban.ip
+  pardon:
+    description: Entbannt einen Spieler
+    usage: /pardon <spieler>
+    permission: xdtils.pardon
+  pardon-ip:
+    description: Entbannt eine IP
+    usage: /pardon-ip <ip>
+    permission: xdtils.pardon.ip
+  op:
+    description: Gibt einem Spieler OP
+    usage: /op <spieler>
+    permission: xdtils.op
+  deop:
+    description: Entzieht einem Spieler OP
+    usage: /deop <spieler>
+    permission: xdtils.deop
+  kill:
+    description: Tötet einen Spieler
+    usage: /kill [spieler|@a]
+    permission: xdtils.kill
+  time:
+    description: Ändert die Weltzeit
+    usage: /time <set|add|query> [wert]
+    permission: xdtils.time
+  weather:
+    description: Ändert das Wetter
+    usage: /weather <clear|rain|thunder>
+    permission: xdtils.weather
+  difficulty:
+    description: Ändert die Schwierigkeit
+    usage: /difficulty <peaceful|easy|normal|hard>
+    permission: xdtils.difficulty
+  whitelist:
+    description: Verwaltet die Whitelist
+    usage: /whitelist <on|off|add|remove|list|reload>
+    permission: xdtils.whitelist
+  heal:
+    description: Heilt einen Spieler
+    usage: /heal [spieler|@a]
+    permission: xdtils.heal
+  feed:
+    description: Sättigt einen Spieler
+    usage: /feed [spieler|@a]
+    permission: xdtils.feed
+  fly:
+    description: Schaltet den Flugmodus um
+    usage: /fly [spieler] [on|off]
+    permission: xdtils.fly
   workbench:
     description: Öffnet eine Werkbank
     usage: /workbench
@@ -118,6 +177,36 @@ permissions:
   xdtils.item:
     default: op
   xdtils.give:
+    default: op
+  xdtils.kick:
+    default: op
+  xdtils.ban:
+    default: op
+  xdtils.ban.ip:
+    default: op
+  xdtils.pardon:
+    default: op
+  xdtils.pardon.ip:
+    default: op
+  xdtils.op:
+    default: op
+  xdtils.deop:
+    default: op
+  xdtils.kill:
+    default: op
+  xdtils.time:
+    default: op
+  xdtils.weather:
+    default: op
+  xdtils.difficulty:
+    default: op
+  xdtils.whitelist:
+    default: op
+  xdtils.heal:
+    default: op
+  xdtils.feed:
+    default: op
+  xdtils.fly:
     default: op
   xdtils.workbench:
     default: true

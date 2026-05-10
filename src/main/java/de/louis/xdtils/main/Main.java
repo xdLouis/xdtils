@@ -1,17 +1,6 @@
 package de.louis.xdtils.main;
 
-import de.louis.xdtils.commands.BackCommand;
-import de.louis.xdtils.commands.ClearCommand;
-import de.louis.xdtils.commands.EnchantCommand;
-import de.louis.xdtils.commands.GamemodeCommand;
-import de.louis.xdtils.commands.GiveCommand;
-import de.louis.xdtils.commands.HatCommand;
-import de.louis.xdtils.commands.InvseeCommand;
-import de.louis.xdtils.commands.ItemCommand;
-import de.louis.xdtils.commands.SpeedCommand;
-import de.louis.xdtils.commands.TeleportCommand;
-import de.louis.xdtils.commands.TrashCommand;
-import de.louis.xdtils.commands.WorkstationCommand;
+import de.louis.xdtils.commands.*;
 import de.louis.xdtils.listener.BackListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -32,9 +21,9 @@ public final class Main extends JavaPlugin {
 
     private void registerCommands() {
         // Gamemode
-        GamemodeCommand gamemodeCommand = new GamemodeCommand();
-        registerCommand("gamemode", gamemodeCommand, gamemodeCommand);
-        registerCommand("gm", gamemodeCommand, gamemodeCommand);
+        GamemodeCommand gm = new GamemodeCommand();
+        registerCommand("gamemode", gm, gm);
+        registerCommand("gm", gm, gm);
 
         // Speed
         SpeedCommand speedAuto = new SpeedCommand(SpeedCommand.SpeedType.AUTO);
@@ -45,37 +34,77 @@ public final class Main extends JavaPlugin {
         registerCommand("flyspeed",  speedFly,  speedFly);
 
         // Enchant
-        EnchantCommand enchantCommand = new EnchantCommand();
-        registerCommand("enchant", enchantCommand, enchantCommand);
+        EnchantCommand enchant = new EnchantCommand();
+        registerCommand("enchant", enchant, enchant);
 
         // Hat
         registerCommand("hat", new HatCommand(), null);
 
         // Invsee
-        InvseeCommand invseeCommand = new InvseeCommand(this);
-        registerCommand("invsee", invseeCommand, invseeCommand);
+        InvseeCommand invsee = new InvseeCommand(this);
+        registerCommand("invsee", invsee, invsee);
 
         // Back
         registerCommand("back", new BackCommand(), null);
 
         // Teleport
-        TeleportCommand tpCommand = new TeleportCommand();
-        registerCommand("tp", tpCommand, tpCommand);
+        TeleportCommand tp = new TeleportCommand();
+        registerCommand("tp", tp, tp);
 
         // Clear
-        ClearCommand clearCommand = new ClearCommand();
-        registerCommand("clear", clearCommand, clearCommand);
+        ClearCommand clear = new ClearCommand();
+        registerCommand("clear", clear, clear);
 
         // Trash
         registerCommand("trash", new TrashCommand(this), null);
 
-        // Item (/i)
-        ItemCommand itemCommand = new ItemCommand();
-        registerCommand("i", itemCommand, itemCommand);
+        // Item / Give
+        ItemCommand item = new ItemCommand();
+        registerCommand("i", item, item);
+        GiveCommand give = new GiveCommand();
+        registerCommand("give", give, give);
 
-        // Give
-        GiveCommand giveCommand = new GiveCommand();
-        registerCommand("give", giveCommand, giveCommand);
+        // Kick / Ban / Pardon
+        KickCommand kick = new KickCommand();
+        registerCommand("kick", kick, kick);
+        BanCommand ban = new BanCommand(false);
+        registerCommand("ban", ban, ban);
+        BanCommand banIp = new BanCommand(true);
+        registerCommand("ban-ip", banIp, banIp);
+        PardonCommand pardon = new PardonCommand(false);
+        registerCommand("pardon", pardon, pardon);
+        PardonCommand pardonIp = new PardonCommand(true);
+        registerCommand("pardon-ip", pardonIp, pardonIp);
+
+        // Op / Deop
+        OpCommand op = new OpCommand(false);
+        registerCommand("op", op, op);
+        OpCommand deop = new OpCommand(true);
+        registerCommand("deop", deop, deop);
+
+        // Kill
+        KillCommand kill = new KillCommand();
+        registerCommand("kill", kill, kill);
+
+        // Time / Weather / Difficulty
+        TimeCommand time = new TimeCommand();
+        registerCommand("time", time, time);
+        WeatherCommand weather = new WeatherCommand();
+        registerCommand("weather", weather, weather);
+        DifficultyCommand difficulty = new DifficultyCommand();
+        registerCommand("difficulty", difficulty, difficulty);
+
+        // Whitelist
+        WhitelistCommand whitelist = new WhitelistCommand();
+        registerCommand("whitelist", whitelist, whitelist);
+
+        // Heal / Feed / Fly
+        HealCommand heal = new HealCommand();
+        registerCommand("heal", heal, heal);
+        FeedCommand feed = new FeedCommand();
+        registerCommand("feed", feed, feed);
+        FlyCommand fly = new FlyCommand();
+        registerCommand("fly", fly, fly);
 
         // Workstations
         registerWorkstation("workbench",   "workbench");
@@ -104,8 +133,6 @@ public final class Main extends JavaPlugin {
 
     private void registerWorkstation(String commandName, String type) {
         var cmd = getCommand(commandName);
-        if (cmd != null) {
-            cmd.setExecutor(new WorkstationCommand(type));
-        }
+        if (cmd != null) cmd.setExecutor(new WorkstationCommand(type));
     }
 }

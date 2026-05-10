@@ -52,7 +52,8 @@ public class TrashCommand implements CommandExecutor, Listener {
         Inventory trash = Bukkit.createInventory(null, TRASH_SIZE, title);
 
         // Deko: roten Rahmen
-        ItemStack pane = createPane(Material.RED_STAINED_GLASS_PANE, "<#F87171>Alles hier wird beim Schließen gelöscht</color>");
+        ItemStack pane = createPane(Material.RED_STAINED_GLASS_PANE,
+                "<#F87171>Alles hier wird beim Schließen gelöscht</#F87171>");
         for (int i = 0; i < 9; i++) trash.setItem(i, pane);
         for (int i = 45; i < 54; i++) trash.setItem(i, pane);
         for (int i = 9; i < 45; i += 9) trash.setItem(i, pane);
