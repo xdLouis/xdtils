@@ -74,10 +74,12 @@ commands:
     description: Entbannt einen Spieler
     usage: /pardon <spieler>
     permission: xdtils.pardon
+    aliases: [ unban ]
   pardon-ip:
     description: Entbannt eine IP
     usage: /pardon-ip <ip>
     permission: xdtils.pardon.ip
+    aliases: [ unban-ip ]
   op:
     description: Gibt einem Spieler OP
     usage: /op <spieler>
@@ -106,6 +108,7 @@ commands:
     description: Verwaltet die Whitelist
     usage: /whitelist <on|off|add|remove|list|reload>
     permission: xdtils.whitelist
+    aliases: [ wl ]
   heal:
     description: Heilt einen Spieler
     usage: /heal [spieler|@a]
@@ -158,6 +161,12 @@ commands:
     description: Leert den Chat
     usage: /cc
     permission: xdtils.clearchat
+    aliases: [ chatclear ]
+  vanish:
+    description: Aktiviert oder deaktiviert Vanish
+    usage: /vanish [spieler]
+    aliases: [ v ]
+    permission: xdtils.vanish
 
 permissions:
   xdtils.gamemode:
@@ -235,4 +244,8 @@ permissions:
   xdtils.tphere:
     default: op
   xdtils.clearchat:
+    default: op
+  xdtils.vanish:
+    default: op
+  xdtils.vanish.others:
     default: op

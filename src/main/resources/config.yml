@@ -1,0 +1,128 @@
+# xdtils Konfiguration
+# Alle Commands können hier aktiviert/deaktiviert werden.
+# Die permission überschreibt die Standard-Permission aus der plugin.yml.
+
+commands:
+  gamemode:
+    enabled: true
+    permission: xdtils.gamemode
+  gm:
+    enabled: true
+    permission: xdtils.gamemode
+  speed:
+    enabled: true
+    permission: xdtils.speed
+  walkspeed:
+    enabled: true
+    permission: xdtils.walkspeed
+  flyspeed:
+    enabled: true
+    permission: xdtils.flyspeed
+  enchant:
+    enabled: true
+    permission: xdtils.enchant
+  hat:
+    enabled: true
+    permission: xdtils.hat
+  invsee:
+    enabled: true
+    permission: xdtils.invsee
+  back:
+    enabled: true
+    permission: xdtils.back
+  tp:
+    enabled: true
+    permission: xdtils.tp
+  tphere:
+    enabled: true
+    permission: xdtils.tphere
+  clear:
+    enabled: true
+    permission: xdtils.clear
+  trash:
+    enabled: true
+    permission: xdtils.trash
+  i:
+    enabled: true
+    permission: xdtils.item
+  give:
+    enabled: true
+    permission: xdtils.give
+  kick:
+    enabled: true
+    permission: xdtils.kick
+  ban:
+    enabled: true
+    permission: xdtils.ban
+  ban-ip:
+    enabled: true
+    permission: xdtils.ban.ip
+  pardon:
+    enabled: true
+    permission: xdtils.pardon
+  pardon-ip:
+    enabled: true
+    permission: xdtils.pardon.ip
+  op:
+    enabled: true
+    permission: xdtils.op
+  deop:
+    enabled: true
+    permission: xdtils.deop
+  kill:
+    enabled: true
+    permission: xdtils.kill
+  time:
+    enabled: true
+    permission: xdtils.time
+  weather:
+    enabled: true
+    permission: xdtils.weather
+  difficulty:
+    enabled: true
+    permission: xdtils.difficulty
+  whitelist:
+    enabled: true
+    permission: xdtils.whitelist
+  heal:
+    enabled: true
+    permission: xdtils.heal
+  feed:
+    enabled: true
+    permission: xdtils.feed
+  fly:
+    enabled: true
+    permission: xdtils.fly
+  cc:
+    enabled: true
+    permission: xdtils.clearchat
+  workbench:
+    enabled: true
+    permission: xdtils.workbench
+  anvil:
+    enabled: true
+    permission: xdtils.anvil
+  grindstone:
+    enabled: true
+    permission: xdtils.grindstone
+  cartography:
+    enabled: true
+    permission: xdtils.cartography
+  loom:
+    enabled: true
+    permission: xdtils.loom
+  stonecutter:
+    enabled: true
+    permission: xdtils.stonecutter
+  smithing:
+    enabled: true
+    permission: xdtils.smithing
+  enchanting:
+    enabled: true
+    permission: xdtils.enchanting
+  vanish:
+    enabled: true
+    permission: xdtils.vanish
+  v:
+    enabled: true
+    permission: xdtils.vanish
