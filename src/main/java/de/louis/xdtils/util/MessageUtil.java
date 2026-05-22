@@ -551,5 +551,34 @@ public final class MessageUtil {
     public static Component chatCleared(String actorName) {
         return prefixed("<gray>Der Chat wurde von " + player(actorName) + "<gray> geleert.</gray>");
     }
+    // ── Vanish ────────────────────────────────────────────────────────
+
+    public static Component vanishToggled(boolean vanished) {
+        return prefixed("<gray>Vanish wurde "
+                + (vanished ? "<#86EFAC>aktiviert</#86EFAC>" : "<#F87171>deaktiviert</#F87171>")
+                + "<gray>.</gray>");
+    }
+
+    public static Component vanishToggledOther(String targetName, boolean vanished) {
+        return prefixed("<gray>Vanish von " + player(targetName) + "<gray> wurde "
+                + (vanished ? "<#86EFAC>aktiviert</#86EFAC>" : "<#F87171>deaktiviert</#F87171>")
+                + "<gray>.</gray>");
+    }
+
+    public static Component vanishRestored() {
+        return prefixed("<gray>Dein Vanish wurde <#86EFAC>wiederhergestellt</#86EFAC><gray>.</gray>");
+    }
+
+    // ── Msg ──────────────────────────────────────────────────────────
+
+    public static Component msgSent(String toName, String message) {
+        return parse("<dark_gray>[</dark_gray><gray>Du → " + player(toName)
+                + "<dark_gray>]</dark_gray> <white>" + escape(message) + "</white>");
+    }
+
+    public static Component msgReceived(String fromName, String message) {
+        return parse("<dark_gray>[</dark_gray><gray>" + player(fromName)
+                + "<gray> → Du<dark_gray>]</dark_gray> <white>" + escape(message) + "</white>");
+    }
 }
 

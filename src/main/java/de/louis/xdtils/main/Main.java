@@ -1,11 +1,8 @@
 package de.louis.xdtils.main;
 
 import de.louis.xdtils.commands.*;
-import de.louis.xdtils.listener.BackListener;
-import de.louis.xdtils.listener.ChatListener;
-import de.louis.xdtils.listener.VanishListener;
-import de.louis.xdtils.manager.ConfigManager;
-import de.louis.xdtils.manager.VanishManager;
+import de.louis.xdtils.listener.*;
+import de.louis.xdtils.manager.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
@@ -15,11 +12,21 @@ public final class Main extends JavaPlugin {
 
     private ConfigManager configManager;
     private VanishManager vanishManager;
+    private SpyManager spyManager;
+    private MsgManager msgManager;
+    private AfkManager afkManager;
+    private FreezeManager freezeManager;
+    private MaintenanceManager maintenanceManager;
 
     @Override
     public void onEnable() {
-        this.configManager = new ConfigManager(this);
-        this.vanishManager = new VanishManager(this);
+        this.configManager       = new ConfigManager(this);
+        this.vanishManager       = new VanishManager(this);
+        this.spyManager          = new SpyManager();
+        this.msgManager          = new MsgManager(spyManager);
+        this.afkManager          = new AfkManager();
+        this.freezeManager       = new FreezeManager();
+        this.maintenanceManager  = new MaintenanceManager();
         registerCommands();
         registerListeners();
         getLogger().info("xdtils wurde aktiviert!");
@@ -61,31 +68,32 @@ public final class Main extends JavaPlugin {
 
         // Teleport
         TeleportCommand tp = new TeleportCommand();
-        registerCommand("tp", tp, tp, "xdtils.tp");
-        registerCommand("tphere", new TpHereCommand(), null, "xdtils.tphere");
+        registerCommand("tp",     tp,                  tp,                  "xdtils.tp");
+        registerCommand("tphere", new TpHereCommand(), null,                "xdtils.tphere");
+        registerCommand("tpworld",new TpWorldCommand(),new TpWorldCommand(),"xdtils.tpworld");
 
         // Clear / Trash
         ClearCommand clear = new ClearCommand();
-        registerCommand("clear", clear, clear, "xdtils.clear");
+        registerCommand("clear", clear,               clear, "xdtils.clear");
         registerCommand("trash", new TrashCommand(this), null, "xdtils.trash");
 
         // Item / Give
         ItemCommand item = new ItemCommand();
-        registerCommand("i", item, item, "xdtils.item");
+        registerCommand("i",    item,             item,             "xdtils.item");
         GiveCommand give = new GiveCommand();
-        registerCommand("give", give, give, "xdtils.give");
+        registerCommand("give", give,             give,             "xdtils.give");
 
         // Kick / Ban / Pardon
         KickCommand kick = new KickCommand();
-        registerCommand("kick", kick, kick, "xdtils.kick");
+        registerCommand("kick",      kick,                    kick,                    "xdtils.kick");
         BanCommand ban = new BanCommand(false);
-        registerCommand("ban", ban, ban, "xdtils.ban");
+        registerCommand("ban",       ban,                     ban,                     "xdtils.ban");
         BanCommand banIp = new BanCommand(true);
-        registerCommand("ban-ip", banIp, banIp, "xdtils.ban.ip");
+        registerCommand("ban-ip",    banIp,                   banIp,                   "xdtils.ban.ip");
         PardonCommand pardon = new PardonCommand(false);
-        registerCommand("pardon", pardon, pardon, "xdtils.pardon");
+        registerCommand("pardon",    pardon,                  pardon,                  "xdtils.pardon");
         PardonCommand pardonIp = new PardonCommand(true);
-        registerCommand("pardon-ip", pardonIp, pardonIp, "xdtils.pardon.ip");
+        registerCommand("pardon-ip", pardonIp,                pardonIp,                "xdtils.pardon.ip");
 
         // Op / Deop
         registerCommand("op",   new OpCommand(false), new OpCommand(false), "xdtils.op");
@@ -97,9 +105,9 @@ public final class Main extends JavaPlugin {
 
         // Time / Weather / Difficulty
         TimeCommand time = new TimeCommand();
-        registerCommand("time", time, time, "xdtils.time");
+        registerCommand("time",       time,       time,       "xdtils.time");
         WeatherCommand weather = new WeatherCommand();
-        registerCommand("weather", weather, weather, "xdtils.weather");
+        registerCommand("weather",    weather,    weather,    "xdtils.weather");
         DifficultyCommand difficulty = new DifficultyCommand();
         registerCommand("difficulty", difficulty, difficulty, "xdtils.difficulty");
 
@@ -108,12 +116,9 @@ public final class Main extends JavaPlugin {
         registerCommand("whitelist", whitelist, whitelist, "xdtils.whitelist");
 
         // Heal / Feed / Fly
-        HealCommand heal = new HealCommand();
-        registerCommand("heal", heal, heal, "xdtils.heal");
-        FeedCommand feed = new FeedCommand();
-        registerCommand("feed", feed, feed, "xdtils.feed");
-        FlyCommand fly = new FlyCommand();
-        registerCommand("fly", fly, fly, "xdtils.fly");
+        registerCommand("heal", new HealCommand(), new HealCommand(), "xdtils.heal");
+        registerCommand("feed", new FeedCommand(), new FeedCommand(), "xdtils.feed");
+        registerCommand("fly",  new FlyCommand(),  new FlyCommand(),  "xdtils.fly");
 
         // ClearChat
         registerCommand("cc", new ClearChatCommand(), null, "xdtils.clearchat");
@@ -121,7 +126,59 @@ public final class Main extends JavaPlugin {
         // Vanish
         VanishCommand vanish = new VanishCommand(vanishManager);
         registerCommand("vanish", vanish, vanish, "xdtils.vanish");
-        registerCommand("v", vanish, vanish, "xdtils.vanish");
+        registerCommand("v",      vanish, vanish, "xdtils.vanish");
+
+        // Info
+        InfoCommand info = new InfoCommand();
+        registerCommand("info", info, info, "xdtils.info");
+
+        // Nick
+        NickCommand nick = new NickCommand();
+        registerCommand("nick", nick, nick, "xdtils.nick");
+
+        // Msg / Reply / Ignore
+        MsgCommand msg = new MsgCommand(msgManager);
+        registerCommand("msg",    msg,                          msg,    "xdtils.msg");
+        registerCommand("r",      new ReplyCommand(msgManager), null,   "xdtils.msg");
+        IgnoreCommand ignore = new IgnoreCommand(msgManager);
+        registerCommand("ignore", ignore,                       ignore, "xdtils.ignore");
+
+        // AFK
+        registerCommand("afk", new AfkCommand(afkManager), null, "xdtils.afk");
+
+        // Seen / Playtime / Ping
+        SeenCommand seen = new SeenCommand();
+        registerCommand("seen",     seen,                 seen,                 "xdtils.seen");
+        PlaytimeCommand playtime = new PlaytimeCommand();
+        registerCommand("playtime", playtime,             playtime,             "xdtils.playtime");
+        PingCommand ping = new PingCommand();
+        registerCommand("ping",     ping,                 ping,                 "xdtils.ping");
+
+        // Broadcast / Staff
+        registerCommand("broadcast", new BroadcastCommand(), null, "xdtils.broadcast");
+        registerCommand("staff",     new StaffCommand(),     null, "xdtils.staff");
+
+        // Maintenance
+        MaintenanceCommand maintenance = new MaintenanceCommand(maintenanceManager);
+        registerCommand("maintenance", maintenance, maintenance, "xdtils.maintenance");
+
+        // Freeze
+        FreezeCommand freeze = new FreezeCommand(freezeManager);
+        registerCommand("freeze", freeze, freeze, "xdtils.freeze");
+
+        // Sudo
+        SudoCommand sudo = new SudoCommand();
+        registerCommand("sudo", sudo, sudo, "xdtils.sudo");
+
+        // Rename / Lore / ItemDb
+        registerCommand("rename", new RenameCommand(), null,                "xdtils.rename");
+        LoreCommand lore = new LoreCommand();
+        registerCommand("lore",   lore,                lore,                "xdtils.lore");
+        registerCommand("itemdb", new ItemDbCommand(), null,                "xdtils.itemdb");
+
+        // CommandSpy / SocialSpy
+        registerCommand("commandspy", new CommandSpyCommand(spyManager), null, "xdtils.commandspy");
+        registerCommand("socialspy",  new SocialSpyCommand(spyManager),  null, "xdtils.socialspy");
 
         // Workstations
         registerWorkstation("workbench",   "workbench",   "xdtils.workbench");
@@ -138,6 +195,10 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new BackListener(), this);
         Bukkit.getPluginManager().registerEvents(new ChatListener(), this);
         Bukkit.getPluginManager().registerEvents(new VanishListener(vanishManager), this);
+        Bukkit.getPluginManager().registerEvents(new FreezeListener(freezeManager), this);
+        Bukkit.getPluginManager().registerEvents(new MaintenanceListener(maintenanceManager), this);
+        Bukkit.getPluginManager().registerEvents(new CommandSpyListener(spyManager), this);
+        Bukkit.getPluginManager().registerEvents(new AfkListener(afkManager), this);
     }
 
     private void registerCommand(String name, CommandExecutor executor,

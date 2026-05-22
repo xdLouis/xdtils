@@ -1,6 +1,8 @@
-# xdtils Konfiguration
-# Alle Commands können hier aktiviert/deaktiviert werden.
-# Die permission überschreibt die Standard-Permission aus der plugin.yml.
+# ╔══════════════════════════════════════════════╗
+# ║           xdtils - Konfiguration             ║
+# ║  enabled: true/false  →  Command an/aus      ║
+# ║  permission: xyz      →  Permission override ║
+# ╚══════════════════════════════════════════════╝
 
 commands:
   gamemode:
@@ -36,6 +38,9 @@ commands:
   tphere:
     enabled: true
     permission: xdtils.tphere
+  tpworld:
+    enabled: true
+    permission: xdtils.tpworld
   clear:
     enabled: true
     permission: xdtils.clear
@@ -96,6 +101,69 @@ commands:
   cc:
     enabled: true
     permission: xdtils.clearchat
+  vanish:
+    enabled: true
+    permission: xdtils.vanish
+  v:
+    enabled: true
+    permission: xdtils.vanish
+  info:
+    enabled: true
+    permission: xdtils.info
+  nick:
+    enabled: true
+    permission: xdtils.nick
+  msg:
+    enabled: true
+    permission: xdtils.msg
+  r:
+    enabled: true
+    permission: xdtils.msg
+  ignore:
+    enabled: true
+    permission: xdtils.ignore
+  afk:
+    enabled: true
+    permission: xdtils.afk
+  seen:
+    enabled: true
+    permission: xdtils.seen
+  playtime:
+    enabled: true
+    permission: xdtils.playtime
+  ping:
+    enabled: true
+    permission: xdtils.ping
+  broadcast:
+    enabled: true
+    permission: xdtils.broadcast
+  staff:
+    enabled: true
+    permission: xdtils.staff
+  maintenance:
+    enabled: true
+    permission: xdtils.maintenance
+  freeze:
+    enabled: true
+    permission: xdtils.freeze
+  sudo:
+    enabled: true
+    permission: xdtils.sudo
+  rename:
+    enabled: true
+    permission: xdtils.rename
+  lore:
+    enabled: true
+    permission: xdtils.lore
+  itemdb:
+    enabled: true
+    permission: xdtils.itemdb
+  commandspy:
+    enabled: true
+    permission: xdtils.commandspy
+  socialspy:
+    enabled: true
+    permission: xdtils.socialspy
   workbench:
     enabled: true
     permission: xdtils.workbench
@@ -120,9 +188,3 @@ commands:
   enchanting:
     enabled: true
     permission: xdtils.enchanting
-  vanish:
-    enabled: true
-    permission: xdtils.vanish
-  v:
-    enabled: true
-    permission: xdtils.vanish
