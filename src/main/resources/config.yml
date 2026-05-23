@@ -188,3 +188,90 @@ commands:
   enchanting:
     enabled: true
     permission: xdtils.enchanting
+  repair:
+    enabled: true
+    permission: xdtils.repair
+  more:
+    enabled: true
+    permission: xdtils.more
+  restart:
+    enabled: true
+    permission: xdtils.restart
+  tps:
+    enabled: true
+    permission: xdtils.tps
+  memory:
+    enabled: true
+    permission: xdtils.memory
+  god:
+    enabled: true
+    permission: xdtils.god
+  xp:
+    enabled: true
+    permission: xdtils.xp
+  near:
+    enabled: true
+    permission: xdtils.near
+  firework:
+    enabled: true
+    permission: xdtils.firework
+  skull:
+    enabled: true
+    permission: xdtils.skull
+  invsave:
+    enabled: true
+    permission: xdtils.invsave
+  invload:
+    enabled: true
+    permission: xdtils.invload
+  recipe:
+    enabled: true
+    permission: xdtils.recipe
+  mute:
+    enabled: true
+    permission: xdtils.mute
+  unmute:
+    enabled: true
+    permission: xdtils.mute
+  history:
+    enabled: true
+    permission: xdtils.history
+  trail:
+    enabled: true
+    permission: xdtils.trail
+  list:
+    enabled: true
+    permission: xdtils.list
+  menu:
+    enabled: true
+    permission: xdtils.menu
+  balance:
+    enabled: true
+    permission: "xdtils.balance"
+  bal:
+    enabled: true
+    permission: "xdtils.balance"
+
+  money:
+    enabled: true
+    permission: "xdtils.balance"
+
+  pay:
+    enabled: true
+    permission: "xdtils.pay"
+
+  eco:
+    enabled: true
+    permission: "xdtils.eco"
+
+
+economy:
+  enabled: true
+  storage: yaml
+  starting-balance: 0.0
+  currency-symbol: "$"
+  currency-name-singular: "Coin"
+  currency-name-plural: "Coins"
+  pay-enabled: true
+  admin-enabled: true
+  vault-hook: true

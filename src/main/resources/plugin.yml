@@ -4,8 +4,14 @@ main: de.louis.xdtils.main.Main
 api-version: '1.21'
 description: A QoL Plugin for Paper 1.21.1
 author: xdLouis
+softdepend:
+  - Vault
 
 commands:
+  balance:
+    aliases: [ bal, money ]
+  pay:
+  eco:
   # Gamemode
   gamemode:
     description: Gamemode wechseln
@@ -98,6 +104,14 @@ commands:
   kill:
     description: Spieler töten
     usage: /kill [spieler|@a]
+  xdtils.balance:
+    default: true
+  xdtils.balance.others:
+    default: op
+  xdtils.pay:
+    default: true
+  xdtils.eco:
+    default: op
 
   # Welt
   time:
@@ -112,6 +126,36 @@ commands:
   whitelist:
     description: Whitelist verwalten
     usage: /whitelist <on|off|add|remove|list|reload>
+  repair:
+    description: Item reparieren
+    usage: /repair [all]
+  more:
+    description: Stack auffüllen
+    usage: /more
+  restart:
+    description: Server neustarten
+    usage: /restart [sekunden|cancel]
+  tps:
+    description: Server-Performance anzeigen
+    usage: /tps
+  memory:
+    description: RAM-Auslastung anzeigen
+    usage: /memory
+  god:
+    description: Godmode togglen
+    usage: /god [spieler]
+  xp:
+    description: XP verwalten
+    usage: /xp <give|set|take> <spieler> <menge> [levels]
+  near:
+    description: Spieler in der Nähe anzeigen
+    usage: /near [radius]
+  firework:
+    description: Feuerwerk starten
+    usage: /firework [anzahl]
+  skull:
+    description: Spielerkopf erhalten
+    usage: /skull [spieler]
 
   # Spieler-Utilities
   heal:
@@ -235,6 +279,33 @@ commands:
   enchanting:
     description: Zaubertisch öffnen
     usage: /enchanting
+  invsave:
+    description: Inventar-Snapshot speichern
+    usage: /invsave [slot]
+  invload:
+    description: Inventar-Snapshot laden
+    usage: /invload [slot]
+  recipe:
+    description: Crafting-Rezept anzeigen
+    usage: /recipe <material>
+  mute:
+    description: Spieler stummschalten
+    usage: /mute <spieler> [grund]
+  unmute:
+    description: Spieler entstummen
+    usage: /unmute <spieler>
+  history:
+    description: Moderations-Historie anzeigen
+    usage: /history <spieler>
+  trail:
+    description: Partikel-Trail setzen
+    usage: /trail [typ|off]
+  list:
+    description: Spielerliste anzeigen
+    usage: /list
+  menu:
+    description: xdtils GUI-Menü öffnen
+    usage: /menu
 
 permissions:
   xdtils.gamemode:
@@ -355,3 +426,43 @@ permissions:
     default: op
   xdtils.enchanting:
     default: op
+  xdtils.repair:
+    default: op
+  xdtils.repair.all:
+    default: op
+  xdtils.more:
+    default: op
+  xdtils.restart:
+    default: op
+  xdtils.tps:
+    default: op
+  xdtils.memory:
+    default: op
+  xdtils.god:
+    default: op
+  xdtils.god.others:
+    default: op
+  xdtils.xp:
+    default: op
+  xdtils.near:
+    default: op
+  xdtils.firework:
+    default: op
+  xdtils.skull:
+    default: op
+  xdtils.invsave:
+    default: op
+  xdtils.invload:
+    default: op
+  xdtils.recipe:
+    default: true
+  xdtils.mute:
+    default: op
+  xdtils.history:
+    default: op
+  xdtils.trail:
+    default: true
+  xdtils.list:
+    default: true
+  xdtils.menu:
+    default: true

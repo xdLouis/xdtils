@@ -17,9 +17,14 @@ public final class Main extends JavaPlugin {
     private AfkManager afkManager;
     private FreezeManager freezeManager;
     private MaintenanceManager maintenanceManager;
+    private MuteManager muteManager;
+    private TrailManager trailManager;
+    private EconomyManager economyManager;
 
     @Override
     public void onEnable() {
+        saveDefaultConfig();
+
         this.configManager       = new ConfigManager(this);
         this.vanishManager       = new VanishManager(this);
         this.spyManager          = new SpyManager();
@@ -27,14 +32,39 @@ public final class Main extends JavaPlugin {
         this.afkManager          = new AfkManager();
         this.freezeManager       = new FreezeManager();
         this.maintenanceManager  = new MaintenanceManager();
+        this.muteManager         = new MuteManager();
+        this.trailManager        = new TrailManager(this);
+
+        if (getConfig().getBoolean("economy.enabled", true)) {
+            this.economyManager = new EconomyManager(this);
+            getLogger().info("Interne Economy wurde aktiviert.");
+        } else {
+            getLogger().info("Interne Economy ist deaktiviert.");
+        }
+
         registerCommands();
         registerListeners();
+
+        if (economyManager != null && getConfig().getBoolean("economy.vault-hook", true)) {
+            if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
+                getLogger().info("Vault wurde gefunden. Optionaler Economy-Hook kann initialisiert werden.");
+            } else {
+                getLogger().info("Vault wurde nicht gefunden.");
+            }
+        }
+
         getLogger().info("xdtils wurde aktiviert!");
     }
 
     @Override
     public void onDisable() {
         vanishManager.save();
+        trailManager.shutdown();
+
+        if (economyManager != null) {
+            economyManager.save();
+        }
+
         getLogger().info("xdtils wurde deaktiviert.");
     }
 
@@ -68,36 +98,39 @@ public final class Main extends JavaPlugin {
 
         // Teleport
         TeleportCommand tp = new TeleportCommand();
-        registerCommand("tp",     tp,                  tp,                  "xdtils.tp");
-        registerCommand("tphere", new TpHereCommand(), null,                "xdtils.tphere");
-        registerCommand("tpworld",new TpWorldCommand(),new TpWorldCommand(),"xdtils.tpworld");
+        registerCommand("tp",      tp,                   tp,                   "xdtils.tp");
+        registerCommand("tphere",  new TpHereCommand(),  null,                 "xdtils.tphere");
+        registerCommand("tpworld", new TpWorldCommand(), new TpWorldCommand(), "xdtils.tpworld");
 
         // Clear / Trash
         ClearCommand clear = new ClearCommand();
-        registerCommand("clear", clear,               clear, "xdtils.clear");
+        registerCommand("clear", clear, clear, "xdtils.clear");
         registerCommand("trash", new TrashCommand(this), null, "xdtils.trash");
 
         // Item / Give
         ItemCommand item = new ItemCommand();
-        registerCommand("i",    item,             item,             "xdtils.item");
+        registerCommand("i", item, item, "xdtils.item");
         GiveCommand give = new GiveCommand();
-        registerCommand("give", give,             give,             "xdtils.give");
+        registerCommand("give", give, give, "xdtils.give");
 
         // Kick / Ban / Pardon
         KickCommand kick = new KickCommand();
-        registerCommand("kick",      kick,                    kick,                    "xdtils.kick");
+        registerCommand("kick", kick, kick, "xdtils.kick");
         BanCommand ban = new BanCommand(false);
-        registerCommand("ban",       ban,                     ban,                     "xdtils.ban");
+        registerCommand("ban", ban, ban, "xdtils.ban");
         BanCommand banIp = new BanCommand(true);
-        registerCommand("ban-ip",    banIp,                   banIp,                   "xdtils.ban.ip");
+        registerCommand("ban-ip", banIp, banIp, "xdtils.ban.ip");
         PardonCommand pardon = new PardonCommand(false);
-        registerCommand("pardon",    pardon,                  pardon,                  "xdtils.pardon");
+        registerCommand("pardon", pardon, pardon, "xdtils.pardon");
         PardonCommand pardonIp = new PardonCommand(true);
-        registerCommand("pardon-ip", pardonIp,                pardonIp,                "xdtils.pardon.ip");
+        registerCommand("pardon-ip", pardonIp, pardonIp, "xdtils.pardon.ip");
 
         // Op / Deop
-        registerCommand("op",   new OpCommand(false), new OpCommand(false), "xdtils.op");
-        registerCommand("deop", new OpCommand(true),  new OpCommand(true),  "xdtils.deop");
+        OpCommand opCommand = new OpCommand(false);
+        registerCommand("op", opCommand, opCommand, "xdtils.op");
+
+        OpCommand deopCommand = new OpCommand(true);
+        registerCommand("deop", deopCommand, deopCommand, "xdtils.deop");
 
         // Kill
         KillCommand kill = new KillCommand();
@@ -105,9 +138,9 @@ public final class Main extends JavaPlugin {
 
         // Time / Weather / Difficulty
         TimeCommand time = new TimeCommand();
-        registerCommand("time",       time,       time,       "xdtils.time");
+        registerCommand("time", time, time, "xdtils.time");
         WeatherCommand weather = new WeatherCommand();
-        registerCommand("weather",    weather,    weather,    "xdtils.weather");
+        registerCommand("weather", weather, weather, "xdtils.weather");
         DifficultyCommand difficulty = new DifficultyCommand();
         registerCommand("difficulty", difficulty, difficulty, "xdtils.difficulty");
 
@@ -126,7 +159,7 @@ public final class Main extends JavaPlugin {
         // Vanish
         VanishCommand vanish = new VanishCommand(vanishManager);
         registerCommand("vanish", vanish, vanish, "xdtils.vanish");
-        registerCommand("v",      vanish, vanish, "xdtils.vanish");
+        registerCommand("v", vanish, vanish, "xdtils.vanish");
 
         // Info
         InfoCommand info = new InfoCommand();
@@ -138,25 +171,25 @@ public final class Main extends JavaPlugin {
 
         // Msg / Reply / Ignore
         MsgCommand msg = new MsgCommand(msgManager);
-        registerCommand("msg",    msg,                          msg,    "xdtils.msg");
-        registerCommand("r",      new ReplyCommand(msgManager), null,   "xdtils.msg");
+        registerCommand("msg", msg, msg, "xdtils.msg");
+        registerCommand("r", new ReplyCommand(msgManager), null, "xdtils.msg");
         IgnoreCommand ignore = new IgnoreCommand(msgManager);
-        registerCommand("ignore", ignore,                       ignore, "xdtils.ignore");
+        registerCommand("ignore", ignore, ignore, "xdtils.ignore");
 
         // AFK
         registerCommand("afk", new AfkCommand(afkManager), null, "xdtils.afk");
 
         // Seen / Playtime / Ping
         SeenCommand seen = new SeenCommand();
-        registerCommand("seen",     seen,                 seen,                 "xdtils.seen");
+        registerCommand("seen", seen, seen, "xdtils.seen");
         PlaytimeCommand playtime = new PlaytimeCommand();
-        registerCommand("playtime", playtime,             playtime,             "xdtils.playtime");
+        registerCommand("playtime", playtime, playtime, "xdtils.playtime");
         PingCommand ping = new PingCommand();
-        registerCommand("ping",     ping,                 ping,                 "xdtils.ping");
+        registerCommand("ping", ping, ping, "xdtils.ping");
 
         // Broadcast / Staff
         registerCommand("broadcast", new BroadcastCommand(), null, "xdtils.broadcast");
-        registerCommand("staff",     new StaffCommand(),     null, "xdtils.staff");
+        registerCommand("staff", new StaffCommand(), null, "xdtils.staff");
 
         // Maintenance
         MaintenanceCommand maintenance = new MaintenanceCommand(maintenanceManager);
@@ -171,24 +204,69 @@ public final class Main extends JavaPlugin {
         registerCommand("sudo", sudo, sudo, "xdtils.sudo");
 
         // Rename / Lore / ItemDb
-        registerCommand("rename", new RenameCommand(), null,                "xdtils.rename");
+        registerCommand("rename", new RenameCommand(), null, "xdtils.rename");
         LoreCommand lore = new LoreCommand();
-        registerCommand("lore",   lore,                lore,                "xdtils.lore");
-        registerCommand("itemdb", new ItemDbCommand(), null,                "xdtils.itemdb");
+        registerCommand("lore", lore, lore, "xdtils.lore");
+        registerCommand("itemdb", new ItemDbCommand(), null, "xdtils.itemdb");
 
         // CommandSpy / SocialSpy
         registerCommand("commandspy", new CommandSpyCommand(spyManager), null, "xdtils.commandspy");
-        registerCommand("socialspy",  new SocialSpyCommand(spyManager),  null, "xdtils.socialspy");
+        registerCommand("socialspy", new SocialSpyCommand(spyManager), null, "xdtils.socialspy");
 
         // Workstations
-        registerWorkstation("workbench",   "workbench",   "xdtils.workbench");
-        registerWorkstation("anvil",       "anvil",       "xdtils.anvil");
-        registerWorkstation("grindstone",  "grindstone",  "xdtils.grindstone");
+        registerWorkstation("workbench", "workbench", "xdtils.workbench");
+        registerWorkstation("anvil", "anvil", "xdtils.anvil");
+        registerWorkstation("grindstone", "grindstone", "xdtils.grindstone");
         registerWorkstation("cartography", "cartography", "xdtils.cartography");
-        registerWorkstation("loom",        "loom",        "xdtils.loom");
+        registerWorkstation("loom", "loom", "xdtils.loom");
         registerWorkstation("stonecutter", "stonecutter", "xdtils.stonecutter");
-        registerWorkstation("smithing",    "smithing",    "xdtils.smithing");
-        registerWorkstation("enchanting",  "enchanting",  "xdtils.enchanting");
+        registerWorkstation("smithing", "smithing", "xdtils.smithing");
+        registerWorkstation("enchanting", "enchanting", "xdtils.enchanting");
+
+        // Gameplay / Server / Items / Fun
+        GodCommand god = new GodCommand();
+        registerCommand("repair", new RepairCommand(), new RepairCommand(), "xdtils.repair");
+        registerCommand("more", new MoreCommand(), null, "xdtils.more");
+        registerCommand("restart", new RestartCommand(this), new RestartCommand(this), "xdtils.restart");
+        registerCommand("tps", new TpsCommand(), null, "xdtils.tps");
+        registerCommand("memory", new MemoryCommand(), null, "xdtils.memory");
+        registerCommand("god", god, god, "xdtils.god");
+        registerCommand("xp", new XpCommand(), new XpCommand(), "xdtils.xp");
+        registerCommand("near", new NearCommand(), null, "xdtils.near");
+        registerCommand("firework", new FireworkCommand(), null, "xdtils.firework");
+        registerCommand("skull", new SkullCommand(), new SkullCommand(), "xdtils.skull");
+
+        // Manager / Extra Commands
+        InvSnapshotManager snapManager = new InvSnapshotManager();
+        HistoryManager historyManager = new HistoryManager();
+
+        registerCommand("invsave", new InvSaveCommand(snapManager), new InvSaveCommand(snapManager), "xdtils.invsave");
+        registerCommand("invload", new InvLoadCommand(snapManager), new InvLoadCommand(snapManager), "xdtils.invload");
+        registerCommand("recipe", new RecipeCommand(), new RecipeCommand(), "xdtils.recipe");
+        registerCommand("mute", new MuteCommand(muteManager), new MuteCommand(muteManager), "xdtils.mute");
+        registerCommand("unmute", new UnmuteCommand(muteManager), new UnmuteCommand(muteManager), "xdtils.mute");
+        registerCommand("history", new HistoryCommand(historyManager), new HistoryCommand(historyManager), "xdtils.history");
+        registerCommand("trail", new TrailCommand(trailManager), new TrailCommand(trailManager), "xdtils.trail");
+        registerCommand("list", new ListCommand(), null, "xdtils.list");
+        registerCommand("menu", new MenuCommand(this), null, "xdtils.menu");
+
+        // Economy
+        if (economyManager != null) {
+            BalanceCommand balanceCommand = new BalanceCommand(economyManager);
+            registerCommand("balance", balanceCommand, balanceCommand, "xdtils.balance");
+            registerCommand("bal", balanceCommand, balanceCommand, "xdtils.balance");
+            registerCommand("money", balanceCommand, balanceCommand, "xdtils.balance");
+
+            if (getConfig().getBoolean("economy.pay-enabled", true)) {
+                PayCommand payCommand = new PayCommand(economyManager);
+                registerCommand("pay", payCommand, payCommand, "xdtils.pay");
+            }
+
+            if (getConfig().getBoolean("economy.admin-enabled", true)) {
+                EcoCommand ecoCommand = new EcoCommand(economyManager);
+                registerCommand("eco", ecoCommand, ecoCommand, "xdtils.eco");
+            }
+        }
     }
 
     private void registerListeners() {
@@ -199,6 +277,7 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new MaintenanceListener(maintenanceManager), this);
         Bukkit.getPluginManager().registerEvents(new CommandSpyListener(spyManager), this);
         Bukkit.getPluginManager().registerEvents(new AfkListener(afkManager), this);
+        Bukkit.getPluginManager().registerEvents(new MuteListener(muteManager), this);
     }
 
     private void registerCommand(String name, CommandExecutor executor,
@@ -207,10 +286,16 @@ public final class Main extends JavaPlugin {
             getLogger().info("[xdtils] Command /" + name + " ist deaktiviert.");
             return;
         }
+
         var cmd = getCommand(name);
         if (cmd == null) return;
+
         cmd.setExecutor(executor);
-        if (completer != null) cmd.setTabCompleter(completer);
+
+        if (completer != null) {
+            cmd.setTabCompleter(completer);
+        }
+
         String permission = configManager.getCommandPermission(name, defaultPermission);
         cmd.setPermission(permission);
     }
@@ -220,10 +305,21 @@ public final class Main extends JavaPlugin {
             getLogger().info("[xdtils] Command /" + commandName + " ist deaktiviert.");
             return;
         }
+
         var cmd = getCommand(commandName);
         if (cmd == null) return;
+
         cmd.setExecutor(new WorkstationCommand(type));
+
         String permission = configManager.getCommandPermission(commandName, defaultPermission);
         cmd.setPermission(permission);
+    }
+
+    public EconomyManager getEconomyManager() {
+        return economyManager;
+    }
+
+    public boolean isEconomyEnabled() {
+        return economyManager != null;
     }
 }
