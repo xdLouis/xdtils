@@ -24,6 +24,7 @@ public class AfkCommand implements CommandExecutor {
         }
 
         if (!player.hasPermission("xdtils.afk")) {
+
             player.sendMessage(MessageUtil.noPermission(label));
             return true;
         }

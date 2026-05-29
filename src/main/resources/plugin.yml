@@ -9,19 +9,26 @@ softdepend:
 
 commands:
   balance:
-    aliases: [ bal, money ]
+    description: Kontostand anzeigen
+    usage: /balance [spieler]
+    aliases: [bal, money]
   pay:
+    description: Geld an andere Spieler senden
+    usage: /pay <spieler> <betrag>
   eco:
-  # Gamemode
+    description: Economy verwalten
+    usage: /eco <set|add|remove> <spieler> <betrag>
+
+  permissions:
+    description: Permission-System verwalten
+    usage: /permissions [group|user|list|reload]
+    aliases: [perms]
+
   gamemode:
     description: Gamemode wechseln
     usage: /gamemode <modus> [spieler]
     aliases: [gm]
-  gm:
-    description: Gamemode wechseln (Alias)
-    usage: /gm <modus> [spieler]
 
-  # Speed
   speed:
     description: Bewegungsgeschwindigkeit setzen
     usage: /speed <wert> [spieler]
@@ -32,27 +39,22 @@ commands:
     description: Fluggeschwindigkeit setzen
     usage: /flyspeed <wert> [spieler]
 
-  # Enchant
   enchant:
     description: Item in der Hand verzaubern
     usage: /enchant <verzauberung> [stufe]
 
-  # Hat
   hat:
     description: Item als Helm tragen
     usage: /hat
 
-  # Invsee
   invsee:
     description: Inventar eines Spielers öffnen
     usage: /invsee <spieler>
 
-  # Back
   back:
     description: Zum letzten Standort zurückkehren
     usage: /back
 
-  # Teleport
   tp:
     description: Spieler teleportieren
     usage: /tp <spieler> [ziel]
@@ -63,7 +65,6 @@ commands:
     description: In eine andere Welt teleportieren
     usage: /tpworld <welt>
 
-  # Inventar
   clear:
     description: Inventar leeren
     usage: /clear [spieler]
@@ -71,7 +72,6 @@ commands:
     description: Mülleimer öffnen
     usage: /trash
 
-  # Items
   i:
     description: Item geben (Kurzform)
     usage: /i <item> [menge]
@@ -79,7 +79,6 @@ commands:
     description: Item an Spieler geben
     usage: /give <spieler> <item> [menge]
 
-  # Moderation
   kick:
     description: Spieler kicken
     usage: /kick <spieler> [grund]
@@ -104,16 +103,7 @@ commands:
   kill:
     description: Spieler töten
     usage: /kill [spieler|@a]
-  xdtils.balance:
-    default: true
-  xdtils.balance.others:
-    default: op
-  xdtils.pay:
-    default: true
-  xdtils.eco:
-    default: op
 
-  # Welt
   time:
     description: Tageszeit setzen
     usage: /time <set|add|query> [wert]
@@ -126,6 +116,7 @@ commands:
   whitelist:
     description: Whitelist verwalten
     usage: /whitelist <on|off|add|remove|list|reload>
+
   repair:
     description: Item reparieren
     usage: /repair [all]
@@ -157,7 +148,6 @@ commands:
     description: Spielerkopf erhalten
     usage: /skull [spieler]
 
-  # Spieler-Utilities
   heal:
     description: Spieler heilen
     usage: /heal [spieler|@a]
@@ -171,26 +161,19 @@ commands:
     description: Chat leeren
     usage: /cc
 
-  # Vanish
   vanish:
     description: Vanish togglen
     usage: /vanish [spieler]
     aliases: [v]
-  v:
-    description: Vanish togglen (Alias)
-    usage: /v [spieler]
 
-  # Info
   info:
     description: Spielerinformationen anzeigen
     usage: /info <spieler>
 
-  # Nick
   nick:
     description: Nickname setzen
     usage: /nick [name|off]
 
-  # Nachrichten
   msg:
     description: Privatnachricht senden
     usage: /msg <spieler> <nachricht>
@@ -201,12 +184,10 @@ commands:
     description: Spieler ignorieren/entignorieren
     usage: /ignore <spieler>
 
-  # AFK
   afk:
     description: AFK-Status togglen
     usage: /afk
 
-  # Statistiken
   seen:
     description: Letzten Online-Zeitpunkt anzeigen
     usage: /seen <spieler>
@@ -217,7 +198,6 @@ commands:
     description: Ping anzeigen
     usage: /ping [spieler]
 
-  # Admin
   broadcast:
     description: Server-weite Nachricht senden
     usage: /broadcast <nachricht>
@@ -235,7 +215,6 @@ commands:
     description: Command als anderer Spieler ausführen
     usage: /sudo <spieler> <command>
 
-  # Items
   rename:
     description: Item umbenennen
     usage: /rename <name>
@@ -246,7 +225,6 @@ commands:
     description: Item-Informationen anzeigen
     usage: /itemdb
 
-  # Spy
   commandspy:
     description: CommandSpy togglen
     usage: /commandspy
@@ -254,7 +232,6 @@ commands:
     description: SocialSpy togglen
     usage: /socialspy
 
-  # Workstations
   workbench:
     description: Werkbank öffnen
     usage: /workbench
@@ -279,6 +256,7 @@ commands:
   enchanting:
     description: Zaubertisch öffnen
     usage: /enchanting
+
   invsave:
     description: Inventar-Snapshot speichern
     usage: /invsave [slot]
@@ -306,8 +284,48 @@ commands:
   menu:
     description: xdtils GUI-Menü öffnen
     usage: /menu
+  glow:
+    description: Toggle deinen Glow oder setze eine Glow-Farbe
+    usage: /glow [player] [color|on|off]
+  enderchest:
+    description: Öffnet deine Enderchest oder die eines anderen Spielers
+    usage: /enderchest [spieler]
+    aliases: [ec]
+  top:
+    description: Teleportiert dich auf den höchsten Block
+    usage: /top
+
+  bottom:
+    description: Teleportiert dich auf den nächsten sicheren Block unter dir
+    usage: /bottom
+
+  mob:
+    description: Spawnt einen Mob
+    usage: /mob <mob> [anzahl]
 
 permissions:
+  xdtils.permissions:
+    default: op
+  xdtils.permissions.reload:
+    default: op
+  xdtils.permissions.group.create:
+    default: op
+  xdtils.permissions.group.delete:
+    default: op
+  xdtils.permissions.group.modify:
+    default: op
+  xdtils.permissions.user.modify:
+    default: op
+
+  xdtils.balance:
+    default: true
+  xdtils.balance.others:
+    default: op
+  xdtils.pay:
+    default: true
+  xdtils.eco:
+    default: op
+
   xdtils.gamemode:
     default: op
   xdtils.speed:
@@ -466,3 +484,22 @@ permissions:
     default: true
   xdtils.menu:
     default: true
+  xdtils.glow:
+    default: op
+  xdtils.glow.others:
+    default: op
+  xdtils.enderchest:
+    default: op
+  xdtils.enderchest.others:
+    default: op
+  xdtils.top:
+    description: Erlaubt die Nutzung von /top
+    default: op
+
+  xdtils.bottom:
+    description: Erlaubt die Nutzung von /bottom
+    default: op
+
+  xdtils.mob:
+    description: Erlaubt die Nutzung von /mob
+    default: op

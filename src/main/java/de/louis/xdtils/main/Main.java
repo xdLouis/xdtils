@@ -3,6 +3,7 @@ package de.louis.xdtils.main;
 import de.louis.xdtils.commands.*;
 import de.louis.xdtils.listener.*;
 import de.louis.xdtils.manager.*;
+import de.louis.xdtils.manager.permissions.PermissionSystemManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
@@ -20,20 +21,22 @@ public final class Main extends JavaPlugin {
     private MuteManager muteManager;
     private TrailManager trailManager;
     private EconomyManager economyManager;
+    private PermissionSystemManager permissionSystemManager;
+    private GlowManager glowManager;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
 
-        this.configManager       = new ConfigManager(this);
-        this.vanishManager       = new VanishManager(this);
-        this.spyManager          = new SpyManager();
-        this.msgManager          = new MsgManager(spyManager);
-        this.afkManager          = new AfkManager();
-        this.freezeManager       = new FreezeManager();
-        this.maintenanceManager  = new MaintenanceManager();
-        this.muteManager         = new MuteManager();
-        this.trailManager        = new TrailManager(this);
+        this.configManager = new ConfigManager(this);
+        this.vanishManager = new VanishManager(this);
+        this.spyManager = new SpyManager();
+        this.msgManager = new MsgManager(spyManager);
+        this.afkManager = new AfkManager();
+        this.freezeManager = new FreezeManager();
+        this.maintenanceManager = new MaintenanceManager();
+        this.muteManager = new MuteManager();
+        this.trailManager = new TrailManager(this);
 
         if (getConfig().getBoolean("economy.enabled", true)) {
             this.economyManager = new EconomyManager(this);
@@ -42,8 +45,30 @@ public final class Main extends JavaPlugin {
             getLogger().info("Interne Economy ist deaktiviert.");
         }
 
+        if (getConfig().getBoolean("permissions-system.enabled", true)) {
+            this.permissionSystemManager = new PermissionSystemManager(this);
+            getLogger().info("Internes Permission-System wurde aktiviert.");
+        } else {
+            getLogger().info("Internes Permission-System ist deaktiviert.");
+        }
+
+        this.glowManager = new GlowManager(this);
+        if (glowManager.isEnabledInConfig()) {
+            getLogger().info("Glow-System wurde aktiviert.");
+        } else {
+            getLogger().info("Glow-System ist deaktiviert.");
+        }
+
         registerCommands();
         registerListeners();
+
+        if (permissionSystemManager != null) {
+            permissionSystemManager.refreshAllOnlinePlayers();
+        }
+
+        if (glowManager != null) {
+            glowManager.refreshAll();
+        }
 
         if (economyManager != null && getConfig().getBoolean("economy.vault-hook", true)) {
             if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
@@ -65,155 +90,157 @@ public final class Main extends JavaPlugin {
             economyManager.save();
         }
 
+        if (permissionSystemManager != null) {
+            permissionSystemManager.save();
+        }
+
+        if (glowManager != null) {
+            glowManager.save();
+        }
+
         getLogger().info("xdtils wurde deaktiviert.");
     }
 
     private void registerCommands() {
-        // Gamemode
         GamemodeCommand gm = new GamemodeCommand();
         registerCommand("gamemode", gm, gm, "xdtils.gamemode");
-        registerCommand("gm",       gm, gm, "xdtils.gamemode");
+        registerCommand("gm", gm, gm, "xdtils.gamemode");
 
-        // Speed
         SpeedCommand speedAuto = new SpeedCommand(SpeedCommand.SpeedType.AUTO);
         SpeedCommand speedWalk = new SpeedCommand(SpeedCommand.SpeedType.WALK);
-        SpeedCommand speedFly  = new SpeedCommand(SpeedCommand.SpeedType.FLY);
-        registerCommand("speed",     speedAuto, speedAuto, "xdtils.speed");
+        SpeedCommand speedFly = new SpeedCommand(SpeedCommand.SpeedType.FLY);
+        registerCommand("speed", speedAuto, speedAuto, "xdtils.speed");
         registerCommand("walkspeed", speedWalk, speedWalk, "xdtils.walkspeed");
-        registerCommand("flyspeed",  speedFly,  speedFly,  "xdtils.flyspeed");
+        registerCommand("flyspeed", speedFly, speedFly, "xdtils.flyspeed");
 
-        // Enchant
         EnchantCommand enchant = new EnchantCommand();
         registerCommand("enchant", enchant, enchant, "xdtils.enchant");
 
-        // Hat
         registerCommand("hat", new HatCommand(), null, "xdtils.hat");
 
-        // Invsee
         InvseeCommand invsee = new InvseeCommand(this);
         registerCommand("invsee", invsee, invsee, "xdtils.invsee");
 
-        // Back
         registerCommand("back", new BackCommand(), null, "xdtils.back");
 
-        // Teleport
         TeleportCommand tp = new TeleportCommand();
-        registerCommand("tp",      tp,                   tp,                   "xdtils.tp");
-        registerCommand("tphere",  new TpHereCommand(),  null,                 "xdtils.tphere");
-        registerCommand("tpworld", new TpWorldCommand(), new TpWorldCommand(), "xdtils.tpworld");
+        registerCommand("tp", tp, tp, "xdtils.tp");
 
-        // Clear / Trash
+        TpHereCommand tpHere = new TpHereCommand();
+        registerCommand("tphere", tpHere, null, "xdtils.tphere");
+
+        TpWorldCommand tpWorld = new TpWorldCommand();
+        registerCommand("tpworld", tpWorld, tpWorld, "xdtils.tpworld");
+
         ClearCommand clear = new ClearCommand();
         registerCommand("clear", clear, clear, "xdtils.clear");
+
         registerCommand("trash", new TrashCommand(this), null, "xdtils.trash");
 
-        // Item / Give
         ItemCommand item = new ItemCommand();
         registerCommand("i", item, item, "xdtils.item");
+
         GiveCommand give = new GiveCommand();
         registerCommand("give", give, give, "xdtils.give");
 
-        // Kick / Ban / Pardon
         KickCommand kick = new KickCommand();
         registerCommand("kick", kick, kick, "xdtils.kick");
+
         BanCommand ban = new BanCommand(false);
         registerCommand("ban", ban, ban, "xdtils.ban");
+
         BanCommand banIp = new BanCommand(true);
         registerCommand("ban-ip", banIp, banIp, "xdtils.ban.ip");
+
         PardonCommand pardon = new PardonCommand(false);
         registerCommand("pardon", pardon, pardon, "xdtils.pardon");
+
         PardonCommand pardonIp = new PardonCommand(true);
         registerCommand("pardon-ip", pardonIp, pardonIp, "xdtils.pardon.ip");
 
-        // Op / Deop
         OpCommand opCommand = new OpCommand(false);
         registerCommand("op", opCommand, opCommand, "xdtils.op");
 
         OpCommand deopCommand = new OpCommand(true);
         registerCommand("deop", deopCommand, deopCommand, "xdtils.deop");
 
-        // Kill
         KillCommand kill = new KillCommand();
         registerCommand("kill", kill, kill, "xdtils.kill");
 
-        // Time / Weather / Difficulty
         TimeCommand time = new TimeCommand();
         registerCommand("time", time, time, "xdtils.time");
+
         WeatherCommand weather = new WeatherCommand();
         registerCommand("weather", weather, weather, "xdtils.weather");
+
         DifficultyCommand difficulty = new DifficultyCommand();
         registerCommand("difficulty", difficulty, difficulty, "xdtils.difficulty");
 
-        // Whitelist
         WhitelistCommand whitelist = new WhitelistCommand();
         registerCommand("whitelist", whitelist, whitelist, "xdtils.whitelist");
 
-        // Heal / Feed / Fly
-        registerCommand("heal", new HealCommand(), new HealCommand(), "xdtils.heal");
-        registerCommand("feed", new FeedCommand(), new FeedCommand(), "xdtils.feed");
-        registerCommand("fly",  new FlyCommand(),  new FlyCommand(),  "xdtils.fly");
+        HealCommand heal = new HealCommand();
+        registerCommand("heal", heal, heal, "xdtils.heal");
 
-        // ClearChat
+        FeedCommand feed = new FeedCommand();
+        registerCommand("feed", feed, feed, "xdtils.feed");
+
+        FlyCommand fly = new FlyCommand();
+        registerCommand("fly", fly, fly, "xdtils.fly");
+
         registerCommand("cc", new ClearChatCommand(), null, "xdtils.clearchat");
 
-        // Vanish
         VanishCommand vanish = new VanishCommand(vanishManager);
         registerCommand("vanish", vanish, vanish, "xdtils.vanish");
         registerCommand("v", vanish, vanish, "xdtils.vanish");
 
-        // Info
         InfoCommand info = new InfoCommand();
         registerCommand("info", info, info, "xdtils.info");
 
-        // Nick
         NickCommand nick = new NickCommand();
         registerCommand("nick", nick, nick, "xdtils.nick");
 
-        // Msg / Reply / Ignore
         MsgCommand msg = new MsgCommand(msgManager);
         registerCommand("msg", msg, msg, "xdtils.msg");
+
         registerCommand("r", new ReplyCommand(msgManager), null, "xdtils.msg");
+
         IgnoreCommand ignore = new IgnoreCommand(msgManager);
         registerCommand("ignore", ignore, ignore, "xdtils.ignore");
 
-        // AFK
         registerCommand("afk", new AfkCommand(afkManager), null, "xdtils.afk");
 
-        // Seen / Playtime / Ping
         SeenCommand seen = new SeenCommand();
         registerCommand("seen", seen, seen, "xdtils.seen");
+
         PlaytimeCommand playtime = new PlaytimeCommand();
         registerCommand("playtime", playtime, playtime, "xdtils.playtime");
+
         PingCommand ping = new PingCommand();
         registerCommand("ping", ping, ping, "xdtils.ping");
 
-        // Broadcast / Staff
         registerCommand("broadcast", new BroadcastCommand(), null, "xdtils.broadcast");
         registerCommand("staff", new StaffCommand(), null, "xdtils.staff");
 
-        // Maintenance
         MaintenanceCommand maintenance = new MaintenanceCommand(maintenanceManager);
         registerCommand("maintenance", maintenance, maintenance, "xdtils.maintenance");
 
-        // Freeze
         FreezeCommand freeze = new FreezeCommand(freezeManager);
         registerCommand("freeze", freeze, freeze, "xdtils.freeze");
 
-        // Sudo
         SudoCommand sudo = new SudoCommand();
         registerCommand("sudo", sudo, sudo, "xdtils.sudo");
 
-        // Rename / Lore / ItemDb
         registerCommand("rename", new RenameCommand(), null, "xdtils.rename");
+
         LoreCommand lore = new LoreCommand();
         registerCommand("lore", lore, lore, "xdtils.lore");
+
         registerCommand("itemdb", new ItemDbCommand(), null, "xdtils.itemdb");
 
-        // CommandSpy / SocialSpy
         registerCommand("commandspy", new CommandSpyCommand(spyManager), null, "xdtils.commandspy");
         registerCommand("socialspy", new SocialSpyCommand(spyManager), null, "xdtils.socialspy");
 
-        // Workstations
         registerWorkstation("workbench", "workbench", "xdtils.workbench");
         registerWorkstation("anvil", "anvil", "xdtils.anvil");
         registerWorkstation("grindstone", "grindstone", "xdtils.grindstone");
@@ -223,34 +250,56 @@ public final class Main extends JavaPlugin {
         registerWorkstation("smithing", "smithing", "xdtils.smithing");
         registerWorkstation("enchanting", "enchanting", "xdtils.enchanting");
 
-        // Gameplay / Server / Items / Fun
         GodCommand god = new GodCommand();
-        registerCommand("repair", new RepairCommand(), new RepairCommand(), "xdtils.repair");
+        registerCommand("god", god, god, "xdtils.god");
+
+        RepairCommand repair = new RepairCommand();
+        registerCommand("repair", repair, repair, "xdtils.repair");
+
         registerCommand("more", new MoreCommand(), null, "xdtils.more");
-        registerCommand("restart", new RestartCommand(this), new RestartCommand(this), "xdtils.restart");
+
+        RestartCommand restart = new RestartCommand(this);
+        registerCommand("restart", restart, restart, "xdtils.restart");
+
         registerCommand("tps", new TpsCommand(), null, "xdtils.tps");
         registerCommand("memory", new MemoryCommand(), null, "xdtils.memory");
-        registerCommand("god", god, god, "xdtils.god");
-        registerCommand("xp", new XpCommand(), new XpCommand(), "xdtils.xp");
+
+        XpCommand xp = new XpCommand();
+        registerCommand("xp", xp, xp, "xdtils.xp");
+
         registerCommand("near", new NearCommand(), null, "xdtils.near");
         registerCommand("firework", new FireworkCommand(), null, "xdtils.firework");
-        registerCommand("skull", new SkullCommand(), new SkullCommand(), "xdtils.skull");
 
-        // Manager / Extra Commands
+        SkullCommand skull = new SkullCommand();
+        registerCommand("skull", skull, skull, "xdtils.skull");
+
         InvSnapshotManager snapManager = new InvSnapshotManager();
         HistoryManager historyManager = new HistoryManager();
 
-        registerCommand("invsave", new InvSaveCommand(snapManager), new InvSaveCommand(snapManager), "xdtils.invsave");
-        registerCommand("invload", new InvLoadCommand(snapManager), new InvLoadCommand(snapManager), "xdtils.invload");
-        registerCommand("recipe", new RecipeCommand(), new RecipeCommand(), "xdtils.recipe");
-        registerCommand("mute", new MuteCommand(muteManager), new MuteCommand(muteManager), "xdtils.mute");
-        registerCommand("unmute", new UnmuteCommand(muteManager), new UnmuteCommand(muteManager), "xdtils.mute");
-        registerCommand("history", new HistoryCommand(historyManager), new HistoryCommand(historyManager), "xdtils.history");
-        registerCommand("trail", new TrailCommand(trailManager), new TrailCommand(trailManager), "xdtils.trail");
+        InvSaveCommand invSave = new InvSaveCommand(snapManager);
+        registerCommand("invsave", invSave, invSave, "xdtils.invsave");
+
+        InvLoadCommand invLoad = new InvLoadCommand(snapManager);
+        registerCommand("invload", invLoad, invLoad, "xdtils.invload");
+
+        RecipeCommand recipe = new RecipeCommand();
+        registerCommand("recipe", recipe, recipe, "xdtils.recipe");
+
+        MuteCommand mute = new MuteCommand(muteManager);
+        registerCommand("mute", mute, mute, "xdtils.mute");
+
+        UnmuteCommand unmute = new UnmuteCommand(muteManager);
+        registerCommand("unmute", unmute, unmute, "xdtils.mute");
+
+        HistoryCommand history = new HistoryCommand(historyManager);
+        registerCommand("history", history, history, "xdtils.history");
+
+        TrailCommand trail = new TrailCommand(trailManager);
+        registerCommand("trail", trail, trail, "xdtils.trail");
+
         registerCommand("list", new ListCommand(), null, "xdtils.list");
         registerCommand("menu", new MenuCommand(this), null, "xdtils.menu");
 
-        // Economy
         if (economyManager != null) {
             BalanceCommand balanceCommand = new BalanceCommand(economyManager);
             registerCommand("balance", balanceCommand, balanceCommand, "xdtils.balance");
@@ -267,6 +316,29 @@ public final class Main extends JavaPlugin {
                 registerCommand("eco", ecoCommand, ecoCommand, "xdtils.eco");
             }
         }
+
+        if (permissionSystemManager != null) {
+            PermissionCommand permissionCommand = new PermissionCommand(permissionSystemManager);
+            registerCommand("permissions", permissionCommand, permissionCommand, "xdtils.permissions");
+            registerCommand("perms", permissionCommand, permissionCommand, "xdtils.permissions");
+        }
+
+        if (glowManager != null) {
+            GlowCommand glow = new GlowCommand(glowManager);
+            registerCommand("glow", glow, glow, "xdtils.glow");
+        }
+        EnderChestCommand enderChest = new EnderChestCommand();
+        registerCommand("enderchest", enderChest, enderChest, "xdtils.enderchest");
+        registerCommand("ec", enderChest, enderChest, "xdtils.enderchest");
+
+        TopCommand top = new TopCommand();
+        registerCommand("top", top, top, "xdtils.top");
+
+        BottomCommand bottom = new BottomCommand();
+        registerCommand("bottom", bottom, bottom, "xdtils.bottom");
+
+        MobCommand mob = new MobCommand();
+        registerCommand("mob", mob, mob, "xdtils.mob");
     }
 
     private void registerListeners() {
@@ -278,10 +350,21 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new CommandSpyListener(spyManager), this);
         Bukkit.getPluginManager().registerEvents(new AfkListener(afkManager), this);
         Bukkit.getPluginManager().registerEvents(new MuteListener(muteManager), this);
+
+        if (permissionSystemManager != null && getConfig().getBoolean("permissions-system.gui-enabled", true)) {
+            Bukkit.getPluginManager().registerEvents(new PermissionMenuListener(permissionSystemManager), this);
+        }
+
+        if (permissionSystemManager != null) {
+            Bukkit.getPluginManager().registerEvents(new PermissionPlayerListener(permissionSystemManager), this);
+        }
+
+        if (glowManager != null) {
+            Bukkit.getPluginManager().registerEvents(new GlowListener(glowManager), this);
+        }
     }
 
-    private void registerCommand(String name, CommandExecutor executor,
-                                 TabCompleter completer, String defaultPermission) {
+    private void registerCommand(String name, CommandExecutor executor, TabCompleter completer, String defaultPermission) {
         if (!configManager.isCommandEnabled(name)) {
             getLogger().info("[xdtils] Command /" + name + " ist deaktiviert.");
             return;
@@ -321,5 +404,13 @@ public final class Main extends JavaPlugin {
 
     public boolean isEconomyEnabled() {
         return economyManager != null;
+    }
+
+    public PermissionSystemManager getPermissionSystemManager() {
+        return permissionSystemManager;
+    }
+
+    public boolean isPermissionSystemEnabled() {
+        return permissionSystemManager != null;
     }
 }

@@ -7,6 +7,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.math.RoundingMode;
+import java.util.Locale;
 import java.util.UUID;
 
 public class EconomyManager {
@@ -109,7 +113,15 @@ public class EconomyManager {
 
     public String format(double amount) {
         String symbol = plugin.getConfig().getString("economy.currency-symbol", "$");
-        return symbol + String.format(java.util.Locale.US, "%.2f", round(amount));
+
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.GERMANY);
+        symbols.setGroupingSeparator('.');
+        symbols.setDecimalSeparator(',');
+
+        DecimalFormat format = new DecimalFormat("#,##0.00", symbols);
+        format.setRoundingMode(RoundingMode.HALF_UP);
+
+        return format.format(round(amount)) + symbol;
     }
 
     public String currencyName(double amount) {

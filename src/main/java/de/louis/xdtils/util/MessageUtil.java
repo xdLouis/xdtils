@@ -580,5 +580,141 @@ public final class MessageUtil {
         return parse("<dark_gray>[</dark_gray><gray>" + player(fromName)
                 + "<gray> → Du<dark_gray>]</dark_gray> <white>" + escape(message) + "</white>");
     }
+
+    public static Component permissionsDisabled() {
+        return prefixed("<gray>Das Permission-System ist deaktiviert.</gray>");
+    }
+
+    public static Component permissionsEnabled() {
+        return prefixed("<gray>Das Permission-System ist <#86EFAC>aktiviert</#86EFAC><gray>.</gray>");
+    }
+
+    public static Component permissionGroupCreated(String group) {
+        return prefixed("<gray>Gruppe " + player(group) + "<gray> wurde erstellt.</gray>");
+    }
+
+    public static Component permissionGroupDeleted(String group) {
+        return prefixed("<gray>Gruppe " + player(group) + "<gray> wurde gelöscht.</gray>");
+    }
+
+    public static Component permissionAdded(String target, String permission) {
+        return prefixed("<gray>Permission " + command(permission) + "<gray> wurde für "
+                + player(target) + "<gray> hinzugefügt.</gray>");
+    }
+
+    public static Component permissionRemoved(String target, String permission) {
+        return prefixed("<gray>Permission " + command(permission) + "<gray> wurde für "
+                + player(target) + "<gray> entfernt.</gray>");
+    }
+
+    public static Component groupAdded(String target, String group) {
+        return prefixed("<gray>Gruppe " + player(group) + "<gray> wurde "
+                + "für " + player(target) + "<gray> hinzugefügt.</gray>");
+    }
+
+    public static Component groupRemoved(String target, String group) {
+        return prefixed("<gray>Gruppe " + player(group) + "<gray> wurde "
+                + "von " + player(target) + "<gray> entfernt.</gray>");
+    }
+    // ── Glow ──────────────────────────────────────────────────────────
+
+    public static String color(String name) {
+        return "<gradient:#67E8F9:#3B82F6>" + escape(name) + "</gradient>";
+    }
+
+    public static Component glowDisabled() {
+        return prefixed("<gray>Das Glow-System ist deaktiviert.</gray>");
+    }
+
+    public static Component glowColorsDisabled() {
+        return prefixed("<gray>Glow-Farben sind deaktiviert.</gray>");
+    }
+
+    public static Component glowInvalidColor(String input) {
+        return prefixed("<gray>Unbekannte Glow-Farbe: <#F87171>" + escape(input) + "</#F87171><gray>.</gray>");
+    }
+
+    public static Component glowUsage() {
+        return prefixed("<gray>Benutzung: " + command("glow") + "<gray> [spieler] [farbe|on|off]</gray>");
+    }
+
+    public static Component glowSelf(boolean enabled) {
+        return prefixed("<gray>Glow wurde "
+                + (enabled ? "<#86EFAC>aktiviert</#86EFAC>" : "<#F87171>deaktiviert</#F87171>")
+                + "<gray>.</gray>");
+    }
+
+    public static Component glowOther(String targetName, boolean enabled) {
+        return prefixed("<gray>Glow von " + player(targetName) + "<gray> wurde "
+                + (enabled ? "<#86EFAC>aktiviert</#86EFAC>" : "<#F87171>deaktiviert</#F87171>")
+                + "<gray>.</gray>");
+    }
+
+    public static Component glowByOther(String actorName, boolean enabled) {
+        return prefixed("<gray>Dein Glow wurde von " + player(actorName) + "<gray> "
+                + (enabled ? "<#86EFAC>aktiviert</#86EFAC>" : "<#F87171>deaktiviert</#F87171>")
+                + "<gray>.</gray>");
+    }
+
+    public static Component glowColorSelf(String colorName) {
+        return prefixed("<gray>Deine Glow-Farbe wurde auf " + color(colorName) + "<gray> gesetzt.</gray>");
+    }
+
+    public static Component glowColorOther(String targetName, String colorName) {
+        return prefixed("<gray>Die Glow-Farbe von " + player(targetName) + "<gray> wurde auf "
+                + color(colorName) + "<gray> gesetzt.</gray>");
+    }
+
+    public static Component glowColorByOther(String actorName, String colorName) {
+        return prefixed("<gray>Deine Glow-Farbe wurde von " + player(actorName) + "<gray> auf "
+                + color(colorName) + "<gray> gesetzt.</gray>");
+    }
+    // ── EnderChest ────────────────────────────────────────────────────
+
+    public static Component enderchestUsage() {
+        return prefixed("<gray>Benutzung: " + command("enderchest") + "<gray> [spieler]</gray>");
+    }
+
+    public static Component enderchestOpenedSelf() {
+        return prefixed("<gray>Deine Enderchest wurde geöffnet.</gray>");
+    }
+
+    public static Component enderchestOpenedOther(String targetName) {
+        return prefixed("<gray>Die Enderchest von " + player(targetName) + "<gray> wurde geöffnet.</gray>");
+    }
+    // ── Top / Bottom / Mob ───────────────────────────────────────────
+
+    public static Component topTeleported() {
+        return prefixed("<gray>Du wurdest nach <#86EFAC>oben</#86EFAC> teleportiert.</gray>");
+    }
+
+    public static Component topNotSafe() {
+        return prefixed("<gray>Es konnte kein sicherer Block über dir gefunden werden.</gray>");
+    }
+
+    public static Component bottomTeleported() {
+        return prefixed("<gray>Du wurdest nach <#86EFAC>unten</#86EFAC> teleportiert.</gray>");
+    }
+
+    public static Component bottomNotSafe() {
+        return prefixed("<gray>Es konnte kein sicherer Block unter dir gefunden werden.</gray>");
+    }
+
+    public static Component mobUsage() {
+        return prefixed("<gray>Benutzung: " + command("mob") + "<gray> <mob> [anzahl]</gray>");
+    }
+
+    public static Component mobUnknown(String input) {
+        return prefixed("<gray>Unbekannter Mob: <#F87171>" + escape(input) + "</#F87171><gray>.</gray>");
+    }
+
+    public static Component mobInvalidAmount() {
+        return prefixed("<gray>Ungültige Anzahl. Nutze eine Zahl zwischen <#86EFAC>1</#86EFAC><gray> und <#86EFAC>100</#86EFAC><gray>.</gray>");
+    }
+
+    public static Component mobSpawned(String mobName, int amount) {
+        return prefixed("<gray><#4DA3FF>" + amount + "</#4DA3FF><gray>x "
+                + value(mobName) + "<gray> wurde gespawnt.</gray>");
+    }
 }
 
