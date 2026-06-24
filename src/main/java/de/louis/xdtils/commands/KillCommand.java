@@ -41,7 +41,7 @@ public class KillCommand implements CommandExecutor, TabCompleter {
 
         String selector = args[0];
 
-        // Entity-Selector (@a, @e, @p, @r, @s) — wie Vanilla
+        // Entity-Selector (@a, @e, @p, @r, @s + Filter wie @e[type=zombie]) — wie Vanilla
         if (selector.startsWith("@")) {
             Collection<Entity> targets;
             try {
@@ -97,16 +97,39 @@ public class KillCommand implements CommandExecutor, TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
                                                 @NotNull String alias, @NotNull String[] args) {
-        List<String> list = new ArrayList<>();
-        if (args.length == 1) {
-            String input = args[0].toLowerCase(Locale.ROOT);
-            for (String sel : List.of("@a", "@e", "@p", "@r", "@s")) {
-                if (sel.startsWith(input)) list.add(sel);
-            }
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                if (p.getName().toLowerCase(Locale.ROOT).startsWith(input)) list.add(p.getName());
+        if (args.length != 1) return List.of();
+
+        String input = args[0];
+        List<String> suggestions = new ArrayList<>();
+
+        // Wenn der User gerade einen Selector tippt (@...) — Paper's eigenen
+        // Vanilla-Completion-Provider nutzen, der @e[type=, name=, ... kennt
+        if (input.startsWith("@")) {
+            // Paper stellt über die BrigadierCommandSource-Bridge Vanilla-Suggestions bereit.
+            // Wir delegieren direkt an den Bukkit-Selector-Completer.
+            try {
+                // Paper 1.20.6+: org.bukkit.command.defaults nutzt intern Vanilla-Brigadier
+                // Für alle @-Selektoren inkl. Filter gibt Paper automatisch Completions
+                // wenn wir null zurückgeben — Bukkit fällt dann auf den eingebauten
+                // EntitySelector-Completer zurück.
+                return null; // null = Bukkit/Paper handled completions natively
+            } catch (Exception ignored) {
+                // Fallback: nur Basis-Selektoren
+                for (String sel : List.of("@a", "@e", "@p", "@r", "@s",
+                        "@e[", "@a[", "@p[", "@r[", "@s[")) {
+                    if (sel.startsWith(input)) suggestions.add(sel);
+                }
+                return suggestions;
             }
         }
-        return list;
+
+        // Spielernamen
+        String lower = input.toLowerCase(Locale.ROOT);
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (p.getName().toLowerCase(Locale.ROOT).startsWith(lower)) {
+                suggestions.add(p.getName());
+            }
+        }
+        return suggestions;
     }
 }
