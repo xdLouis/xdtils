@@ -28,7 +28,7 @@ public class KillCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        // /kill → sich selbst töten
+        // /kill → sich selbst töten (wie Vanilla)
         if (args.length == 0) {
             if (!(sender instanceof Player player)) {
                 sender.sendMessage(MessageUtil.onlyPlayers());
@@ -41,23 +41,18 @@ public class KillCommand implements CommandExecutor, TabCompleter {
 
         String selector = args[0];
 
-        // Entity-Selector via Bukkit-API auflösen (@a, @e, @p, @r, @s)
+        // Entity-Selector (@a, @e, @p, @r, @s) — wie Vanilla
         if (selector.startsWith("@")) {
             Collection<Entity> targets;
             try {
-                if (sender instanceof Player player) {
-                    targets = player.getWorld().selectEntities(sender, selector);
-                } else {
-                    // Konsole: keinen Location-Kontext, Bukkit kann trotzdem global resolven
-                    targets = Bukkit.getServer().selectEntities(sender, selector);
-                }
+                targets = Bukkit.getServer().selectEntities(sender, selector);
             } catch (IllegalArgumentException e) {
-                sender.sendMessage(MessageUtil.invalidSelector(selector));
+                sender.sendMessage(MessageUtil.playerNotFound(selector));
                 return true;
             }
 
             if (targets.isEmpty()) {
-                sender.sendMessage(MessageUtil.noTargetsFound());
+                sender.sendMessage(MessageUtil.playerNotFound(selector));
                 return true;
             }
 
@@ -72,11 +67,10 @@ public class KillCommand implements CommandExecutor, TabCompleter {
                             p.sendMessage(MessageUtil.killByOther(sender.getName()));
                         }
                     }
-                    count++;
                 } else {
                     entity.remove();
-                    count++;
                 }
+                count++;
             }
             sender.sendMessage(MessageUtil.killAll(count));
             return true;
@@ -106,11 +100,9 @@ public class KillCommand implements CommandExecutor, TabCompleter {
         List<String> list = new ArrayList<>();
         if (args.length == 1) {
             String input = args[0].toLowerCase(Locale.ROOT);
-            // Entity-Selektoren
             for (String sel : List.of("@a", "@e", "@p", "@r", "@s")) {
                 if (sel.startsWith(input)) list.add(sel);
             }
-            // Online-Spielernamen
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (p.getName().toLowerCase(Locale.ROOT).startsWith(input)) list.add(p.getName());
             }
