@@ -294,14 +294,21 @@ commands:
   top:
     description: Teleportiert dich auf den höchsten Block
     usage: /top
-
   bottom:
     description: Teleportiert dich auf den nächsten sicheren Block unter dir
     usage: /bottom
-
   mob:
     description: Spawnt einen Mob
     usage: /mob <mob> [anzahl]
+
+  armortrim:
+    description: Rüstungs-Trim per GUI anwenden
+    usage: /armortrim
+
+  leathercolor:
+    description: Lederrüstung einfärben (Hex oder Name)
+    usage: /leathercolor <#RRGGBB|farbe>
+    aliases: [lc]
 
 permissions:
   xdtils.permissions:
@@ -495,11 +502,15 @@ permissions:
   xdtils.top:
     description: Erlaubt die Nutzung von /top
     default: op
-
   xdtils.bottom:
     description: Erlaubt die Nutzung von /bottom
     default: op
-
   xdtils.mob:
     description: Erlaubt die Nutzung von /mob
+    default: op
+  xdtils.armortrim:
+    description: Erlaubt die Nutzung von /armortrim
+    default: op
+  xdtils.leathercolor:
+    description: Erlaubt die Nutzung von /leathercolor
     default: op

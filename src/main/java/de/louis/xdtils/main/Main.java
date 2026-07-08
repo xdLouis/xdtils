@@ -327,6 +327,7 @@ public final class Main extends JavaPlugin {
             GlowCommand glow = new GlowCommand(glowManager);
             registerCommand("glow", glow, glow, "xdtils.glow");
         }
+
         EnderChestCommand enderChest = new EnderChestCommand();
         registerCommand("enderchest", enderChest, enderChest, "xdtils.enderchest");
         registerCommand("ec", enderChest, enderChest, "xdtils.enderchest");
@@ -339,6 +340,14 @@ public final class Main extends JavaPlugin {
 
         MobCommand mob = new MobCommand();
         registerCommand("mob", mob, mob, "xdtils.mob");
+
+        // ── ArmorTrim & LeatherColor ─────────────────────────────────
+        ArmorTrimCommand armorTrim = new ArmorTrimCommand();
+        registerCommand("armortrim", armorTrim, null, "xdtils.armortrim");
+
+        LeatherColorCommand leatherColor = new LeatherColorCommand();
+        registerCommand("leathercolor", leatherColor, leatherColor, "xdtils.leathercolor");
+        registerCommand("lc", leatherColor, leatherColor, "xdtils.leathercolor");
     }
 
     private void registerListeners() {
@@ -350,6 +359,7 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new CommandSpyListener(spyManager), this);
         Bukkit.getPluginManager().registerEvents(new AfkListener(afkManager), this);
         Bukkit.getPluginManager().registerEvents(new MuteListener(muteManager), this);
+        Bukkit.getPluginManager().registerEvents(new ArmorTrimListener(), this);
 
         if (permissionSystemManager != null && getConfig().getBoolean("permissions-system.gui-enabled", true)) {
             Bukkit.getPluginManager().registerEvents(new PermissionMenuListener(permissionSystemManager), this);

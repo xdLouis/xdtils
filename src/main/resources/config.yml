@@ -1,9 +1,9 @@
-# ─────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────
 # xdtils configuration
 # Achte auf korrekte Einrückung mit Leerzeichen, nicht mit Tabs.
-# ─────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────
 
-# ── Commands ────────────────────────────────────────────────
+# ── Commands ───────────────────────────────────────────────────────
 # Jeder Command kann hier global aktiviert/deaktiviert werden.
 # permission überschreibt die Default-Permission aus dem Code.
 
@@ -358,7 +358,18 @@ commands:
     enabled: true
     permission: xdtils.mob
 
-# ── Economy ─────────────────────────────────────────────────
+  armortrim:
+    enabled: true
+    permission: xdtils.armortrim
+
+  leathercolor:
+    enabled: true
+    permission: xdtils.leathercolor
+  lc:
+    enabled: true
+    permission: xdtils.leathercolor
+
+# ── Economy ───────────────────────────────────────────────────────
 economy:
   enabled: true
   vault-hook: true
@@ -366,39 +377,39 @@ economy:
   admin-enabled: true
   start-balance: 0.0
 
-# ── Permission-System ───────────────────────────────────────
+# ── Permission-System ─────────────────────────────────────────────
 permissions-system:
   enabled: true
   gui-enabled: true
   default-group: default
 
-# ── Glow ────────────────────────────────────────────────────
+# ── Glow ────────────────────────────────────────────────────────────
 glow:
   enabled: true
   colors-enabled: true
   default-color: white
   players: {}
 
-# ── Trails ──────────────────────────────────────────────────
+# ── Trails ──────────────────────────────────────────────────────────
 trail:
   enabled: true
   update-interval-ticks: 3
 
-# ── Freeze ──────────────────────────────────────────────────
+# ── Freeze ─────────────────────────────────────────────────────────
 freeze:
   block-movement: true
   block-damage: true
   block-chat: false
   block-commands: false
 
-# ── Maintenance ─────────────────────────────────────────────
+# ── Maintenance ───────────────────────────────────────────────────
 maintenance:
   enabled: false
   kick-message: "<red>Der Server befindet sich aktuell im Wartungsmodus.</red>"
   allow-ops: true
   allow-permission: "xdtils.maintenance.bypass"
 
-# ── Mute ────────────────────────────────────────────────────
+# ── Mute ──────────────────────────────────────────────────────────
 mute:
   block-chat: true
   blocked-message: "<red>Du bist gemutet und kannst nicht schreiben.</red>"
@@ -407,7 +418,7 @@ mute:
 messages:
   prefix-enabled: true
 
-# ── Features / future-proof ─────────────────────────────────
+# ── Features / future-proof ──────────────────────────────────────
 features:
   save-on-disable: true
   refresh-permissions-on-join: true
