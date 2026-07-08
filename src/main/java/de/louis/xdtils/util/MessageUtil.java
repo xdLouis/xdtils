@@ -716,5 +716,47 @@ public final class MessageUtil {
         return prefixed("<gray><#4DA3FF>" + amount + "</#4DA3FF><gray>x "
                 + value(mobName) + "<gray> wurde gespawnt.</gray>");
     }
-}
 
+    // ── ArmorTrim ─────────────────────────────────────────────────────
+
+    public static Component armorTrimNoArmor() {
+        return prefixed("<gray>Du hältst kein Rüstungsteil in der Hand.</gray>");
+    }
+
+    public static Component armorTrimGuiOpened() {
+        return prefixed("<gray>Wähle ein <gradient:#C084FC:#818CF8>Muster</gradient><gray> und ein "
+                + "<gradient:#FCD34D:#F59E0B>Material</gradient><gray> aus dem Menü.</gray>");
+    }
+
+    public static Component armorTrimApplied(String pattern, String material) {
+        String patternFormatted = pattern.replace("_", " ");
+        patternFormatted = Character.toUpperCase(patternFormatted.charAt(0)) + patternFormatted.substring(1);
+        String materialFormatted = material.replace("_", " ");
+        materialFormatted = Character.toUpperCase(materialFormatted.charAt(0)) + materialFormatted.substring(1);
+        return prefixed("<gray>Rüstungsverzierung <gradient:#C084FC:#818CF8>" + escape(patternFormatted)
+                + "</gradient> <gray>mit Material <gradient:#FCD34D:#F59E0B>" + escape(materialFormatted)
+                + "</gradient> <gray>wurde angewendet.</gray>");
+    }
+
+    // ── LeatherColor ─────────────────────────────────────────────────
+
+    public static Component leatherColorUsage() {
+        return prefixed("<gray>Benutzung: " + command("leathercolor")
+                + "<gray> <#86EFAC><#RRGGBB|farbe></#86EFAC></gray>"
+                + "<gray>. Beispiel: <#67E8F9>/leathercolor #FF5500</#67E8F9></gray>");
+    }
+
+    public static Component leatherColorNoLeather() {
+        return prefixed("<gray>Du hältst kein Lederrüstungsteil in der Hand.</gray>");
+    }
+
+    public static Component leatherColorInvalid(String input) {
+        return prefixed("<gray>Ungültige Farbe: <#F87171>" + escape(input) + "</#F87171><gray>."
+                + " Nutze einen Hex-Code wie <#67E8F9>#FF5500</#67E8F9><gray> oder einen Farbnamen.</gray>");
+    }
+
+    public static Component leatherColorSet(String hex) {
+        return prefixed("<gray>Lederrüstungsfarbe wurde auf <" + escape(hex) + ">" + escape(hex)
+                + "</" + escape(hex) + "><gray> gesetzt.</gray>");
+    }
+}
