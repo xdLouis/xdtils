@@ -1,66 +1,516 @@
 name: xdtils
-version: '${version}'
-
+version: 1.0.0
 main: de.louis.xdtils.main.Main
 api-version: '1.21'
-load: POSTWORLD
+description: A QoL Plugin for Paper 1.21.1
+author: xdLouis
+softdepend:
+  - Vault
 
 commands:
+  balance:
+    description: Kontostand anzeigen
+    usage: /balance [spieler]
+    aliases: [bal, money]
+  pay:
+    description: Geld an andere Spieler senden
+    usage: /pay <spieler> <betrag>
+  eco:
+    description: Economy verwalten
+    usage: /eco <set|add|remove> <spieler> <betrag>
+
+  permissions:
+    description: Permission-System verwalten
+    usage: /permissions [group|user|list|reload]
+    aliases: [perms]
+
+  gamemode:
+    description: Gamemode wechseln
+    usage: /gamemode <modus> [spieler]
+    aliases: [gm]
+
+  speed:
+    description: Bewegungsgeschwindigkeit setzen
+    usage: /speed <wert> [spieler]
+  walkspeed:
+    description: Laufgeschwindigkeit setzen
+    usage: /walkspeed <wert> [spieler]
+  flyspeed:
+    description: Fluggeschwindigkeit setzen
+    usage: /flyspeed <wert> [spieler]
+
+  enchant:
+    description: Item in der Hand verzaubern
+    usage: /enchant <verzauberung> [stufe]
+
+  hat:
+    description: Item als Helm tragen
+    usage: /hat
+
+  invsee:
+    description: Inventar eines Spielers öffnen
+    usage: /invsee <spieler>
+
+  back:
+    description: Zum letzten Standort zurückkehren
+    usage: /back
+
+  tp:
+    description: Spieler teleportieren
+    usage: /tp <spieler> [ziel]
+  tphere:
+    description: Spieler zu dir teleportieren
+    usage: /tphere <spieler>
+  tpworld:
+    description: In eine andere Welt teleportieren
+    usage: /tpworld <welt>
+
+  clear:
+    description: Inventar leeren
+    usage: /clear [spieler]
+  trash:
+    description: Mülleimer öffnen
+    usage: /trash
+
+  i:
+    description: Item geben (Kurzform)
+    usage: /i <item> [menge]
+  give:
+    description: Item an Spieler geben
+    usage: /give <spieler> <item> [menge]
+
+  kick:
+    description: Spieler kicken
+    usage: /kick <spieler> [grund]
+  ban:
+    description: Spieler bannen
+    usage: /ban <spieler> [grund]
+  ban-ip:
+    description: IP bannen
+    usage: /ban-ip <spieler/ip> [grund]
+  pardon:
+    description: Spieler entbannen
+    usage: /pardon <spieler>
+  pardon-ip:
+    description: IP entbannen
+    usage: /pardon-ip <ip>
+  op:
+    description: Spieler zum Operator machen
+    usage: /op <spieler>
+  deop:
+    description: Operator-Status entziehen
+    usage: /deop <spieler>
+  kill:
+    description: Spieler töten
+    usage: /kill [spieler|@a]
+
+  time:
+    description: Tageszeit setzen
+    usage: /time <set|add|query> [wert]
+  weather:
+    description: Wetter setzen
+    usage: /weather <clear|rain|thunder>
+  difficulty:
+    description: Schwierigkeit setzen
+    usage: /difficulty <peaceful|easy|normal|hard>
+  whitelist:
+    description: Whitelist verwalten
+    usage: /whitelist <on|off|add|remove|list|reload>
+
+  repair:
+    description: Item reparieren
+    usage: /repair [all]
+  more:
+    description: Stack auffüllen
+    usage: /more
+  restart:
+    description: Server neustarten
+    usage: /restart [sekunden|cancel]
+  tps:
+    description: Server-Performance anzeigen
+    usage: /tps
+  memory:
+    description: RAM-Auslastung anzeigen
+    usage: /memory
+  god:
+    description: Godmode togglen
+    usage: /god [spieler]
+  xp:
+    description: XP verwalten
+    usage: /xp <give|set|take> <spieler> <menge> [levels]
+  near:
+    description: Spieler in der Nähe anzeigen
+    usage: /near [radius]
+  firework:
+    description: Feuerwerk starten
+    usage: /firework [anzahl]
+  skull:
+    description: Spielerkopf erhalten
+    usage: /skull [spieler]
+
+  heal:
+    description: Spieler heilen
+    usage: /heal [spieler|@a]
+  feed:
+    description: Spieler sättigen
+    usage: /feed [spieler|@a]
+  fly:
+    description: Flugmodus togglen
+    usage: /fly [spieler] [on|off]
+  cc:
+    description: Chat leeren
+    usage: /cc
+
+  vanish:
+    description: Vanish togglen
+    usage: /vanish [spieler]
+    aliases: [v]
+
+  info:
+    description: Spielerinformationen anzeigen
+    usage: /info <spieler>
+
+  nick:
+    description: Nickname setzen
+    usage: /nick [name|off]
+
+  msg:
+    description: Privatnachricht senden
+    usage: /msg <spieler> <nachricht>
+  r:
+    description: Auf letzte Nachricht antworten
+    usage: /r <nachricht>
+  ignore:
+    description: Spieler ignorieren/entignorieren
+    usage: /ignore <spieler>
+
+  afk:
+    description: AFK-Status togglen
+    usage: /afk
+
+  seen:
+    description: Letzten Online-Zeitpunkt anzeigen
+    usage: /seen <spieler>
+  playtime:
+    description: Spielzeit anzeigen
+    usage: /playtime [spieler]
+  ping:
+    description: Ping anzeigen
+    usage: /ping [spieler]
+
+  broadcast:
+    description: Server-weite Nachricht senden
+    usage: /broadcast <nachricht>
+    aliases: [bc]
+  staff:
+    description: Online Staff anzeigen
+    usage: /staff
+  maintenance:
+    description: Wartungsmodus verwalten
+    usage: /maintenance <on|off>
+  freeze:
+    description: Spieler einfrieren
+    usage: /freeze <spieler>
+  sudo:
+    description: Command als anderer Spieler ausführen
+    usage: /sudo <spieler> <command>
+
+  rename:
+    description: Item umbenennen
+    usage: /rename <name>
+  lore:
+    description: Lore bearbeiten
+    usage: /lore <set|add|clear> [zeile] [text]
+  itemdb:
+    description: Item-Informationen anzeigen
+    usage: /itemdb
+
+  commandspy:
+    description: CommandSpy togglen
+    usage: /commandspy
+  socialspy:
+    description: SocialSpy togglen
+    usage: /socialspy
+
   workbench:
-    description: Öffnet eine Werkbank
+    description: Werkbank öffnen
     usage: /workbench
-    permission: xdtils.workbench
   anvil:
-    description: Öffnet einen Amboss
+    description: Amboss öffnen
     usage: /anvil
-    permission: xdtils.anvil
   grindstone:
-    description: Öffnet einen Schleifstein
+    description: Schleifstein öffnen
     usage: /grindstone
-    permission: xdtils.grindstone
   cartography:
-    description: Öffnet einen Kartografietisch
+    description: Kartentisch öffnen
     usage: /cartography
-    permission: xdtils.cartography
   loom:
-    description: Öffnet einen Webstuhl
+    description: Webstuhl öffnen
     usage: /loom
-    permission: xdtils.loom
   stonecutter:
-    description: Öffnet einen Steinschneider
+    description: Steinmetz öffnen
     usage: /stonecutter
-    permission: xdtils.stonecutter
   smithing:
-    description: Öffnet einen Schmiedetisch
+    description: Schmiedetisch öffnen
     usage: /smithing
-    permission: xdtils.smithing
   enchanting:
-    description: Öffnet einen Zaubertisch
+    description: Zaubertisch öffnen
     usage: /enchanting
-    permission: xdtils.enchanting
+
+  invsave:
+    description: Inventar-Snapshot speichern
+    usage: /invsave [slot]
+  invload:
+    description: Inventar-Snapshot laden
+    usage: /invload [slot]
+  recipe:
+    description: Crafting-Rezept anzeigen
+    usage: /recipe <material>
+  mute:
+    description: Spieler stummschalten
+    usage: /mute <spieler> [grund]
+  unmute:
+    description: Spieler entstummen
+    usage: /unmute <spieler>
+  history:
+    description: Moderations-Historie anzeigen
+    usage: /history <spieler>
+  trail:
+    description: Partikel-Trail setzen
+    usage: /trail [typ|off]
+  list:
+    description: Spielerliste anzeigen
+    usage: /list
+  menu:
+    description: xdtils GUI-Menü öffnen
+    usage: /menu
+  glow:
+    description: Toggle deinen Glow oder setze eine Glow-Farbe
+    usage: /glow [player] [color|on|off]
+  enderchest:
+    description: Öffnet deine Enderchest oder die eines anderen Spielers
+    usage: /enderchest [spieler]
+    aliases: [ec]
+  top:
+    description: Teleportiert dich auf den höchsten Block
+    usage: /top
+  bottom:
+    description: Teleportiert dich auf den nächsten sicheren Block unter dir
+    usage: /bottom
+  mob:
+    description: Spawnt einen Mob
+    usage: /mob <mob> [anzahl]
+
+  armortrim:
+    description: Rüstungs-Trim per GUI anwenden
+    usage: /armortrim
+
+  leathercolor:
+    description: Lederrüstung einfärben (Hex oder Name)
+    usage: /leathercolor <#RRGGBB|farbe>
+    aliases: [lc]
 
 permissions:
+  xdtils.permissions:
+    default: op
+  xdtils.permissions.reload:
+    default: op
+  xdtils.permissions.group.create:
+    default: op
+  xdtils.permissions.group.delete:
+    default: op
+  xdtils.permissions.group.modify:
+    default: op
+  xdtils.permissions.user.modify:
+    default: op
+
+  xdtils.balance:
+    default: true
+  xdtils.balance.others:
+    default: op
+  xdtils.pay:
+    default: true
+  xdtils.eco:
+    default: op
+
+  xdtils.gamemode:
+    default: op
+  xdtils.speed:
+    default: op
+  xdtils.walkspeed:
+    default: op
+  xdtils.flyspeed:
+    default: op
+  xdtils.enchant:
+    default: op
+  xdtils.hat:
+    default: op
+  xdtils.invsee:
+    default: op
+  xdtils.back:
+    default: true
+  xdtils.tp:
+    default: op
+  xdtils.tphere:
+    default: op
+  xdtils.tpworld:
+    default: op
+  xdtils.clear:
+    default: op
+  xdtils.trash:
+    default: true
+  xdtils.item:
+    default: op
+  xdtils.give:
+    default: op
+  xdtils.kick:
+    default: op
+  xdtils.ban:
+    default: op
+  xdtils.ban.ip:
+    default: op
+  xdtils.pardon:
+    default: op
+  xdtils.pardon.ip:
+    default: op
+  xdtils.op:
+    default: op
+  xdtils.deop:
+    default: op
+  xdtils.kill:
+    default: op
+  xdtils.time:
+    default: op
+  xdtils.weather:
+    default: op
+  xdtils.difficulty:
+    default: op
+  xdtils.whitelist:
+    default: op
+  xdtils.heal:
+    default: op
+  xdtils.feed:
+    default: op
+  xdtils.fly:
+    default: op
+  xdtils.clearchat:
+    default: op
+  xdtils.vanish:
+    default: op
+  xdtils.vanish.others:
+    default: op
+  xdtils.info:
+    default: op
+  xdtils.nick:
+    default: op
+  xdtils.msg:
+    default: true
+  xdtils.ignore:
+    default: true
+  xdtils.afk:
+    default: true
+  xdtils.seen:
+    default: op
+  xdtils.playtime:
+    default: true
+  xdtils.ping:
+    default: true
+  xdtils.broadcast:
+    default: op
+  xdtils.staff:
+    default: op
+  xdtils.maintenance:
+    default: op
+  xdtils.freeze:
+    default: op
+  xdtils.sudo:
+    default: op
+  xdtils.rename:
+    default: op
+  xdtils.lore:
+    default: op
+  xdtils.itemdb:
+    default: op
+  xdtils.commandspy:
+    default: op
+  xdtils.socialspy:
+    default: op
   xdtils.workbench:
-    description: Erlaubt /workbench
     default: true
   xdtils.anvil:
-    description: Erlaubt /anvil
-    default: true
+    default: op
   xdtils.grindstone:
-    description: Erlaubt /grindstone
     default: true
   xdtils.cartography:
-    description: Erlaubt /cartography
     default: true
   xdtils.loom:
-    description: Erlaubt /loom
     default: true
   xdtils.stonecutter:
-    description: Erlaubt /stonecutter
     default: true
   xdtils.smithing:
-    description: Erlaubt /smithing
-    default: true
+    default: op
   xdtils.enchanting:
-    description: Erlaubt /enchanting
+    default: op
+  xdtils.repair:
+    default: op
+  xdtils.repair.all:
+    default: op
+  xdtils.more:
+    default: op
+  xdtils.restart:
+    default: op
+  xdtils.tps:
+    default: op
+  xdtils.memory:
+    default: op
+  xdtils.god:
+    default: op
+  xdtils.god.others:
+    default: op
+  xdtils.xp:
+    default: op
+  xdtils.near:
+    default: op
+  xdtils.firework:
+    default: op
+  xdtils.skull:
+    default: op
+  xdtils.invsave:
+    default: op
+  xdtils.invload:
+    default: op
+  xdtils.recipe:
     default: true
+  xdtils.mute:
+    default: op
+  xdtils.history:
+    default: op
+  xdtils.trail:
+    default: true
+  xdtils.list:
+    default: true
+  xdtils.menu:
+    default: true
+  xdtils.glow:
+    default: op
+  xdtils.glow.others:
+    default: op
+  xdtils.enderchest:
+    default: op
+  xdtils.enderchest.others:
+    default: op
+  xdtils.top:
+    description: Erlaubt die Nutzung von /top
+    default: op
+  xdtils.bottom:
+    description: Erlaubt die Nutzung von /bottom
+    default: op
+  xdtils.mob:
+    description: Erlaubt die Nutzung von /mob
+    default: op
+  xdtils.armortrim:
+    description: Erlaubt die Nutzung von /armortrim
+    default: op
+  xdtils.leathercolor:
+    description: Erlaubt die Nutzung von /leathercolor
+    default: op

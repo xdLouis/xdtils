@@ -1,6 +1,5 @@
 package de.louis.xdtils.commands;
 
-import de.louis.xdtils.manager.BanManager;
 import de.louis.xdtils.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -15,20 +14,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class KickCommand implements CommandExecutor, TabCompleter {
+public class FeedCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
                              @NotNull String label, @NotNull String[] args) {
 
-        if (!sender.hasPermission("xdtils.kick")) {
+        if (!sender.hasPermission("xdtils.feed")) {
             sender.sendMessage(MessageUtil.noPermission(label));
             return true;
         }
 
         if (args.length == 0) {
-            sender.sendMessage(MessageUtil.prefixed("<gray>Benutzung: "
-                    + MessageUtil.command("kick") + "<gray> <spieler> [grund]</gray>"));
+            if (!(sender instanceof Player player)) {
+                sender.sendMessage(MessageUtil.onlyPlayers());
+                return true;
+            }
+            feed(player);
+            player.sendMessage(MessageUtil.feedSelf());
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("@a")) {
+            int count = 0;
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                feed(p);
+                p.sendMessage(MessageUtil.feedByOther(sender.getName()));
+                count++;
+            }
+            sender.sendMessage(MessageUtil.feedAll(count));
             return true;
         }
 
@@ -38,13 +52,20 @@ public class KickCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        String reason = args.length > 1
-                ? String.join(" ", java.util.Arrays.copyOfRange(args, 1, args.length))
-                : "Du wurdest gekickt.";
-
-        target.kick(MessageUtil.kickScreen(reason, sender.getName()));
-        Bukkit.broadcast(MessageUtil.kickBroadcast(target.getName(), sender.getName(), reason));
+        feed(target);
+        if (target.getName().equalsIgnoreCase(sender.getName())) {
+            target.sendMessage(MessageUtil.feedSelf());
+        } else {
+            sender.sendMessage(MessageUtil.feedOther(target.getName()));
+            target.sendMessage(MessageUtil.feedByOther(sender.getName()));
+        }
         return true;
+    }
+
+    private void feed(Player player) {
+        player.setFoodLevel(20);
+        player.setSaturation(20f);
+        player.setExhaustion(0f);
     }
 
     @Override
@@ -53,6 +74,7 @@ public class KickCommand implements CommandExecutor, TabCompleter {
         List<String> list = new ArrayList<>();
         if (args.length == 1) {
             String input = args[0].toLowerCase(Locale.ROOT);
+            if ("@a".startsWith(input)) list.add("@a");
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (p.getName().toLowerCase(Locale.ROOT).startsWith(input)) list.add(p.getName());
             }

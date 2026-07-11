@@ -1,49 +1,41 @@
 package de.louis.xdtils.commands;
 
-import de.louis.xdtils.manager.BanManager;
 import de.louis.xdtils.util.MessageUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
-public class KickCommand implements CommandExecutor, TabCompleter {
+public class PingCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
                              @NotNull String label, @NotNull String[] args) {
 
-        if (!sender.hasPermission("xdtils.kick")) {
+        if (!sender.hasPermission("xdtils.ping")) {
             sender.sendMessage(MessageUtil.noPermission(label));
             return true;
         }
 
+        Player target;
         if (args.length == 0) {
-            sender.sendMessage(MessageUtil.prefixed("<gray>Benutzung: "
-                    + MessageUtil.command("kick") + "<gray> <spieler> [grund]</gray>"));
-            return true;
+            if (!(sender instanceof Player p)) { sender.sendMessage(MessageUtil.onlyPlayers()); return true; }
+            target = p;
+        } else {
+            target = Bukkit.getPlayerExact(args[0]);
+            if (target == null) { sender.sendMessage(MessageUtil.playerNotFound(args[0])); return true; }
         }
 
-        Player target = Bukkit.getPlayerExact(args[0]);
-        if (target == null) {
-            sender.sendMessage(MessageUtil.playerNotFound(args[0]));
-            return true;
-        }
+        int ping = target.getPing();
+        String color = ping < 60 ? "<#86EFAC>" : ping < 120 ? "<#FCD34D>" : ping < 200 ? "<#F59E0B>" : "<#F87171>";
+        String close = ping < 60 ? "</#86EFAC>" : ping < 120 ? "</#FCD34D>" : ping < 200 ? "</#F59E0B>" : "</#F87171>";
 
-        String reason = args.length > 1
-                ? String.join(" ", java.util.Arrays.copyOfRange(args, 1, args.length))
-                : "Du wurdest gekickt.";
-
-        target.kick(MessageUtil.kickScreen(reason, sender.getName()));
-        Bukkit.broadcast(MessageUtil.kickBroadcast(target.getName(), sender.getName(), reason));
+        sender.sendMessage(MessageUtil.prefixed("<gray>Ping von "
+                + MessageUtil.player(target.getName())
+                + "<gray>: " + color + ping + "ms" + close + "<gray>.</gray>"));
         return true;
     }
 

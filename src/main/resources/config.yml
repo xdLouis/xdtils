@@ -1,0 +1,424 @@
+# ─────────────────────────────────────────────────────────────────
+# xdtils configuration
+# Achte auf korrekte Einrückung mit Leerzeichen, nicht mit Tabs.
+# ─────────────────────────────────────────────────────────────────
+
+# ── Commands ───────────────────────────────────────────────────────
+# Jeder Command kann hier global aktiviert/deaktiviert werden.
+# permission überschreibt die Default-Permission aus dem Code.
+
+commands:
+  gamemode:
+    enabled: true
+    permission: xdtils.gamemode
+  gm:
+    enabled: true
+    permission: xdtils.gamemode
+
+  speed:
+    enabled: true
+    permission: xdtils.speed
+  walkspeed:
+    enabled: true
+    permission: xdtils.walkspeed
+  flyspeed:
+    enabled: true
+    permission: xdtils.flyspeed
+
+  enchant:
+    enabled: true
+    permission: xdtils.enchant
+
+  hat:
+    enabled: true
+    permission: xdtils.hat
+
+  invsee:
+    enabled: true
+    permission: xdtils.invsee
+
+  back:
+    enabled: true
+    permission: xdtils.back
+
+  tp:
+    enabled: true
+    permission: xdtils.tp
+  tphere:
+    enabled: true
+    permission: xdtils.tphere
+  tpworld:
+    enabled: true
+    permission: xdtils.tpworld
+
+  clear:
+    enabled: true
+    permission: xdtils.clear
+
+  trash:
+    enabled: true
+    permission: xdtils.trash
+
+  i:
+    enabled: true
+    permission: xdtils.item
+
+  give:
+    enabled: true
+    permission: xdtils.give
+
+  kick:
+    enabled: true
+    permission: xdtils.kick
+
+  ban:
+    enabled: true
+    permission: xdtils.ban
+  ban-ip:
+    enabled: true
+    permission: xdtils.ban.ip
+
+  pardon:
+    enabled: true
+    permission: xdtils.pardon
+  pardon-ip:
+    enabled: true
+    permission: xdtils.pardon.ip
+
+  op:
+    enabled: true
+    permission: xdtils.op
+  deop:
+    enabled: true
+    permission: xdtils.deop
+
+  kill:
+    enabled: true
+    permission: xdtils.kill
+
+  time:
+    enabled: true
+    permission: xdtils.time
+
+  weather:
+    enabled: true
+    permission: xdtils.weather
+
+  difficulty:
+    enabled: true
+    permission: xdtils.difficulty
+
+  whitelist:
+    enabled: true
+    permission: xdtils.whitelist
+
+  heal:
+    enabled: true
+    permission: xdtils.heal
+
+  feed:
+    enabled: true
+    permission: xdtils.feed
+
+  fly:
+    enabled: true
+    permission: xdtils.fly
+
+  cc:
+    enabled: true
+    permission: xdtils.clearchat
+
+  vanish:
+    enabled: true
+    permission: xdtils.vanish
+  v:
+    enabled: true
+    permission: xdtils.vanish
+
+  info:
+    enabled: true
+    permission: xdtils.info
+
+  nick:
+    enabled: true
+    permission: xdtils.nick
+
+  msg:
+    enabled: true
+    permission: xdtils.msg
+  r:
+    enabled: true
+    permission: xdtils.msg
+
+  ignore:
+    enabled: true
+    permission: xdtils.ignore
+
+  afk:
+    enabled: true
+    permission: xdtils.afk
+
+  seen:
+    enabled: true
+    permission: xdtils.seen
+
+  playtime:
+    enabled: true
+    permission: xdtils.playtime
+
+  ping:
+    enabled: true
+    permission: xdtils.ping
+
+  broadcast:
+    enabled: true
+    permission: xdtils.broadcast
+
+  staff:
+    enabled: true
+    permission: xdtils.staff
+
+  maintenance:
+    enabled: true
+    permission: xdtils.maintenance
+
+  freeze:
+    enabled: true
+    permission: xdtils.freeze
+
+  sudo:
+    enabled: true
+    permission: xdtils.sudo
+
+  rename:
+    enabled: true
+    permission: xdtils.rename
+
+  lore:
+    enabled: true
+    permission: xdtils.lore
+
+  itemdb:
+    enabled: true
+    permission: xdtils.itemdb
+
+  commandspy:
+    enabled: true
+    permission: xdtils.commandspy
+  socialspy:
+    enabled: true
+    permission: xdtils.socialspy
+
+  workbench:
+    enabled: true
+    permission: xdtils.workbench
+  anvil:
+    enabled: true
+    permission: xdtils.anvil
+  grindstone:
+    enabled: true
+    permission: xdtils.grindstone
+  cartography:
+    enabled: true
+    permission: xdtils.cartography
+  loom:
+    enabled: true
+    permission: xdtils.loom
+  stonecutter:
+    enabled: true
+    permission: xdtils.stonecutter
+  smithing:
+    enabled: true
+    permission: xdtils.smithing
+  enchanting:
+    enabled: true
+    permission: xdtils.enchanting
+
+  god:
+    enabled: true
+    permission: xdtils.god
+
+  repair:
+    enabled: true
+    permission: xdtils.repair
+
+  more:
+    enabled: true
+    permission: xdtils.more
+
+  restart:
+    enabled: true
+    permission: xdtils.restart
+
+  tps:
+    enabled: true
+    permission: xdtils.tps
+
+  memory:
+    enabled: true
+    permission: xdtils.memory
+
+  xp:
+    enabled: true
+    permission: xdtils.xp
+
+  near:
+    enabled: true
+    permission: xdtils.near
+
+  firework:
+    enabled: true
+    permission: xdtils.firework
+
+  skull:
+    enabled: true
+    permission: xdtils.skull
+
+  invsave:
+    enabled: true
+    permission: xdtils.invsave
+
+  invload:
+    enabled: true
+    permission: xdtils.invload
+
+  recipe:
+    enabled: true
+    permission: xdtils.recipe
+
+  mute:
+    enabled: true
+    permission: xdtils.mute
+
+  unmute:
+    enabled: true
+    permission: xdtils.mute
+
+  history:
+    enabled: true
+    permission: xdtils.history
+
+  trail:
+    enabled: true
+    permission: xdtils.trail
+
+  list:
+    enabled: true
+    permission: xdtils.list
+
+  menu:
+    enabled: true
+    permission: xdtils.menu
+
+  balance:
+    enabled: true
+    permission: xdtils.balance
+  bal:
+    enabled: true
+    permission: xdtils.balance
+  money:
+    enabled: true
+    permission: xdtils.balance
+
+  pay:
+    enabled: true
+    permission: xdtils.pay
+
+  eco:
+    enabled: true
+    permission: xdtils.eco
+
+  permissions:
+    enabled: true
+    permission: xdtils.permissions
+  perms:
+    enabled: true
+    permission: xdtils.permissions
+
+  glow:
+    enabled: true
+    permission: xdtils.glow
+
+  enderchest:
+    enabled: true
+    permission: xdtils.enderchest
+  ec:
+    enabled: true
+    permission: xdtils.enderchest
+
+  top:
+    enabled: true
+    permission: xdtils.top
+
+  bottom:
+    enabled: true
+    permission: xdtils.bottom
+
+  mob:
+    enabled: true
+    permission: xdtils.mob
+
+  armortrim:
+    enabled: true
+    permission: xdtils.armortrim
+
+  leathercolor:
+    enabled: true
+    permission: xdtils.leathercolor
+  lc:
+    enabled: true
+    permission: xdtils.leathercolor
+
+# ── Economy ───────────────────────────────────────────────────────
+economy:
+  enabled: true
+  vault-hook: true
+  pay-enabled: true
+  admin-enabled: true
+  start-balance: 0.0
+
+# ── Permission-System ─────────────────────────────────────────────
+permissions-system:
+  enabled: true
+  gui-enabled: true
+  default-group: default
+
+# ── Glow ────────────────────────────────────────────────────────────
+glow:
+  enabled: true
+  colors-enabled: true
+  default-color: white
+  players: {}
+
+# ── Trails ──────────────────────────────────────────────────────────
+trail:
+  enabled: true
+  update-interval-ticks: 3
+
+# ── Freeze ─────────────────────────────────────────────────────────
+freeze:
+  block-movement: true
+  block-damage: true
+  block-chat: false
+  block-commands: false
+
+# ── Maintenance ───────────────────────────────────────────────────
+maintenance:
+  enabled: false
+  kick-message: "<red>Der Server befindet sich aktuell im Wartungsmodus.</red>"
+  allow-ops: true
+  allow-permission: "xdtils.maintenance.bypass"
+
+# ── Mute ──────────────────────────────────────────────────────────
+mute:
+  block-chat: true
+  blocked-message: "<red>Du bist gemutet und kannst nicht schreiben.</red>"
+
+# ── Messages / Formatting (optional für spätere Nutzung) ───
+messages:
+  prefix-enabled: true
+
+# ── Features / future-proof ──────────────────────────────────────
+features:
+  save-on-disable: true
+  refresh-permissions-on-join: true

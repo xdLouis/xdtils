@@ -1,34 +1,35 @@
 package de.louis.xdtils.commands;
 
-import de.louis.xdtils.manager.BanManager;
+import de.louis.xdtils.manager.FreezeManager;
 import de.louis.xdtils.util.MessageUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
-public class KickCommand implements CommandExecutor, TabCompleter {
+public class FreezeCommand implements CommandExecutor, TabCompleter {
+
+    private final FreezeManager freezeManager;
+
+    public FreezeCommand(FreezeManager freezeManager) {
+        this.freezeManager = freezeManager;
+    }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
                              @NotNull String label, @NotNull String[] args) {
 
-        if (!sender.hasPermission("xdtils.kick")) {
+        if (!sender.hasPermission("xdtils.freeze")) {
             sender.sendMessage(MessageUtil.noPermission(label));
             return true;
         }
 
         if (args.length == 0) {
             sender.sendMessage(MessageUtil.prefixed("<gray>Benutzung: "
-                    + MessageUtil.command("kick") + "<gray> <spieler> [grund]</gray>"));
+                    + MessageUtil.command("freeze") + "<gray> <spieler></gray>"));
             return true;
         }
 
@@ -38,12 +39,14 @@ public class KickCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        String reason = args.length > 1
-                ? String.join(" ", java.util.Arrays.copyOfRange(args, 1, args.length))
-                : "Du wurdest gekickt.";
-
-        target.kick(MessageUtil.kickScreen(reason, sender.getName()));
-        Bukkit.broadcast(MessageUtil.kickBroadcast(target.getName(), sender.getName(), reason));
+        boolean nowFrozen = freezeManager.toggle(target.getUniqueId());
+        sender.sendMessage(MessageUtil.prefixed("<gray>" + MessageUtil.player(target.getName())
+                + "<gray> wurde "
+                + (nowFrozen ? "<#F87171>eingefroren</#F87171>" : "<#86EFAC>aufgetaut</#86EFAC>")
+                + "<gray>.</gray>"));
+        target.sendMessage(MessageUtil.prefixed("<gray>Du wurdest "
+                + (nowFrozen ? "<#F87171>eingefroren</#F87171>" : "<#86EFAC>aufgetaut</#86EFAC>")
+                + "<gray>.</gray>"));
         return true;
     }
 

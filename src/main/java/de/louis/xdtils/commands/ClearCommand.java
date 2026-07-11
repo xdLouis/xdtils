@@ -1,6 +1,5 @@
 package de.louis.xdtils.commands;
 
-import de.louis.xdtils.manager.BanManager;
 import de.louis.xdtils.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -12,38 +11,60 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-public class KickCommand implements CommandExecutor, TabCompleter {
+public class ClearCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
                              @NotNull String label, @NotNull String[] args) {
 
-        if (!sender.hasPermission("xdtils.kick")) {
+        if (!sender.hasPermission("xdtils.clear")) {
             sender.sendMessage(MessageUtil.noPermission(label));
             return true;
         }
 
+        // /clear → eigenes Inventar leeren
         if (args.length == 0) {
-            sender.sendMessage(MessageUtil.prefixed("<gray>Benutzung: "
-                    + MessageUtil.command("kick") + "<gray> <spieler> [grund]</gray>"));
+            if (!(sender instanceof Player player)) {
+                sender.sendMessage(MessageUtil.onlyPlayers());
+                return true;
+            }
+
+            player.getInventory().clear();
+            player.sendMessage(MessageUtil.clearSelf());
             return true;
         }
 
+        // /clear @a → alle Spieler leeren
+        if (args[0].equalsIgnoreCase("@a")) {
+            Collection<? extends Player> online = Bukkit.getOnlinePlayers();
+            for (Player p : online) {
+                p.getInventory().clear();
+                p.sendMessage(MessageUtil.clearByOther(sender.getName()));
+            }
+            sender.sendMessage(MessageUtil.clearAll(online.size()));
+            return true;
+        }
+
+        // /clear <spieler>
         Player target = Bukkit.getPlayerExact(args[0]);
         if (target == null) {
             sender.sendMessage(MessageUtil.playerNotFound(args[0]));
             return true;
         }
 
-        String reason = args.length > 1
-                ? String.join(" ", java.util.Arrays.copyOfRange(args, 1, args.length))
-                : "Du wurdest gekickt.";
+        target.getInventory().clear();
 
-        target.kick(MessageUtil.kickScreen(reason, sender.getName()));
-        Bukkit.broadcast(MessageUtil.kickBroadcast(target.getName(), sender.getName(), reason));
+        if (target.getName().equalsIgnoreCase(sender.getName())) {
+            target.sendMessage(MessageUtil.clearSelf());
+        } else {
+            sender.sendMessage(MessageUtil.clearOther(target.getName()));
+            target.sendMessage(MessageUtil.clearByOther(sender.getName()));
+        }
+
         return true;
     }
 
@@ -51,12 +72,19 @@ public class KickCommand implements CommandExecutor, TabCompleter {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
                                                 @NotNull String alias, @NotNull String[] args) {
         List<String> list = new ArrayList<>();
+
         if (args.length == 1) {
             String input = args[0].toLowerCase(Locale.ROOT);
+
+            if ("@a".startsWith(input)) list.add("@a");
+
             for (Player p : Bukkit.getOnlinePlayers()) {
-                if (p.getName().toLowerCase(Locale.ROOT).startsWith(input)) list.add(p.getName());
+                if (p.getName().toLowerCase(Locale.ROOT).startsWith(input)) {
+                    list.add(p.getName());
+                }
             }
         }
+
         return list;
     }
 }
