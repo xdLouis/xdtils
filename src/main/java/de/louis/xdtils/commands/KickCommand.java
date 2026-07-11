@@ -1,5 +1,6 @@
 package de.louis.xdtils.commands;
 
+import de.louis.xdtils.manager.BanManager;
 import de.louis.xdtils.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
