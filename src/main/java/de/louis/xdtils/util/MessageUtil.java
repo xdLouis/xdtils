@@ -317,7 +317,12 @@ public final class MessageUtil {
         return prefixed("<gray><#4DA3FF>" + count + "</#4DA3FF><gray> Spieler haben <#4DA3FF>"
                 + amount + "x</#4DA3FF> " + item(itemName) + "<gray> erhalten.</gray>");
     }
+
     // ── Kick ─────────────────────────────────────────────────────────
+
+    public static Component kickUsage() {
+        return prefixed("<gray>Benutzung: " + command("kick") + "<gray> <spieler> [grund]</gray>");
+    }
 
     public static net.kyori.adventure.text.Component kickScreen(String reason, String actorName) {
         return parse("<red><bold>Du wurdest gekickt</bold></red>\n\n"
@@ -331,6 +336,10 @@ public final class MessageUtil {
     }
 
 // ── Ban ──────────────────────────────────────────────────────────
+
+    public static Component banUsage() {
+        return prefixed("<gray>Benutzung: " + command("ban") + "<gray> <spieler> [grund]</gray>");
+    }
 
     public static net.kyori.adventure.text.Component banScreen(String reason, String actorName) {
         return parse("<red><bold>Du wurdest gebannt</bold></red>\n\n"
@@ -346,6 +355,44 @@ public final class MessageUtil {
     public static Component banIpSuccess(String ip, String actorName, String reason) {
         return prefixed("<gray>IP <#F87171>" + escape(ip) + "</#F87171><gray> wurde von "
                 + player(actorName) + "<gray> gebannt. Grund: <#F87171>" + escape(reason) + "</#F87171></gray>");
+    }
+
+// ── TempBan ──────────────────────────────────────────────────────
+
+    public static Component tempBanUsage() {
+        return prefixed("<gray>Benutzung: " + command("tempban")
+                + "<gray> <spieler> <zeit> [grund]</gray>\n"
+                + "<gray>Zeitformate: <#86EFAC>10s</#86EFAC><gray>, <#86EFAC>5m</#86EFAC><gray>, "
+                + "<#86EFAC>2h</#86EFAC><gray>, <#86EFAC>3d</#86EFAC><gray>, <#86EFAC>1w</#86EFAC>");
+    }
+
+    public static Component tempBanInvalidDuration(String input) {
+        return prefixed("<gray>Ungültige Zeitangabe: <#F87171>" + escape(input)
+                + "</#F87171><gray>. Beispiel: <#86EFAC>1h</#86EFAC><gray>, "
+                + "<#86EFAC>30m</#86EFAC><gray>, <#86EFAC>7d</#86EFAC>");
+    }
+
+    public static net.kyori.adventure.text.Component tempBanScreen(String reason, String actorName, String duration) {
+        return parse("<red><bold>Du wurdest temporär gebannt</bold></red>\n\n"
+                + "<gray>Grund: <white>" + escape(reason) + "</white></gray>\n"
+                + "<gray>Von: " + player(actorName) + "</gray>\n"
+                + "<gray>Dauer: <#F87171>" + escape(duration) + "</#F87171></gray>");
+    }
+
+    public static Component tempBanBroadcast(String targetName, String actorName, String reason, String duration) {
+        return prefixed(player(targetName) + "<gray> wurde von " + player(actorName)
+                + "<gray> für <#F87171>" + escape(duration) + "</#F87171><gray> gebannt."
+                + " (<#F87171>" + escape(reason) + "</#F87171><gray>)</gray>");
+    }
+
+// ── Unban ─────────────────────────────────────────────────────────
+
+    public static Component unbanSuccess(String targetName) {
+        return prefixed("<gray>" + player(targetName) + "<gray> wurde entbannt.</gray>");
+    }
+
+    public static Component notBanned(String targetName) {
+        return prefixed("<gray><#F87171>" + escape(targetName) + "</#F87171><gray> ist nicht gebannt.</gray>");
     }
 
 // ── Pardon ───────────────────────────────────────────────────────
@@ -536,6 +583,7 @@ public final class MessageUtil {
                 + (enabled ? "<#86EFAC>aktiviert</#86EFAC>" : "<#F87171>deaktiviert</#F87171>")
                 + "<gray>.</gray>");
     }
+
     // ── TpHere ───────────────────────────────────────────────────────
 
     public static Component tpHereSuccess(String targetName) {
@@ -551,6 +599,7 @@ public final class MessageUtil {
     public static Component chatCleared(String actorName) {
         return prefixed("<gray>Der Chat wurde von " + player(actorName) + "<gray> geleert.</gray>");
     }
+
     // ── Vanish ────────────────────────────────────────────────────────
 
     public static Component vanishToggled(boolean vanished) {
@@ -616,6 +665,7 @@ public final class MessageUtil {
         return prefixed("<gray>Gruppe " + player(group) + "<gray> wurde "
                 + "von " + player(target) + "<gray> entfernt.</gray>");
     }
+
     // ── Glow ──────────────────────────────────────────────────────────
 
     public static String color(String name) {
@@ -669,6 +719,7 @@ public final class MessageUtil {
         return prefixed("<gray>Deine Glow-Farbe wurde von " + player(actorName) + "<gray> auf "
                 + color(colorName) + "<gray> gesetzt.</gray>");
     }
+
     // ── EnderChest ────────────────────────────────────────────────────
 
     public static Component enderchestUsage() {
@@ -682,6 +733,7 @@ public final class MessageUtil {
     public static Component enderchestOpenedOther(String targetName) {
         return prefixed("<gray>Die Enderchest von " + player(targetName) + "<gray> wurde geöffnet.</gray>");
     }
+
     // ── Top / Bottom / Mob ───────────────────────────────────────────
 
     public static Component topTeleported() {
