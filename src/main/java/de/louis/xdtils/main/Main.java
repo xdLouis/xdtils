@@ -152,10 +152,11 @@ public final class Main extends JavaPlugin {
         KickCommand kick = new KickCommand();
         registerCommand("kick", kick, kick, "xdtils.kick");
 
-        BanCommand ban = new BanCommand(false);
+        // ── Ban-Commands ──────────────────────────────────────────
+        BanCommand ban = new BanCommand(banManager);
         registerCommand("ban", ban, ban, "xdtils.ban");
 
-        BanCommand banIp = new BanCommand(true);
+        BanCommand banIp = new BanCommand(banManager);
         registerCommand("ban-ip", banIp, banIp, "xdtils.ban.ip");
 
         PardonCommand pardon = new PardonCommand(false);
