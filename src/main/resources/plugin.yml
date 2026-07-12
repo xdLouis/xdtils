@@ -94,6 +94,16 @@ commands:
   pardon-ip:
     description: IP entbannen
     usage: /pardon-ip <ip>
+
+  tempban:
+    description: Spieler temporär bannen
+    usage: /tempban <spieler> <dauer> [grund]
+    aliases: [tb]
+
+  unban:
+    description: Spieler vom TempBan befreien
+    usage: /unban <spieler>
+
   op:
     description: Spieler zum Operator machen
     usage: /op <spieler>
@@ -373,6 +383,12 @@ permissions:
     default: op
   xdtils.pardon.ip:
     default: op
+  xdtils.tempban:
+    description: Erlaubt die Nutzung von /tempban
+    default: op
+  xdtils.unban:
+    description: Erlaubt die Nutzung von /unban
+    default: op
   xdtils.op:
     default: op
   xdtils.deop:
@@ -420,6 +436,9 @@ permissions:
   xdtils.staff:
     default: op
   xdtils.maintenance:
+    default: op
+  xdtils.maintenance.bypass:
+    description: Erlaubt den Join trotz Wartungsmodus
     default: op
   xdtils.freeze:
     default: op
