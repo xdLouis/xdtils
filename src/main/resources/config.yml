@@ -3,7 +3,7 @@
 # Achte auf korrekte Einrückung mit Leerzeichen, nicht mit Tabs.
 # ─────────────────────────────────────────────────────────────────
 
-# ── Commands ───────────────────────────────────────────────────────
+# ── Commands ──────────────────────────────────────────────────
 # Jeder Command kann hier global aktiviert/deaktiviert werden.
 # permission überschreibt die Default-Permission aus dem Code.
 
@@ -84,6 +84,13 @@ commands:
   pardon-ip:
     enabled: true
     permission: xdtils.pardon.ip
+
+  banhistory:
+    enabled: true
+    permission: xdtils.banhistory
+  bh:
+    enabled: true
+    permission: xdtils.banhistory
 
   tempban:
     enabled: true
@@ -380,7 +387,7 @@ commands:
     enabled: true
     permission: xdtils.leathercolor
 
-# ── Economy ───────────────────────────────────────────────────────
+# ── Economy ──────────────────────────────────────────────────
 economy:
   enabled: true
   vault-hook: true
@@ -394,38 +401,38 @@ permissions-system:
   gui-enabled: true
   default-group: default
 
-# ── Glow ────────────────────────────────────────────────────────────
+# ── Glow ────────────────────────────────────────────────────
 glow:
   enabled: true
   colors-enabled: true
   default-color: white
   players: {}
 
-# ── Trails ──────────────────────────────────────────────────────────
+# ── Trails ────────────────────────────────────────────────────
 trail:
   enabled: true
   update-interval-ticks: 3
 
-# ── Freeze ─────────────────────────────────────────────────────────
+# ── Freeze ────────────────────────────────────────────────────
 freeze:
   block-movement: true
   block-damage: true
   block-chat: false
   block-commands: false
 
-# ── Maintenance ───────────────────────────────────────────────────
+# ── Maintenance ───────────────────────────────────────────────
 maintenance:
   enabled: false
   kick-message: "<red>Der Server befindet sich aktuell im Wartungsmodus.</red>"
   allow-ops: true
   allow-permission: "xdtils.maintenance.bypass"
 
-# ── Mute ──────────────────────────────────────────────────────────
+# ── Mute ─────────────────────────────────────────────────────
 mute:
   block-chat: true
   blocked-message: "<red>Du bist gemutet und kannst nicht schreiben.</red>"
 
-# ── Ban-System ────────────────────────────────────────────────────
+# ── Ban-System ──────────────────────────────────────────────────
 # tempban-enabled: /tempban Command aktivieren
 # join-check-enabled: Prüft beim Join ob TempBan noch aktiv ist
 # storage: "yaml" (Standard) — zukünftig auch "mysql" möglich
@@ -472,7 +479,7 @@ messages:
   player-only: "<red>Dieser Command kann nur von Spielern ausgeführt werden."
   console-only: "<red>Dieser Command kann nur von der Konsole ausgeführt werden."
 
-# ── Features / future-proof ──────────────────────────────────────
+# ── Features / future-proof ─────────────────────────────────────────
 features:
   save-on-disable: true
   refresh-permissions-on-join: true

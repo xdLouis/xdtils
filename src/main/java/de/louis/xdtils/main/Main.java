@@ -165,6 +165,10 @@ public final class Main extends JavaPlugin {
         PardonCommand pardonIp = new PardonCommand(true);
         registerCommand("pardon-ip", pardonIp, pardonIp, "xdtils.pardon.ip");
 
+        BanHistoryCommand banHistory = new BanHistoryCommand(banManager);
+        registerCommand("banhistory", banHistory, banHistory, "xdtils.banhistory");
+        registerCommand("bh", banHistory, banHistory, "xdtils.banhistory");
+
         // ── TempBan / Unban ──────────────────────────────────────────
         if (getConfig().getBoolean("ban.tempban-enabled", true)) {
             TempBanCommand tempBan = new TempBanCommand(banManager);
