@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * BanManager — verwaltet permanente Bans, TempBans und die History.
+ * BanManager — verwaltet permanente Bans, TempBans, Mutes, TempMutes und die History.
  * Daten werden in /plugins/xdtils/bans.yml persistiert.
  */
 public final class BanManager {
@@ -18,10 +18,7 @@ public final class BanManager {
     private File file;
     private FileConfiguration data;
 
-    // ── In-Memory-Caches ──────────────────────────────────────────────
-    // key = lowercase Name, value = BanEntry
     private final Map<String, BanEntry> activeBans = new HashMap<>();
-    // key = lowercase Name, value = liste von HistoryEntry
     private final Map<String, List<HistoryEntry>> history = new HashMap<>();
 
     public BanManager(Main plugin) {
@@ -42,7 +39,6 @@ public final class BanManager {
         activeBans.clear();
         history.clear();
 
-        // Active bans
         if (data.isConfigurationSection("bans")) {
             for (String key : data.getConfigurationSection("bans").getKeys(false)) {
                 String path = "bans." + key + ".";
@@ -55,7 +51,6 @@ public final class BanManager {
             }
         }
 
-        // History
         if (data.isConfigurationSection("history")) {
             for (String key : data.getConfigurationSection("history").getKeys(false)) {
                 List<Map<?, ?>> entries = data.getMapList("history." + key);
@@ -105,7 +100,6 @@ public final class BanManager {
 
     // ── Ban-Operationen ───────────────────────────────────────────────
 
-    /** Permanenter Ban */
     public void ban(String playerName, String reason, String bannedBy) {
         long now = System.currentTimeMillis();
         activeBans.put(playerName.toLowerCase(), new BanEntry(playerName, reason, bannedBy, now, -1));
@@ -113,7 +107,6 @@ public final class BanManager {
         save();
     }
 
-    /** Temporärer Ban. duration in Millisekunden. */
     public void tempBan(String playerName, String reason, String bannedBy, long durationMs) {
         long now = System.currentTimeMillis();
         long expires = now + durationMs;
@@ -122,7 +115,6 @@ public final class BanManager {
         save();
     }
 
-    /** Entbannt einen Spieler. Gibt true zurück wenn er gebannt war. */
     public boolean unban(String playerName) {
         BanEntry removed = activeBans.remove(playerName.toLowerCase());
         if (removed != null) {
@@ -133,13 +125,30 @@ public final class BanManager {
         return false;
     }
 
-    /** Kick-Eintrag in History schreiben */
     public void logKick(String playerName, String reason, String kickedBy) {
         addHistory(playerName, "KICK", reason, kickedBy, System.currentTimeMillis(), -1);
         save();
     }
 
-    /** Prüft ob ein Spieler gerade aktiv gebannt ist (inklusive abgelaufene TempBans entfernen) */
+    /** Permanenter Mute (nur History-Eintrag, kein Ban) */
+    public void logMute(String playerName, String reason, String mutedBy) {
+        addHistory(playerName, "MUTE", reason, mutedBy, System.currentTimeMillis(), -1);
+        save();
+    }
+
+    /** TempMute History-Eintrag */
+    public void logMute(String playerName, String reason, String mutedBy, long durationMs) {
+        long expires = System.currentTimeMillis() + durationMs;
+        addHistory(playerName, "TEMPMUTE", reason, mutedBy, System.currentTimeMillis(), expires);
+        save();
+    }
+
+    /** Unmute History-Eintrag */
+    public void logUnmute(String playerName, String unmutedBy) {
+        addHistory(playerName, "UNMUTE", "-", unmutedBy, System.currentTimeMillis(), -1);
+        save();
+    }
+
     public boolean isBanned(String playerName) {
         BanEntry entry = activeBans.get(playerName.toLowerCase());
         if (entry == null) return false;
@@ -151,13 +160,11 @@ public final class BanManager {
         return true;
     }
 
-    /** Gibt den aktiven BanEntry oder null zurück */
     public BanEntry getBan(String playerName) {
         if (!isBanned(playerName)) return null;
         return activeBans.get(playerName.toLowerCase());
     }
 
-    /** History eines Spielers */
     public List<HistoryEntry> getHistory(String playerName) {
         return history.getOrDefault(playerName.toLowerCase(), Collections.emptyList());
     }
@@ -175,18 +182,16 @@ public final class BanManager {
             Iterator<Map.Entry<String, BanEntry>> it = activeBans.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry<String, BanEntry> e = it.next();
-                BanEntry b = e.getValue();
-                if (b.expiresAt() != -1 && System.currentTimeMillis() >= b.expiresAt()) {
+                if (e.getValue().expiresAt() != -1 && System.currentTimeMillis() >= e.getValue().expiresAt()) {
                     it.remove();
                     dirty = true;
                 }
             }
             if (dirty) save();
-        }, 20L * 30, 20L * 30); // alle 30 Sekunden
+        }, 20L * 30, 20L * 30);
     }
 
-    // ── Hilfsmethode: Zeitstring parsen ──────────────────────────────
-    // Format: 10s, 5m, 2h, 3d, 1w
+    // ── Hilfsmethoden ─────────────────────────────────────────────────
 
     public static long parseDuration(String input) {
         if (input == null || input.isBlank()) return -1;
@@ -215,7 +220,6 @@ public final class BanManager {
         long hours   = remaining / 3_600_000L;   remaining %= 3_600_000L;
         long minutes = remaining / 60_000L;      remaining %= 60_000L;
         long seconds = remaining / 1000L;
-
         StringBuilder sb = new StringBuilder();
         if (weeks   > 0) sb.append(weeks).append("w ");
         if (days    > 0) sb.append(days).append("d ");
