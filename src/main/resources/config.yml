@@ -3,7 +3,7 @@
 # Achte auf korrekte Einrückung mit Leerzeichen, nicht mit Tabs.
 # ─────────────────────────────────────────────────────────────────
 
-# ── Commands ───────────────────────────────────────────────────────
+# ── Commands ──────────────────────────────────────────────────
 # Jeder Command kann hier global aktiviert/deaktiviert werden.
 # permission überschreibt die Default-Permission aus dem Code.
 
@@ -84,6 +84,24 @@ commands:
   pardon-ip:
     enabled: true
     permission: xdtils.pardon.ip
+
+  banhistory:
+    enabled: true
+    permission: xdtils.banhistory
+  bh:
+    enabled: true
+    permission: xdtils.banhistory
+
+  tempban:
+    enabled: true
+    permission: xdtils.tempban
+  tb:
+    enabled: true
+    permission: xdtils.tempban
+
+  unban:
+    enabled: true
+    permission: xdtils.unban
 
   op:
     enabled: true
@@ -369,7 +387,7 @@ commands:
     enabled: true
     permission: xdtils.leathercolor
 
-# ── Economy ───────────────────────────────────────────────────────
+# ── Economy ──────────────────────────────────────────────────
 economy:
   enabled: true
   vault-hook: true
@@ -383,42 +401,85 @@ permissions-system:
   gui-enabled: true
   default-group: default
 
-# ── Glow ────────────────────────────────────────────────────────────
+# ── Glow ────────────────────────────────────────────────────
 glow:
   enabled: true
   colors-enabled: true
   default-color: white
   players: {}
 
-# ── Trails ──────────────────────────────────────────────────────────
+# ── Trails ────────────────────────────────────────────────────
 trail:
   enabled: true
   update-interval-ticks: 3
 
-# ── Freeze ─────────────────────────────────────────────────────────
+# ── Freeze ────────────────────────────────────────────────────
 freeze:
   block-movement: true
   block-damage: true
   block-chat: false
   block-commands: false
 
-# ── Maintenance ───────────────────────────────────────────────────
+# ── Maintenance ───────────────────────────────────────────────
 maintenance:
   enabled: false
   kick-message: "<red>Der Server befindet sich aktuell im Wartungsmodus.</red>"
   allow-ops: true
   allow-permission: "xdtils.maintenance.bypass"
 
-# ── Mute ──────────────────────────────────────────────────────────
+# ── Mute ─────────────────────────────────────────────────────
 mute:
   block-chat: true
   blocked-message: "<red>Du bist gemutet und kannst nicht schreiben.</red>"
 
-# ── Messages / Formatting (optional für spätere Nutzung) ───
+# ── Ban-System ──────────────────────────────────────────────────
+# tempban-enabled: /tempban Command aktivieren
+# join-check-enabled: Prüft beim Join ob TempBan noch aktiv ist
+# storage: "yaml" (Standard) — zukünftig auch "mysql" möglich
+ban:
+  tempban-enabled: true
+  join-check-enabled: true
+  storage: yaml
+  # MySQL-Einstellungen (nur relevant wenn storage: mysql)
+  mysql:
+    enabled: false
+    host: localhost
+    port: 3306
+    database: xdtils
+    username: root
+    password: ""
+    table-prefix: xdtils_
+  # Nachrichten-Templates (MiniMessage Format)
+  messages:
+    tempban-screen: |
+      <red><bold>Du wurdest temporär gebannt!</bold></red>
+      <gray>Grund: <white>{reason}</white></gray>
+      <gray>Von: <white>{actor}</white></gray>
+      <gray>Dauer: <white>{duration}</white></gray>
+      <gray>Verbleibend: <white>{remaining}</white></gray>
+    tempban-broadcast: "<red>[Ban] <white>{target}</white> wurde von <white>{actor}</white> für <white>{duration}</white> gebannt. Grund: <white>{reason}</white>"
+    tempban-still-banned: |
+      <red><bold>Du bist noch gebannt!</bold></red>
+      <gray>Grund: <white>{reason}</white></gray>
+      <gray>Verbleibend: <white>{remaining}</white></gray>
+    unban-success: "<green>{target} wurde erfolgreich entbannt."
+    not-banned: "<red>{target} ist nicht gebannt."
+    ban-usage: "<red>Verwendung: /ban <spieler> [grund]"
+    kick-usage: "<red>Verwendung: /kick <spieler> [grund]"
+    tempban-usage: "<red>Verwendung: /tempban <spieler> <dauer> [grund]  (z.B. 7d, 12h, 30m)"
+    tempban-invalid-duration: "<red>Ungültige Dauer '{value}'. Beispiele: 30m, 12h, 7d"
+
+# ── Messages / Formatting ─────────────────────────────────────────
 messages:
   prefix-enabled: true
+  prefix: "<dark_gray>[<aqua>xdtils</aqua>]</dark_gray> "
+  # Allgemeine Nachrichten-Templates
+  no-permission: "<red>Du hast keine Berechtigung für diesen Command."
+  player-not-found: "<red>Spieler '{player}' wurde nicht gefunden."
+  player-only: "<red>Dieser Command kann nur von Spielern ausgeführt werden."
+  console-only: "<red>Dieser Command kann nur von der Konsole ausgeführt werden."
 
-# ── Features / future-proof ──────────────────────────────────────
+# ── Features / future-proof ─────────────────────────────────────────
 features:
   save-on-disable: true
   refresh-permissions-on-join: true

@@ -23,6 +23,7 @@ public final class Main extends JavaPlugin {
     private EconomyManager economyManager;
     private PermissionSystemManager permissionSystemManager;
     private GlowManager glowManager;
+    private BanManager banManager;
 
     @Override
     public void onEnable() {
@@ -37,6 +38,7 @@ public final class Main extends JavaPlugin {
         this.maintenanceManager = new MaintenanceManager();
         this.muteManager = new MuteManager();
         this.trailManager = new TrailManager(this);
+        this.banManager = new BanManager(this);
 
         if (getConfig().getBoolean("economy.enabled", true)) {
             this.economyManager = new EconomyManager(this);
@@ -98,6 +100,10 @@ public final class Main extends JavaPlugin {
             glowManager.save();
         }
 
+        if (banManager != null) {
+            banManager.save();
+        }
+
         getLogger().info("xdtils wurde deaktiviert.");
     }
 
@@ -146,10 +152,11 @@ public final class Main extends JavaPlugin {
         KickCommand kick = new KickCommand();
         registerCommand("kick", kick, kick, "xdtils.kick");
 
-        BanCommand ban = new BanCommand(false);
+        // ── Ban-Commands ──────────────────────────────────────────
+        BanCommand ban = new BanCommand(banManager);
         registerCommand("ban", ban, ban, "xdtils.ban");
 
-        BanCommand banIp = new BanCommand(true);
+        BanCommand banIp = new BanCommand(banManager);
         registerCommand("ban-ip", banIp, banIp, "xdtils.ban.ip");
 
         PardonCommand pardon = new PardonCommand(false);
@@ -157,6 +164,20 @@ public final class Main extends JavaPlugin {
 
         PardonCommand pardonIp = new PardonCommand(true);
         registerCommand("pardon-ip", pardonIp, pardonIp, "xdtils.pardon.ip");
+
+        BanHistoryCommand banHistory = new BanHistoryCommand(banManager);
+        registerCommand("banhistory", banHistory, banHistory, "xdtils.banhistory");
+        registerCommand("bh", banHistory, banHistory, "xdtils.banhistory");
+
+        // ── TempBan / Unban ──────────────────────────────────────────
+        if (getConfig().getBoolean("ban.tempban-enabled", true)) {
+            TempBanCommand tempBan = new TempBanCommand(banManager);
+            registerCommand("tempban", tempBan, tempBan, "xdtils.tempban");
+            registerCommand("tb", tempBan, tempBan, "xdtils.tempban");
+        }
+
+        UnbanCommand unban = new UnbanCommand(banManager);
+        registerCommand("unban", unban, unban, "xdtils.unban");
 
         OpCommand opCommand = new OpCommand(false);
         registerCommand("op", opCommand, opCommand, "xdtils.op");
@@ -341,7 +362,6 @@ public final class Main extends JavaPlugin {
         MobCommand mob = new MobCommand();
         registerCommand("mob", mob, mob, "xdtils.mob");
 
-        // ── ArmorTrim & LeatherColor ─────────────────────────────────
         ArmorTrimCommand armorTrim = new ArmorTrimCommand();
         registerCommand("armortrim", armorTrim, null, "xdtils.armortrim");
 
@@ -360,6 +380,10 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new AfkListener(afkManager), this);
         Bukkit.getPluginManager().registerEvents(new MuteListener(muteManager), this);
         Bukkit.getPluginManager().registerEvents(new ArmorTrimListener(), this);
+
+        if (getConfig().getBoolean("ban.join-check-enabled", true)) {
+            Bukkit.getPluginManager().registerEvents(new TempBanListener(banManager), this);
+        }
 
         if (permissionSystemManager != null && getConfig().getBoolean("permissions-system.gui-enabled", true)) {
             Bukkit.getPluginManager().registerEvents(new PermissionMenuListener(permissionSystemManager), this);
@@ -408,19 +432,9 @@ public final class Main extends JavaPlugin {
         cmd.setPermission(permission);
     }
 
-    public EconomyManager getEconomyManager() {
-        return economyManager;
-    }
-
-    public boolean isEconomyEnabled() {
-        return economyManager != null;
-    }
-
-    public PermissionSystemManager getPermissionSystemManager() {
-        return permissionSystemManager;
-    }
-
-    public boolean isPermissionSystemEnabled() {
-        return permissionSystemManager != null;
-    }
+    public EconomyManager getEconomyManager() { return economyManager; }
+    public boolean isEconomyEnabled() { return economyManager != null; }
+    public PermissionSystemManager getPermissionSystemManager() { return permissionSystemManager; }
+    public boolean isPermissionSystemEnabled() { return permissionSystemManager != null; }
+    public BanManager getBanManager() { return banManager; }
 }
