@@ -95,6 +95,11 @@ commands:
     description: IP entbannen
     usage: /pardon-ip <ip>
 
+  banhistory:
+    description: Ban-Historie eines Spielers anzeigen
+    usage: /banhistory <spieler>
+    aliases: [bh]
+
   tempban:
     description: Spieler temporär bannen
     usage: /tempban <spieler> <dauer> [grund]
@@ -382,6 +387,9 @@ permissions:
   xdtils.pardon:
     default: op
   xdtils.pardon.ip:
+    default: op
+  xdtils.banhistory:
+    description: Erlaubt die Nutzung von /banhistory
     default: op
   xdtils.tempban:
     description: Erlaubt die Nutzung von /tempban
