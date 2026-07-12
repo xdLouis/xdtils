@@ -25,14 +25,21 @@ public final class BanHistoryCommand implements CommandExecutor, TabCompleter {
 
     private final BanManager banManager;
 
+    // GUI-Title-Prefix zum Erkennen beim Click-Event
+    public static final String GUI_TITLE_PREFIX = "[xdTils] History:";
+
     public BanHistoryCommand(BanManager banManager) {
         this.banManager = banManager;
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (!sender.hasPermission("xdtils.banhistory")) {
+            sender.sendMessage(MessageUtil.noPermission(label));
+            return true;
+        }
+
         if (!(sender instanceof Player player)) {
-            // Konsole bekommt Text-Output
             if (args.length < 1) {
                 sender.sendMessage(MessageUtil.prefixed("<gray>Benutzung: " + MessageUtil.command("banhistory") + "<gray> <spieler>"));
                 return true;
@@ -56,14 +63,35 @@ public final class BanHistoryCommand implements CommandExecutor, TabCompleter {
         List<HistoryEntry> entries = banManager.getHistory(targetName);
         BanManager.BanEntry activeBan = banManager.getBan(targetName);
 
-        // Größe: 9-Slots-Reihen, min 3 Reihen, max 6 Reihen
-        int rows = Math.min(6, Math.max(3, 1 + (int) Math.ceil((entries.size() + 1) / 9.0)));
+        // Größe: mind. 3 Reihen, max 6 Reihen
+        int rows = Math.min(6, Math.max(3, 2 + (int) Math.ceil(entries.size() / 7.0)));
         int size = rows * 9;
 
-        String title = "<gray>[</gray><gradient:#67E8F9:#3B82F6><bold>xdTils</bold></gradient><gray>]</gray> <gray>History: <#4DA3FF>" + targetName + "</#4DA3FF>";
-        Inventory gui = Bukkit.createInventory(null, size, MessageUtil.parse(title));
+        // Fester Title-String (plain) zum Erkennen im InventoryClickEvent
+        String titlePlain = GUI_TITLE_PREFIX + " " + targetName;
+        Inventory gui = Bukkit.createInventory(null, size,
+            MessageUtil.parse("<gray>[</gray><gradient:#67E8F9:#3B82F6><bold>xdTils</bold></gradient><gray>]</gray> <gray>History: <#4DA3FF>" + targetName + "</#4DA3FF>"));
 
-        // ── Spieler-Kopf oben links ───────────────────────────────────
+        // ── Rahmen: schwarze Glasscheiben ─────────────────────────────
+        ItemStack border = makeFiller(Material.BLACK_STAINED_GLASS_PANE);
+        // Obere Reihe
+        for (int i = 0; i < 9; i++) gui.setItem(i, border);
+        // Untere Reihe
+        for (int i = size - 9; i < size; i++) gui.setItem(i, border);
+        // Linke + rechte Spalte
+        for (int row = 1; row < rows - 1; row++) {
+            gui.setItem(row * 9, border);
+            gui.setItem(row * 9 + 8, border);
+        }
+        // Innere leere Slots mit dunkelgrauem Glas auffüllen
+        ItemStack innerFiller = makeFiller(Material.GRAY_STAINED_GLASS_PANE);
+        for (int i = 1; i < size - 1; i++) {
+            int col = i % 9;
+            if (col == 0 || col == 8) continue;
+            if (gui.getItem(i) == null) gui.setItem(i, innerFiller);
+        }
+
+        // ── Spieler-Kopf (Mitte oben, Slot 4) ────────────────────────
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
         skullMeta.displayName(MessageUtil.parse("<#4DA3FF><bold>" + targetName + "</bold>"));
@@ -86,74 +114,91 @@ public final class BanHistoryCommand implements CommandExecutor, TabCompleter {
         skull.setItemMeta(skullMeta);
         gui.setItem(4, skull);
 
-        // ── Trennlinie ────────────────────────────────────────────────
-        ItemStack filler = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
-        ItemMeta fillerMeta = filler.getItemMeta();
-        fillerMeta.displayName(Component.empty());
-        filler.setItemMeta(fillerMeta);
-        for (int i = 0; i < 9; i++) gui.setItem(9 + i, filler);
-
-        // ── Einträge (neueste zuerst) ─────────────────────────────────
+        // ── Einträge (neueste zuerst, ab Reihe 1 Spalten 1-7) ─────────
         List<HistoryEntry> reversed = new ArrayList<>(entries);
         java.util.Collections.reverse(reversed);
 
-        int slot = 18;
+        // Verfügbare Slots: Reihen 1..rows-2, Spalten 1..7
+        List<Integer> contentSlots = new ArrayList<>();
+        for (int row = 1; row < rows - 1; row++) {
+            if (row == 0) continue; // Kopfzeile
+            for (int col = 1; col <= 7; col++) {
+                int slot = row * 9 + col;
+                if (slot == 4) continue; // Skull-Slot überspringen
+                contentSlots.add(slot);
+            }
+        }
+
+        int idx = 0;
         for (HistoryEntry entry : reversed) {
-            if (slot >= size) break;
-            gui.setItem(slot++, buildEntryItem(entry));
+            if (idx >= contentSlots.size()) break;
+            gui.setItem(contentSlots.get(idx++), buildEntryItem(entry));
         }
 
         // ── Keine Einträge ────────────────────────────────────────────
         if (entries.isEmpty()) {
             ItemStack empty = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
             ItemMeta emptyMeta = empty.getItemMeta();
-            emptyMeta.displayName(MessageUtil.parse("<#86EFAC>Keine Einträge</gray>"));
-            emptyMeta.lore(List.of(MessageUtil.parse("<gray>Dieser Spieler hat eine saubere Akte.</gray>")));
+            emptyMeta.displayName(MessageUtil.parse("<#86EFAC><bold>Saubere Akte</bold></#86EFAC>"));
+            emptyMeta.lore(List.of(MessageUtil.parse("<gray>Dieser Spieler hat keine Einträge.</gray>")));
             empty.setItemMeta(emptyMeta);
-            gui.setItem(22, empty);
+            // Mittelslot der mittleren Reihe
+            gui.setItem(rows / 2 * 9 + 4, empty);
         }
 
-        // ── Schließen-Button ──────────────────────────────────────────
+        // ── Schließen-Button (unten rechts, vorletzter Slot) ──────────
         ItemStack close = new ItemStack(Material.BARRIER);
         ItemMeta closeMeta = close.getItemMeta();
-        closeMeta.displayName(MessageUtil.parse("<#F87171>Schließen</#F87171>"));
+        closeMeta.displayName(MessageUtil.parse("<#F87171><bold>✖ Schließen</bold></#F87171>"));
+        closeMeta.lore(List.of(MessageUtil.parse("<gray>Klicke zum Schließen</gray>")));
         close.setItemMeta(closeMeta);
-        gui.setItem(size - 1, close);
+        gui.setItem(size - 2, close);
 
         player.openInventory(gui);
         player.sendMessage(MessageUtil.banHistoryOpened(targetName));
     }
 
+    private ItemStack makeFiller(Material mat) {
+        ItemStack item = new ItemStack(mat);
+        ItemMeta meta = item.getItemMeta();
+        meta.displayName(Component.empty());
+        item.setItemMeta(meta);
+        return item;
+    }
+
     private ItemStack buildEntryItem(HistoryEntry entry) {
         Material mat = switch (entry.type()) {
-            case "BAN"    -> Material.RED_CONCRETE;
-            case "TEMPBAN"-> Material.ORANGE_CONCRETE;
-            case "KICK"   -> Material.YELLOW_CONCRETE;
-            case "UNBAN"  -> Material.LIME_CONCRETE;
-            default       -> Material.GRAY_CONCRETE;
+            case "BAN"      -> Material.RED_CONCRETE;
+            case "TEMPBAN"  -> Material.ORANGE_CONCRETE;
+            case "KICK"     -> Material.YELLOW_CONCRETE;
+            case "UNBAN"    -> Material.LIME_CONCRETE;
+            case "MUTE"     -> Material.PURPLE_CONCRETE;
+            case "TEMPMUTE" -> Material.MAGENTA_CONCRETE;
+            case "UNMUTE"   -> Material.CYAN_CONCRETE;
+            default         -> Material.GRAY_CONCRETE;
         };
 
         String typeColor = switch (entry.type()) {
-            case "BAN"    -> "<#F87171>";
-            case "TEMPBAN"-> "<#FCD34D>";
-            case "KICK"   -> "<#FBBF24>";
-            case "UNBAN"  -> "<#86EFAC>";
-            default       -> "<gray>";
+            case "BAN"      -> "<#F87171>";
+            case "TEMPBAN"  -> "<#FCD34D>";
+            case "KICK"     -> "<#FBBF24>";
+            case "UNBAN"    -> "<#86EFAC>";
+            case "MUTE"     -> "<#C084FC>";
+            case "TEMPMUTE" -> "<#E879F9>";
+            case "UNMUTE"   -> "<#67E8F9>";
+            default         -> "<gray>";
         };
-        String typeEnd = switch (entry.type()) {
-            case "BAN"    -> "</#F87171>";
-            case "TEMPBAN"-> "</#FCD34D>";
-            case "KICK"   -> "</#FBBF24>";
-            case "UNBAN"  -> "</#86EFAC>";
-            default       -> "</gray>";
-        };
+        String typeEnd = typeColor.replace("<", "</");
 
         String typeLabel = switch (entry.type()) {
-            case "BAN"    -> "⛔ BAN";
-            case "TEMPBAN"-> "⏳ TEMPBAN";
-            case "KICK"   -> "👢 KICK";
-            case "UNBAN"  -> "✅ UNBAN";
-            default       -> entry.type();
+            case "BAN"      -> "⛔ BAN";
+            case "TEMPBAN"  -> "⏳ TEMPBAN";
+            case "KICK"     -> "👢 KICK";
+            case "UNBAN"    -> "✅ UNBAN";
+            case "MUTE"     -> "🔇 MUTE";
+            case "TEMPMUTE" -> "⏱ TEMPMUTE";
+            case "UNMUTE"   -> "🔊 UNMUTE";
+            default         -> entry.type();
         };
 
         ItemStack item = new ItemStack(mat);
@@ -166,7 +211,7 @@ public final class BanHistoryCommand implements CommandExecutor, TabCompleter {
         lore.add(MessageUtil.parse("<gray>Von: <#4DA3FF>" + entry.by() + "</#4DA3FF>"));
         lore.add(MessageUtil.parse("<gray>Grund: <white>" + entry.reason() + "</white>"));
         if (entry.expires() > 0) {
-            lore.add(MessageUtil.parse("<gray>Dauer bis: <#FCD34D>" + BanManager.formatTimestamp(entry.expires()) + "</#FCD34D>"));
+            lore.add(MessageUtil.parse("<gray>Läuft ab: <#FCD34D>" + BanManager.formatTimestamp(entry.expires()) + "</#FCD34D>"));
         }
         lore.add(Component.empty());
         meta.lore(lore);

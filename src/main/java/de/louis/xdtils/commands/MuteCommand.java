@@ -1,5 +1,6 @@
 package de.louis.xdtils.commands;
 
+import de.louis.xdtils.manager.BanManager;
 import de.louis.xdtils.manager.MuteManager;
 import de.louis.xdtils.util.MessageUtil;
 import org.bukkit.Bukkit;
@@ -13,9 +14,11 @@ import java.util.*;
 public class MuteCommand implements CommandExecutor, TabCompleter {
 
     private final MuteManager muteManager;
+    private final BanManager banManager;
 
-    public MuteCommand(MuteManager muteManager) {
+    public MuteCommand(MuteManager muteManager, BanManager banManager) {
         this.muteManager = muteManager;
+        this.banManager = banManager;
     }
 
     @Override
@@ -50,7 +53,12 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
                 ? String.join(" ", Arrays.copyOfRange(args, 1, args.length))
                 : "Kein Grund angegeben";
 
-        muteManager.mute(target.getUniqueId(), sender.getName(), reason);
+        String actorName = sender instanceof Player p ? p.getName() : "Konsole";
+
+        muteManager.mute(target.getUniqueId(), actorName, reason);
+
+        // History-Eintrag
+        banManager.logMute(target.getName(), reason, actorName);
 
         target.sendMessage(MessageUtil.prefixed("<gray>Du wurdest <#F87171>stummgeschaltet</#F87171><gray>.</gray>\n"
                 + "<gray>Grund: <#F87171>" + reason + "</#F87171></gray>"));

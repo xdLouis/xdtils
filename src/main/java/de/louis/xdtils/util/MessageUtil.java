@@ -267,7 +267,7 @@ public final class MessageUtil {
         return prefixed("<gray>Mülleimer wurde geleert.</gray>");
     }
 
-// ── Item (/i) ─────────────────────────────────────────────────────
+    // ── Item (/i) ─────────────────────────────────────────────────────
 
     public static Component itemUsage() {
         return prefixed("<gray>Benutzung: " + command("i") + "<gray> <item> [menge]</gray>");
@@ -286,7 +286,7 @@ public final class MessageUtil {
                 + item(itemName) + "<gray> erhalten.</gray>");
     }
 
-// ── Give ──────────────────────────────────────────────────────────
+    // ── Give ──────────────────────────────────────────────────────────
 
     public static Component giveUsage() {
         return prefixed("<gray>Benutzung: " + command("give")
@@ -335,7 +335,7 @@ public final class MessageUtil {
                 + "<gray> gekickt. </gray><gray>(<#F87171>" + escape(reason) + "</#F87171><gray>)</gray>");
     }
 
-// ── Ban ──────────────────────────────────────────────────────────
+    // ── Ban ──────────────────────────────────────────────────────────
 
     public static Component banUsage() {
         return prefixed("<gray>Benutzung: " + command("ban") + "<gray> <spieler> [grund]</gray>");
@@ -405,7 +405,7 @@ public final class MessageUtil {
         return prefixed("<gray><#F87171>" + escape(targetName) + "</#F87171><gray> ist nicht gebannt.</gray>");
     }
 
-// ── Op / Deop ────────────────────────────────────────────────────
+    // ── Op / Deop ────────────────────────────────────────────────────
 
     public static Component opSuccess(String targetName) {
         return prefixed("<gray>" + player(targetName) + "<gray> wurde zum Operator gemacht.</gray>");
@@ -423,7 +423,7 @@ public final class MessageUtil {
         return prefixed("<gray>Dein <#F87171>Operator-Status</#F87171><gray> wurde entzogen.</gray>");
     }
 
-// ── Kill ─────────────────────────────────────────────────────────
+    // ── Kill ─────────────────────────────────────────────────────────
 
     public static Component killSelf() {
         return prefixed("<gray>Du wurdest getötet.</gray>");
@@ -441,7 +441,7 @@ public final class MessageUtil {
         return prefixed("<gray><#4DA3FF>" + count + "</#4DA3FF><gray> Spieler wurden getötet.</gray>");
     }
 
-// ── Time ─────────────────────────────────────────────────────────
+    // ── Time ─────────────────────────────────────────────────────────
 
     public static Component timeUsage() {
         return prefixed("<gray>Benutzung: " + command("time")
@@ -464,7 +464,7 @@ public final class MessageUtil {
         return prefixed("<gray>Ungültiger Wert: <#F87171>" + escape(input) + "</#F87171><gray>.</gray>");
     }
 
-// ── Weather ──────────────────────────────────────────────────────
+    // ── Weather ──────────────────────────────────────────────────────
 
     public static Component weatherUsage() {
         return prefixed("<gray>Benutzung: " + command("weather")
@@ -481,7 +481,7 @@ public final class MessageUtil {
                 + "<#86EFAC>rain</#86EFAC><gray> oder <#86EFAC>thunder</#86EFAC><gray>.</gray>");
     }
 
-// ── Difficulty ───────────────────────────────────────────────────
+    // ── Difficulty ───────────────────────────────────────────────────
 
     public static Component difficultyUsage() {
         return prefixed("<gray>Benutzung: " + command("difficulty")
@@ -496,7 +496,7 @@ public final class MessageUtil {
         return prefixed("<gray>Unbekannte Schwierigkeit: <#F87171>" + escape(input) + "</#F87171><gray>.</gray>");
     }
 
-// ── Whitelist ────────────────────────────────────────────────────
+    // ── Whitelist ────────────────────────────────────────────────────
 
     public static Component whitelistUsage() {
         return prefixed("<gray>Benutzung: " + command("whitelist")
@@ -528,7 +528,7 @@ public final class MessageUtil {
         return prefixed("<gray>Whitelist wurde neu geladen.</gray>");
     }
 
-// ── Heal ─────────────────────────────────────────────────────────
+    // ── Heal ─────────────────────────────────────────────────────────
 
     public static Component healSelf() {
         return prefixed("<gray>Du wurdest geheilt.</gray>");
@@ -546,7 +546,7 @@ public final class MessageUtil {
         return prefixed("<gray><#4DA3FF>" + count + "</#4DA3FF><gray> Spieler wurden geheilt.</gray>");
     }
 
-// ── Feed ─────────────────────────────────────────────────────────
+    // ── Feed ─────────────────────────────────────────────────────────
 
     public static Component feedSelf() {
         return prefixed("<gray>Du wurdest gesättigt.</gray>");
@@ -564,7 +564,7 @@ public final class MessageUtil {
         return prefixed("<gray><#4DA3FF>" + count + "</#4DA3FF><gray> Spieler wurden gesättigt.</gray>");
     }
 
-// ── Fly ──────────────────────────────────────────────────────────
+    // ── Fly ──────────────────────────────────────────────────────────
 
     public static Component flySelf(boolean enabled) {
         return prefixed("<gray>Flugmodus wurde " + (enabled
@@ -810,5 +810,542 @@ public final class MessageUtil {
     public static Component leatherColorSet(String hex) {
         return prefixed("<gray>Lederrüstungsfarbe wurde auf <" + escape(hex) + ">" + escape(hex)
                 + "</" + escape(hex) + "><gray> gesetzt.</gray>");
+    }
+
+    // ── Nick ──────────────────────────────────────────────────────────
+
+    public static Component nickUsage() {
+        return prefixed("<gray>Benutzung: " + command("nick") + "<gray> <name|off> [spieler]</gray>");
+    }
+
+    public static Component nickSet(String nick) {
+        return prefixed("<gray>Dein Nickname wurde auf " + value(nick) + "<gray> gesetzt.</gray>");
+    }
+
+    public static Component nickSetOther(String targetName, String nick) {
+        return prefixed("<gray>Nickname von " + player(targetName) + "<gray> wurde auf " + value(nick) + "<gray> gesetzt.</gray>");
+    }
+
+    public static Component nickReset() {
+        return prefixed("<gray>Dein Nickname wurde <#F87171>zurückgesetzt</#F87171><gray>.</gray>");
+    }
+
+    public static Component nickResetOther(String targetName) {
+        return prefixed("<gray>Nickname von " + player(targetName) + "<gray> wurde zurückgesetzt.</gray>");
+    }
+
+    // ── Freeze ────────────────────────────────────────────────────────
+
+    public static Component freezeUsage() {
+        return prefixed("<gray>Benutzung: " + command("freeze") + "<gray> <spieler></gray>");
+    }
+
+    public static Component freezeToggled(String targetName, boolean frozen) {
+        return prefixed("<gray>" + player(targetName) + "<gray> wurde "
+                + (frozen ? "<#86EFAC>eingefroren</#86EFAC>" : "<#F87171>aufgetaut</#F87171>")
+                + "<gray>.</gray>");
+    }
+
+    public static Component freezeNotified(boolean frozen) {
+        return prefixed("<gray>Du wurdest "
+                + (frozen ? "<#86EFAC>eingefroren</#86EFAC>" : "<#F87171>aufgetaut</#F87171>")
+                + "<gray>.</gray>");
+    }
+
+    public static Component freezeBlocked() {
+        return prefixed("<gray>Du bist eingefroren und kannst dich nicht bewegen.</gray>");
+    }
+
+    // ── Mute ──────────────────────────────────────────────────────────
+
+    public static Component muteUsage() {
+        return prefixed("<gray>Benutzung: " + command("mute") + "<gray> <spieler> [grund]</gray>");
+    }
+
+    public static Component mutedPlayer(String targetName, String reason) {
+        return prefixed("<gray>" + player(targetName) + "<gray> wurde gemutet. Grund: <#F87171>" + escape(reason) + "</#F87171><gray>.</gray>");
+    }
+
+    public static Component mutedNotified(String reason) {
+        return prefixed("<gray>Du wurdest gemutet. Grund: <#F87171>" + escape(reason) + "</#F87171><gray>.</gray>");
+    }
+
+    public static Component unmutedPlayer(String targetName) {
+        return prefixed("<gray>" + player(targetName) + "<gray> wurde entmutet.</gray>");
+    }
+
+    public static Component unmutedNotified() {
+        return prefixed("<gray>Du wurdest <#86EFAC>entmutet</#86EFAC><gray>.</gray>");
+    }
+
+    public static Component alreadyMuted(String targetName) {
+        return prefixed("<gray>" + player(targetName) + "<gray> ist bereits gemutet.</gray>");
+    }
+
+    public static Component notMuted(String targetName) {
+        return prefixed("<gray>" + player(targetName) + "<gray> ist nicht gemutet.</gray>");
+    }
+
+    // ── Broadcast ────────────────────────────────────────────────────
+
+    public static Component broadcastUsage() {
+        return prefixed("<gray>Benutzung: " + command("broadcast") + "<gray> <nachricht></gray>");
+    }
+
+    public static Component broadcastMessage(String message) {
+        return parse("<gold><bold>[Broadcast]</bold></gold> <white>" + escape(message) + "</white>");
+    }
+
+    // ── AFK ───────────────────────────────────────────────────────────
+
+    public static Component afkEnabled(String playerName) {
+        return prefixed("<gray>" + player(playerName) + "<gray> ist jetzt <#F59E0B>AFK</#F59E0B><gray>.</gray>");
+    }
+
+    public static Component afkDisabled(String playerName) {
+        return prefixed("<gray>" + player(playerName) + "<gray> ist nicht mehr AFK.</gray>");
+    }
+
+    // ── Seen ─────────────────────────────────────────────────────────
+
+    public static Component seenUsage() {
+        return prefixed("<gray>Benutzung: " + command("seen") + "<gray> <spieler></gray>");
+    }
+
+    public static Component seenOnline(String targetName) {
+        return prefixed("<gray>" + player(targetName) + "<gray> ist gerade <#86EFAC>online</#86EFAC><gray>.</gray>");
+    }
+
+    public static Component seenOffline(String targetName, String lastSeen) {
+        return prefixed("<gray>" + player(targetName) + "<gray> war zuletzt online: " + value(lastSeen) + "<gray>.</gray>");
+    }
+
+    public static Component seenNeverJoined(String targetName) {
+        return prefixed("<gray>" + player(targetName) + "<gray> hat den Server noch nie betreten.</gray>");
+    }
+
+    // ── Staff ─────────────────────────────────────────────────────────
+
+    public static Component staffUsage() {
+        return prefixed("<gray>Benutzung: " + command("staff") + "<gray> <nachricht></gray>");
+    }
+
+    public static Component staffMessage(String senderName, String message) {
+        return parse("<dark_gray>[</dark_gray><gradient:#67E8F9:#3B82F6>Staff</gradient><dark_gray>]</dark_gray> "
+                + player(senderName) + "<gray>: <white>" + escape(message) + "</white>");
+    }
+
+    // ── Repair ───────────────────────────────────────────────────────
+
+    public static Component repairSuccess() {
+        return prefixed("<gray>Das Item in deiner Hand wurde <#86EFAC>repariert</#86EFAC><gray>.</gray>");
+    }
+
+    public static Component repairAllSuccess() {
+        return prefixed("<gray>Alle Items in deinem Inventar wurden <#86EFAC>repariert</#86EFAC><gray>.</gray>");
+    }
+
+    public static Component repairNoItem() {
+        return prefixed("<gray>Du hältst kein reparierbares Item in der Hand.</gray>");
+    }
+
+    // ── God ───────────────────────────────────────────────────────────
+
+    public static Component godSelf(boolean enabled) {
+        return prefixed("<gray>Gottmodus wurde "
+                + (enabled ? "<#86EFAC>aktiviert</#86EFAC>" : "<#F87171>deaktiviert</#F87171>")
+                + "<gray>.</gray>");
+    }
+
+    public static Component godOther(String targetName, boolean enabled) {
+        return prefixed("<gray>Gottmodus von " + player(targetName) + "<gray> wurde "
+                + (enabled ? "<#86EFAC>aktiviert</#86EFAC>" : "<#F87171>deaktiviert</#F87171>")
+                + "<gray>.</gray>");
+    }
+
+    public static Component godByOther(String actorName, boolean enabled) {
+        return prefixed("<gray>Dein Gottmodus wurde von " + player(actorName) + "<gray> "
+                + (enabled ? "<#86EFAC>aktiviert</#86EFAC>" : "<#F87171>deaktiviert</#F87171>")
+                + "<gray>.</gray>");
+    }
+
+    // ── Sudo ──────────────────────────────────────────────────────────
+
+    public static Component sudoUsage() {
+        return prefixed("<gray>Benutzung: " + command("sudo") + "<gray> <spieler> <befehl></gray>");
+    }
+
+    public static Component sudoSuccess(String targetName, String cmd) {
+        return prefixed("<gray>" + player(targetName) + "<gray> führt aus: " + value(cmd) + "<gray>.</gray>");
+    }
+
+    // ── Rename ────────────────────────────────────────────────────────
+
+    public static Component renameUsage() {
+        return prefixed("<gray>Benutzung: " + command("rename") + "<gray> <name></gray>");
+    }
+
+    public static Component renameSuccess(String name) {
+        return prefixed("<gray>Item wurde in " + value(name) + "<gray> umbenannt.</gray>");
+    }
+
+    public static Component renameNoItem() {
+        return prefixed("<gray>Du hältst kein Item in der Hand.</gray>");
+    }
+
+    // ── Lore ──────────────────────────────────────────────────────────
+
+    public static Component loreUsage() {
+        return prefixed("<gray>Benutzung: " + command("lore") + "<gray> <set|add|remove|clear> [zeile] [text]</gray>");
+    }
+
+    public static Component loreSet(int line, String text) {
+        return prefixed("<gray>Lore Zeile " + value(String.valueOf(line)) + "<gray> wurde gesetzt: " + value(text) + "<gray>.</gray>");
+    }
+
+    public static Component loreAdded(String text) {
+        return prefixed("<gray>Lore-Zeile " + value(text) + "<gray> wurde hinzugefügt.</gray>");
+    }
+
+    public static Component loreRemoved(int line) {
+        return prefixed("<gray>Lore Zeile " + value(String.valueOf(line)) + "<gray> wurde entfernt.</gray>");
+    }
+
+    public static Component loreCleared() {
+        return prefixed("<gray>Die gesamte Lore wurde gelöscht.</gray>");
+    }
+
+    public static Component loreNoItem() {
+        return prefixed("<gray>Du hältst kein Item in der Hand.</gray>");
+    }
+
+    public static Component loreInvalidLine() {
+        return prefixed("<gray>Ungültige Zeilennummer.</gray>");
+    }
+
+    // ── Balance ───────────────────────────────────────────────────────
+
+    public static Component balanceUsage() {
+        return prefixed("<gray>Benutzung: " + command("balance") + "<gray> [spieler]</gray>");
+    }
+
+    public static Component balanceSelf(double amount) {
+        return prefixed("<gray>Dein Kontostand: " + value(String.format("%.2f", amount)) + "<gray> Coins.</gray>");
+    }
+
+    public static Component balanceOther(String targetName, double amount) {
+        return prefixed("<gray>Kontostand von " + player(targetName) + "<gray>: " + value(String.format("%.2f", amount)) + "<gray> Coins.</gray>");
+    }
+
+    public static Component economyDisabled() {
+        return prefixed("<gray>Das Economy-System ist deaktiviert.</gray>");
+    }
+
+    // ── Pay ───────────────────────────────────────────────────────────
+
+    public static Component payUsage() {
+        return prefixed("<gray>Benutzung: " + command("pay") + "<gray> <spieler> <betrag></gray>");
+    }
+
+    public static Component paySent(String targetName, double amount) {
+        return prefixed("<gray>Du hast " + player(targetName) + "<gray> " + value(String.format("%.2f", amount)) + "<gray> Coins gesendet.</gray>");
+    }
+
+    public static Component payReceived(String senderName, double amount) {
+        return prefixed("<gray>Du hast " + value(String.format("%.2f", amount)) + "<gray> Coins von " + player(senderName) + "<gray> erhalten.</gray>");
+    }
+
+    public static Component payInvalidAmount() {
+        return prefixed("<gray>Ungültiger Betrag. Nutze eine positive Zahl.</gray>");
+    }
+
+    public static Component payNotEnough() {
+        return prefixed("<gray>Du hast nicht genug Coins.</gray>");
+    }
+
+    public static Component payNotSelf() {
+        return prefixed("<gray>Du kannst dir nicht selbst Coins senden.</gray>");
+    }
+
+    // ── Near ──────────────────────────────────────────────────────────
+
+    public static Component nearUsage() {
+        return prefixed("<gray>Benutzung: " + command("near") + "<gray> [radius]</gray>");
+    }
+
+    public static Component nearResult(int count, int radius) {
+        return prefixed("<gray>Spieler in " + value(String.valueOf(radius)) + "<gray> Blöcken: <#4DA3FF>" + count + "</#4DA3FF><gray>.</gray>");
+    }
+
+    public static Component nearEmpty(int radius) {
+        return prefixed("<gray>Keine Spieler in " + value(String.valueOf(radius)) + "<gray> Blöcken gefunden.</gray>");
+    }
+
+    // ── XP ────────────────────────────────────────────────────────────
+
+    public static Component xpUsage() {
+        return prefixed("<gray>Benutzung: " + command("xp") + "<gray> <set|add|remove> <menge> [spieler]</gray>");
+    }
+
+    public static Component xpSet(int amount) {
+        return prefixed("<gray>Dein XP wurde auf " + value(String.valueOf(amount)) + "<gray> gesetzt.</gray>");
+    }
+
+    public static Component xpSetOther(String targetName, int amount) {
+        return prefixed("<gray>XP von " + player(targetName) + "<gray> wurde auf " + value(String.valueOf(amount)) + "<gray> gesetzt.</gray>");
+    }
+
+    public static Component xpAdded(int amount) {
+        return prefixed("<gray>" + value(String.valueOf(amount)) + "<gray> XP wurden hinzugefügt.</gray>");
+    }
+
+    public static Component xpAddedOther(String targetName, int amount) {
+        return prefixed("<gray>" + value(String.valueOf(amount)) + "<gray> XP wurden " + player(targetName) + "<gray> hinzugefügt.</gray>");
+    }
+
+    public static Component xpRemoved(int amount) {
+        return prefixed("<gray>" + value(String.valueOf(amount)) + "<gray> XP wurden entfernt.</gray>");
+    }
+
+    public static Component xpRemovedOther(String targetName, int amount) {
+        return prefixed("<gray>" + value(String.valueOf(amount)) + "<gray> XP wurden von " + player(targetName) + "<gray> entfernt.</gray>");
+    }
+
+    public static Component xpInvalidAmount() {
+        return prefixed("<gray>Ungültige XP-Menge.</gray>");
+    }
+
+    // ── Ping ─────────────────────────────────────────────────────────
+
+    public static Component pingSelf(int ping) {
+        return prefixed("<gray>Dein Ping: " + value(ping + "ms") + "<gray>.</gray>");
+    }
+
+    public static Component pingOther(String targetName, int ping) {
+        return prefixed("<gray>Ping von " + player(targetName) + "<gray>: " + value(ping + "ms") + "<gray>.</gray>");
+    }
+
+    // ── Playtime ─────────────────────────────────────────────────────
+
+    public static Component playtimeSelf(String formatted) {
+        return prefixed("<gray>Deine Spielzeit: " + value(formatted) + "<gray>.</gray>");
+    }
+
+    public static Component playtimeOther(String targetName, String formatted) {
+        return prefixed("<gray>Spielzeit von " + player(targetName) + "<gray>: " + value(formatted) + "<gray>.</gray>");
+    }
+
+    // ── History ──────────────────────────────────────────────────────
+
+    public static Component historyUsage() {
+        return prefixed("<gray>Benutzung: " + command("history") + "<gray> <spieler></gray>");
+    }
+
+    public static Component historyHeader(String targetName) {
+        return prefixed("<gray>Straf-Historie von " + player(targetName) + "<gray>:</gray>");
+    }
+
+    public static Component historyEmpty(String targetName) {
+        return prefixed("<gray>" + player(targetName) + "<gray> hat keine Straf-Historie.</gray>");
+    }
+
+    public static Component historyEntry(int index, String type, String reason, String actor, String date) {
+        return parse("<dark_gray>" + index + ". </dark_gray><#F87171>" + escape(type) + "</#F87171>"
+                + " <gray>– " + escape(reason) + " <dark_gray>(" + escape(actor) + ", " + escape(date) + ")</dark_gray>");
+    }
+
+    // ── Maintenance ──────────────────────────────────────────────────
+
+    public static Component maintenanceEnabled() {
+        return prefixed("<gray>Wartungsmodus wurde <#86EFAC>aktiviert</#86EFAC><gray>.</gray>");
+    }
+
+    public static Component maintenanceDisabled() {
+        return prefixed("<gray>Wartungsmodus wurde <#F87171>deaktiviert</#F87171><gray>.</gray>");
+    }
+
+    // ── Restart ──────────────────────────────────────────────────────
+
+    public static Component restartUsage() {
+        return prefixed("<gray>Benutzung: " + command("restart") + "<gray> [sekunden]</gray>");
+    }
+
+    public static Component restartScheduled(int seconds) {
+        return prefixed("<gray>Server-Neustart in " + value(String.valueOf(seconds)) + "<gray> Sekunden.</gray>");
+    }
+
+    public static Component restartBroadcast(int seconds) {
+        return parse("<red><bold>[!]</bold></red> <gray>Der Server startet in <#F87171>" + seconds + "</#F87171> Sekunden neu.</gray>");
+    }
+
+    public static Component restartCancelled() {
+        return prefixed("<gray>Server-Neustart wurde <#F87171>abgebrochen</#F87171><gray>.</gray>");
+    }
+
+    // ── TPS ──────────────────────────────────────────────────────────
+
+    public static Component tpsInfo(String tps1, String tps5, String tps15) {
+        return prefixed("<gray>TPS: " + value(tps1) + "<gray> (1m) | " + value(tps5) + "<gray> (5m) | " + value(tps15) + "<gray> (15m)</gray>");
+    }
+
+    // ── Memory ───────────────────────────────────────────────────────
+
+    public static Component memoryInfo(long usedMB, long maxMB) {
+        return prefixed("<gray>RAM: " + value(usedMB + " MB") + "<gray> / " + value(maxMB + " MB") + "<gray> genutzt.</gray>");
+    }
+
+    // ── More ──────────────────────────────────────────────────────────
+
+    public static Component moreNoItem() {
+        return prefixed("<gray>Du hältst kein Item in der Hand.</gray>");
+    }
+
+    public static Component moreFilled(String itemName) {
+        return prefixed("<gray>" + item(itemName) + "<gray> wurde auf " + value("64") + "<gray> aufgefüllt.</gray>");
+    }
+
+    // ── Skull ─────────────────────────────────────────────────────────
+
+    public static Component skullUsage() {
+        return prefixed("<gray>Benutzung: " + command("skull") + "<gray> [spieler]</gray>");
+    }
+
+    public static Component skullGiven(String ownerName) {
+        return prefixed("<gray>Kopf von " + player(ownerName) + "<gray> wurde gegeben.</gray>");
+    }
+
+    // ── InvSave / InvLoad ─────────────────────────────────────────────
+
+    public static Component invSaveUsage() {
+        return prefixed("<gray>Benutzung: " + command("invsave") + "<gray> <name></gray>");
+    }
+
+    public static Component invSaved(String name) {
+        return prefixed("<gray>Inventar unter " + value(name) + "<gray> gespeichert.</gray>");
+    }
+
+    public static Component invLoadUsage() {
+        return prefixed("<gray>Benutzung: " + command("invload") + "<gray> <name></gray>");
+    }
+
+    public static Component invLoaded(String name) {
+        return prefixed("<gray>Inventar " + value(name) + "<gray> wurde geladen.</gray>");
+    }
+
+    public static Component invNotFound(String name) {
+        return prefixed("<gray>Kein gespeichertes Inventar mit dem Namen " + value(name) + "<gray> gefunden.</gray>");
+    }
+
+    // ── CommandSpy / SocialSpy ────────────────────────────────────────
+
+    public static Component commandSpyToggled(boolean enabled) {
+        return prefixed("<gray>CommandSpy wurde "
+                + (enabled ? "<#86EFAC>aktiviert</#86EFAC>" : "<#F87171>deaktiviert</#F87171>")
+                + "<gray>.</gray>");
+    }
+
+    public static Component socialSpyToggled(boolean enabled) {
+        return prefixed("<gray>SocialSpy wurde "
+                + (enabled ? "<#86EFAC>aktiviert</#86EFAC>" : "<#F87171>deaktiviert</#F87171>")
+                + "<gray>.</gray>");
+    }
+
+    public static Component commandSpyLog(String playerName, String cmd) {
+        return parse("<dark_gray>[<#67E8F9>CSpy</#67E8F9>] " + player(playerName) + "<dark_gray>: <gray>" + escape(cmd));
+    }
+
+    public static Component socialSpyLog(String fromName, String toName, String message) {
+        return parse("<dark_gray>[<#67E8F9>SSpy</#67E8F9>] " + player(fromName)
+                + "<dark_gray> → " + player(toName) + "<dark_gray>: <white>" + escape(message) + "</white>");
+    }
+
+    // ── Ignore ────────────────────────────────────────────────────────
+
+    public static Component ignoreUsage() {
+        return prefixed("<gray>Benutzung: " + command("ignore") + "<gray> <spieler></gray>");
+    }
+
+    public static Component ignoreAdded(String targetName) {
+        return prefixed("<gray>" + player(targetName) + "<gray> wird jetzt ignoriert.</gray>");
+    }
+
+    public static Component ignoreRemoved(String targetName) {
+        return prefixed("<gray>" + player(targetName) + "<gray> wird nicht mehr ignoriert.</gray>");
+    }
+
+    public static Component ignoreBlocked(String senderName) {
+        return prefixed("<gray>Du ignorierst " + player(senderName) + "<gray>.</gray>");
+    }
+
+    // ── Eco ───────────────────────────────────────────────────────────
+
+    public static Component ecoUsage() {
+        return prefixed("<gray>Benutzung: " + command("eco") + "<gray> <give|take|set|reset> <spieler> [betrag]</gray>");
+    }
+
+    public static Component ecoGive(String targetName, double amount) {
+        return prefixed("<gray>" + player(targetName) + "<gray> wurden " + value(String.format("%.2f", amount)) + "<gray> Coins gegeben.</gray>");
+    }
+
+    public static Component ecoTake(String targetName, double amount) {
+        return prefixed("<gray>Von " + player(targetName) + "<gray> wurden " + value(String.format("%.2f", amount)) + "<gray> Coins abgezogen.</gray>");
+    }
+
+    public static Component ecoSet(String targetName, double amount) {
+        return prefixed("<gray>Kontostand von " + player(targetName) + "<gray> wurde auf " + value(String.format("%.2f", amount)) + "<gray> gesetzt.</gray>");
+    }
+
+    public static Component ecoReset(String targetName) {
+        return prefixed("<gray>Kontostand von " + player(targetName) + "<gray> wurde zurückgesetzt.</gray>");
+    }
+
+    // ── Trail ─────────────────────────────────────────────────────────
+
+    public static Component trailUsage() {
+        return prefixed("<gray>Benutzung: " + command("trail") + "<gray> <typ|off> [spieler]</gray>");
+    }
+
+    public static Component trailSet(String trailName) {
+        return prefixed("<gray>Dein Trail wurde auf " + value(trailName) + "<gray> gesetzt.</gray>");
+    }
+
+    public static Component trailSetOther(String targetName, String trailName) {
+        return prefixed("<gray>Trail von " + player(targetName) + "<gray> wurde auf " + value(trailName) + "<gray> gesetzt.</gray>");
+    }
+
+    public static Component trailDisabled() {
+        return prefixed("<gray>Dein Trail wurde <#F87171>deaktiviert</#F87171><gray>.</gray>");
+    }
+
+    public static Component trailInvalid(String input) {
+        return prefixed("<gray>Unbekannter Trail-Typ: <#F87171>" + escape(input) + "</#F87171><gray>.</gray>");
+    }
+
+    // ── Firework ──────────────────────────────────────────────────────
+
+    public static Component fireworkUsage() {
+        return prefixed("<gray>Benutzung: " + command("firework") + "<gray> [anzahl]</gray>");
+    }
+
+    public static Component fireworkLaunched(int count) {
+        return prefixed("<gray><#4DA3FF>" + count + "</#4DA3FF><gray>x Feuerwerk wurde gestartet.</gray>");
+    }
+
+    // ── TpWorld ──────────────────────────────────────────────────────
+
+    public static Component tpWorldUsage() {
+        return prefixed("<gray>Benutzung: " + command("tpworld") + "<gray> <welt> [spieler]</gray>");
+    }
+
+    public static Component tpWorldSuccess(String worldName) {
+        return prefixed("<gray>Du wurdest in die Welt " + value(worldName) + "<gray> teleportiert.</gray>");
+    }
+
+    public static Component tpWorldSuccessOther(String targetName, String worldName) {
+        return prefixed("<gray>" + player(targetName) + "<gray> wurde in die Welt " + value(worldName) + "<gray> teleportiert.</gray>");
+    }
+
+    public static Component tpWorldNotFound(String worldName) {
+        return prefixed("<gray>Die Welt " + value(worldName) + "<gray> wurde nicht gefunden oder ist nicht geladen.</gray>");
     }
 }
