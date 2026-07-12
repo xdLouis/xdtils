@@ -40,6 +40,9 @@ public final class Main extends JavaPlugin {
         this.trailManager = new TrailManager(this);
         this.banManager = new BanManager(this);
 
+        // MuteManager Cleanup-Task starten (TempMutes ablaufen lassen)
+        this.muteManager.startCleanupTask(this);
+
         if (getConfig().getBoolean("economy.enabled", true)) {
             this.economyManager = new EconomyManager(this);
             getLogger().info("Interne Economy wurde aktiviert.");
@@ -87,6 +90,7 @@ public final class Main extends JavaPlugin {
     public void onDisable() {
         vanishManager.save();
         trailManager.shutdown();
+        muteManager.stopCleanupTask();
 
         if (economyManager != null) {
             economyManager.save();
@@ -306,11 +310,17 @@ public final class Main extends JavaPlugin {
         RecipeCommand recipe = new RecipeCommand();
         registerCommand("recipe", recipe, recipe, "xdtils.recipe");
 
-        MuteCommand mute = new MuteCommand(muteManager);
+        // ── Mute-Commands (banManager für History-Logging) ──────────────
+        MuteCommand mute = new MuteCommand(muteManager, banManager);
         registerCommand("mute", mute, mute, "xdtils.mute");
 
-        UnmuteCommand unmute = new UnmuteCommand(muteManager);
-        registerCommand("unmute", unmute, unmute, "xdtils.mute");
+        UnmuteCommand unmute = new UnmuteCommand(muteManager, banManager);
+        registerCommand("unmute", unmute, unmute, "xdtils.unmute");
+
+        if (getConfig().getBoolean("ban.tempmute-enabled", true)) {
+            TempMuteCommand tempMute = new TempMuteCommand(muteManager, banManager);
+            registerCommand("tempmute", tempMute, tempMute, "xdtils.tempmute");
+        }
 
         HistoryCommand history = new HistoryCommand(historyManager);
         registerCommand("history", history, history, "xdtils.history");
@@ -380,6 +390,7 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new AfkListener(afkManager), this);
         Bukkit.getPluginManager().registerEvents(new MuteListener(muteManager), this);
         Bukkit.getPluginManager().registerEvents(new ArmorTrimListener(), this);
+        Bukkit.getPluginManager().registerEvents(new BanHistoryGuiListener(), this);
 
         if (getConfig().getBoolean("ban.join-check-enabled", true)) {
             Bukkit.getPluginManager().registerEvents(new TempBanListener(banManager), this);
